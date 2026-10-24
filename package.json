@@ -6,7 +6,7 @@
     "version": "7.3.0"
   },
   "scripts": {
-    "collect": "node scripts/collect.js",
+    "collect": "node bin/collect.js",
     "build": "npm run collect && hexo clean && hexo generate",
     "server": "hexo server"
   },
@@ -17,7 +17,6 @@
     "hexo-cli": "^4.3.0",
     "hexo-generator-archive": "^2.0.0",
     "hexo-generator-category": "^2.0.0",
-    "hexo-generator-index": "^3.0.0",
     "hexo-generator-search": "^2.4.3",
     "hexo-generator-tag": "^2.0.0",
     "hexo-renderer-ejs": "^2.0.0",

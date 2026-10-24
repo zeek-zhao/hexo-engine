@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zeek 的 AI 知识工程</title>
+<meta name="description" content="AI 驱动的 Obsidian 知识工程 · 用 AI 跑一条内容流水线">
+<style>
+:root{--bg:#0d0f14;--card:#161a23;--card2:#1b202c;--text:#e8eaf0;--muted:#9aa3b5;--a1:#6C7EE1;--a2:#ec4899}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;line-height:1.65;min-height:100vh;
+background-image:radial-gradient(1000px 500px at 80% -10%,rgba(108,126,225,.12),transparent),radial-gradient(800px 400px at -10% 110%,rgba(236,72,153,.08),transparent)}
+.wrap{max-width:880px;margin:0 auto;padding:48px 20px 40px}
+.hero{display:flex;align-items:center;gap:22px;background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid #262c3a;border-radius:20px;padding:28px 30px}
+.avatar{width:92px;height:92px;border-radius:22px;flex-shrink:0;box-shadow:0 6px 24px rgba(108,126,225,.35)}
+.hero h1{font-size:1.7rem;letter-spacing:.5px}
+.hero h1 .grad{background:linear-gradient(90deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .desc{color:var(--muted);margin-top:4px;font-size:.98rem}
+.links{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+.links a{color:var(--text);text-decoration:none;font-size:.9rem;padding:6px 14px;border-radius:999px;border:1px solid #2c3344;transition:.25s}
+.links a:hover{border-color:var(--a1);color:#fff;background:rgba(108,126,225,.15)}
+.pin{margin-top:18px}
+.pin a{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);background:linear-gradient(90deg,rgba(108,126,225,.16),rgba(236,72,153,.10));border:1px solid rgba(108,126,225,.45);border-radius:14px;padding:14px 18px;transition:.25s}
+.pin a:hover{border-color:var(--a2);transform:translateY(-1px)}
+.pin-badge{background:linear-gradient(90deg,var(--a1),var(--a2));color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:999px;flex-shrink:0}
+.pin .pin-sub{color:var(--muted);font-size:.86rem;margin-left:auto}
+h2.sec{margin:34px 0 14px;font-size:1.18rem;display:flex;align-items:center;gap:10px}
+h2.sec:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#2c3344,transparent)}
+.count{color:var(--muted);font-weight:400;font-size:.9rem}
+.docs{list-style:none}
+.doc{background:var(--card);border:1px solid #232937;border-radius:14px;padding:14px 18px;margin-bottom:10px;transition:.25s}
+.doc:hover{border-color:var(--a1);transform:translateX(4px)}
+.doc-link{display:flex;justify-content:space-between;gap:14px;text-decoration:none;color:var(--text);flex-wrap:wrap}
+.doc-title{font-weight:600;font-size:1.02rem}
+.doc-link:hover .doc-title{background:linear-gradient(90deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.doc-meta{color:var(--muted);font-size:.82rem;white-space:nowrap}
+.doc-desc{color:var(--muted);font-size:.88rem;margin-top:5px}
+footer{margin-top:38px;text-align:center;color:var(--muted);font-size:.85rem}
+footer a{color:var(--a1);text-decoration:none}
+@media(max-width:600px){.hero{flex-direction:column;text-align:center;align-items:center}.pin .pin-sub{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <img class="avatar" src="/img/avatar.svg" alt="Z">
+    <div>
+      <h1>Zeek <span class="grad">Zhao</span></h1>
+      <p class="desc">AI 驱动的知识工程 · Obsidian + Hexo 内容流水线</p>
+      <div class="links">
+        <a href="https://github.com/zeek-zhao" target="_blank" rel="noopener">GitHub</a>
+        <a href="/archives/">归档</a>
+        <a href="/tags/">标签</a>
+        <a href="/categories/">分类</a>
+        <a href="/posts/2919529784.html">短链映射</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="pin">
+    <a href="/posts/2919529784.html">
+      <span class="pin-badge">置顶</span>
+      <span>📌 文章短链映射</span>
+      <span class="pin-sub">全部 21 篇文档的源路径 ↔ 短链对照</span>
+    </a>
+  </section>
+
+  <main>
+    <h2 class="sec">全部文档 <span class="count">共 21 篇</span></h2>
+    <ul class="docs">
+    <li class="doc">
+      <a class="doc-link" href="/posts/2644990176.html">
+        <span class="doc-title">用 AI 把 Obsidian 变成一条发布流水线</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">内容库、工程库、主页库三仓分离，AI 经总入口路由操作规则与模板，Hexo 按 frontmatter 自动构建发布——我的知识工程全流程设计。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3187656958.html">
+        <span class="doc-title">执行日志 2026-10</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">本月工程操作留痕。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3361894003.html">
+        <span class="doc-title">目录与命名规范</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">生命周期前缀目录、英文 slug 命名规则与内容流向总览。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4154483658.html">
+        <span class="doc-title">元数据字段规范</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">核心层、类型层、发布层三层字段模型；published + status 为唯一发布开关。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1504292073.html">
+        <span class="doc-title">MD 格式规范</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">Obsidian 与 Hexo 双兼容的 Markdown 底线，含一票否决项。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3127871457.html">
+        <span class="doc-title">插件管理</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">插件清单、新增评估流程与月度审查规则。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3381772242.html">
+        <span class="doc-title">主页管理</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">主页仪表盘的维度设计、数据来源与维护规则。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/990229869.html">
+        <span class="doc-title">自动化检查</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">日/周/月三层仓库检查清单，只报不改。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/776308366.html">
+        <span class="doc-title">发布全流程</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">从选题到上线的 8 步流程、本地与云端部署模式、失败处理与回滚。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3062385798.html">
+        <span class="doc-title">代码仓库处理办法</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">WSL Ubuntu 环境的 git 操作约定、SSH 凭据决策与踩坑记录。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1616078030.html">
+        <span class="doc-title">Skill: 捕获分类</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">清洗 Inbox，分类打标，给出提升/转素材/删除建议</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3135266635.html">
+        <span class="doc-title">Skill: 元数据补全</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">按 rules/02-metadata.md 补全并校验 frontmatter</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4162125565.html">
+        <span class="doc-title">Skill: 发布质检</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">发布门禁质检，输出 PASS/FAIL 报告</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2116436333.html">
+        <span class="doc-title">Skill: Hexo 转换预检</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">发布前格式预检，模拟 Hexo 侧转换规则</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/272558275.html">
+        <span class="doc-title">Skill: 周报回顾</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">生成周报：产出统计、管线状态、待办</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4073910351.html">
+        <span class="doc-title">Skill: 发布执行</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">发布操作与上线核对，严格走 rules/07-publish.md 8 步</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4072754905.html">
+        <span class="doc-title">Skill 索引</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">全部 skill 的版本化索引与调用约定。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1733969919.html">
+        <span class="doc-title">OB-AI 工程管理总方案（树状版）</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">一个入口、三类资产、一条流水线的总设计快照。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3398868994.html">
+        <span class="doc-title">Obsidian 工程管理方案</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">内容状态机、运营节奏、视图与风险清单。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/865069045.html">
+        <span class="doc-title">工程迭代计划</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">v0.1 骨架到 v1.0 正式运行的迭代路线与状态记录。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3561059836.html">
+        <span class="doc-title">从 OB 到发布的工作手册</span>
+        <span class="doc-meta">Sat Oct 24 · 工程实践</span>
+      </a>
+      <p class="doc-desc">把一篇笔记从 Obsidian 推上线上站点的完整操作路径：写、放行、自动发布、核对与回滚。</p>
+    </li>
+    </ul>
+  </main>
+
+  <footer>© 2026 Zeek Zhao · <a href="https://github.com/zeek-zhao/ai-obsidian" target="_blank" rel="noopener">ob-content</a> · 由 AI 流水线构建</footer>
+</div>
+</body>
+</html>

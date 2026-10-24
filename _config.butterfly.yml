@@ -7,13 +7,22 @@ menu:
   归档: /archives/ || fas fa-archive
   标签: /tags/ || fas fa-tags
   分类: /categories/ || fas fa-folder-open
+  短链映射: /posts/2919529784.html || fas fa-link
 
-# ── 侧栏头像与社交 ──
+# ── 侧栏头像与社交（头像 = Z 字标，本地生成不走 CDN）──
 avatar:
-  img: https://cdn.jsdelivr.net/gh/zeek-zhao/zeek-zhao.github.io@gh-pages/img/avatar.png
+  img: /img/avatar.svg
+
+aside:
+  author_info:
+    enable: true
+  card_author:
+    enable: true
+    description: 用 AI 跑一条内容流水线
 
 social:
-  GitHub: https://github.com/zeek-zhao || fab fa-github
+  Github: https://github.com/zeek-zhao || fab fa-github
+  Email: mailto:zeek.zhao@foxmail.com || fas fa-envelope
 
 # ── 站内搜索（配合 hexo-generator-search）──
 local_search:
@@ -26,10 +35,11 @@ mermaid:
     light: default
     dark: dark
 
-# ── 注入外部脚本：live2d 看板娘 + APlayer 播放器 ──
+# ── 注入外部脚本与自定义样式 ──
 inject:
   head:
     - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+    - <link rel="stylesheet" href="/css/archive-refine.css">
   bottom:
     - <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
     - <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
