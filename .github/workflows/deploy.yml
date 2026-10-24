@@ -1,0 +1,47 @@
+name: Build and Publish
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # 每日 UTC 2:00（北京时间 10:00）全量重建
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [content-updated]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout engine
+        uses: actions/checkout@v4
+
+      - name: Clone content repo
+        run: |
+          git clone --depth 1 \
+            "https://x-access-token:${{ secrets.CONTENT_TOKEN }}@github.com/zeek-zhao/ai-obsidian.git" content
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install and Build
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+
+      - name: Publish to Pages repo
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.PAGES_TOKEN }}
+          external_repository: zeek-zhao/zeek-zhao.github.io
+          publish_branch: gh-pages
+          publish_dir: ./public
+          force_orphan: true
+          commit_message: "publish from ob-content (${{ github.event.client_payload.via || github.event_name }})"
