@@ -1,0 +1,64 @@
+# Butterfly 主题配置覆盖（只写与默认不同的项）
+# 完整配置参考：https://butterfly.js.org
+
+# ── 导航菜单 ──
+menu:
+  首页: / || fas fa-home
+  归档: /archives/ || fas fa-archive
+  标签: /tags/ || fas fa-tags
+  分类: /categories/ || fas fa-folder-open
+
+# ── 侧栏头像与社交 ──
+avatar:
+  img: https://cdn.jsdelivr.net/gh/zeek-zhao/zeek-zhao.github.io@gh-pages/img/avatar.png
+
+social:
+  GitHub: https://github.com/zeek-zhao || fab fa-github
+
+# ── 站内搜索（配合 hexo-generator-search）──
+local_search:
+  enable: true
+
+# ── Mermaid 图表（代码块 mermaid 渲染流程图/时序图等）──
+mermaid:
+  enable: true
+  theme:
+    light: default
+    dark: dark
+
+# ── 注入外部脚本：live2d 看板娘 + APlayer 播放器 ──
+inject:
+  head:
+    - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+  bottom:
+    - <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    - <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+
+# ── 文章页 ──
+post_meta:
+  page:
+    date_type: created
+    date_format: YYYY-MM-DD
+  post:
+    date_type: created
+    date_format: YYYY-MM-DD
+
+# 代码块设置
+highlight_theme: light
+highlight_copy: true
+
+# 目录
+toc:
+  post: true
+  page: false
+  number: true
+
+# ── 页脚 ──
+footer:
+  owner:
+    enable: true
+    since: 2026
+
+# 右下角按钮（回到顶部等）
+rightside_item_order:
+  enable: false

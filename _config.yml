@@ -1,10 +1,14 @@
 title: Zeek 的 AI 知识工程
 subtitle: 用 AI 跑一条内容流水线
 description: AI 驱动的 Obsidian 知识工程博客
+keywords: Obsidian, AI, Hexo, 知识管理
+author: Zeek Zhao
 language: zh-CN
+timezone: 'Asia/Shanghai'
 url: https://zeek-zhao.github.io
 root: /
-permalink: :year/:month/:day/:slug/
+# abbrlink：每篇文章生成稳定短链（crc32 十进制），改标题/日期不影响 URL
+permalink: posts/:abbrlink.html
 permalink_defaults:
 pretty_urls:
   trailing_index: true
@@ -49,10 +53,25 @@ time_format: HH:mm:ss
 updated_option: 'date'
 per_page: 10
 pagination_dir: page
-theme: next
+theme: butterfly
 server:
   port: 4000
   compress: true
   header: true
 marked:
   gfm: true
+# ── 插件 ──────────────────────────────────
+# 短链
+abbrlink:
+  alg: crc32
+  rep: dec
+# 音乐播放器（hexo-tag-aplayer；页面内用 {% aplayer %} 标签插入）
+aplayer:
+  meting: false
+  asset_inject: false
+# 站内搜索（hexo-generator-search 生成 search.xml，主题侧 local_search 消费）
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html
