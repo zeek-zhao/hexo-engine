@@ -51,6 +51,7 @@ for (const d of ASSET_DIRS) {
 
 // 全库扫描 md
 const usedNames = new Set();
+const seenTitles = new Set();
 for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
   report.scanned++;
   const rel = path.relative(CONTENT_DIR, full).split(path.sep).join('/');
@@ -67,7 +68,8 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
   if (!Array.isArray(fm.tags) || fm.tags.length < 2) { report.skipped.push({ file: rel, reason: 'tags 少于 2 个' }); continue; }
   if (fm.tags.length > 3) { report.skipped.push({ file: rel, reason: 'tags 超过 3 个（规则：每个文档 ≤3）' }); continue; }
   if (!fm.description) { report.skipped.push({ file: rel, reason: '缺少 description' }); continue; }
-  if (/\{\{/.test(body) || /TODO:/.test(body)) { report.skipped.push({ file: rel, reason: '含占位符/模板语法/TODO' }); continue; }
+  // {% raw %} 包裹段是刻意展示的字面语法，检测前先剥离
+  if (/\{\{/.test(body.replace(/\{% raw %\}[\s\S]*?\{% endraw %\}/g, '')) || /TODO:/.test(body)) { report.skipped.push({ file: rel, reason: '含占位符/模板语法/TODO' }); continue; }
 
   // OB 专有语法兜底清理
   body = body.replace(/!\[\[([^\]]+)\]\]/g, '> [!warning] 未转换的 Obsidian 嵌入: $1');
@@ -83,6 +85,10 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
     if (fm[k] !== undefined && fm[k] !== null) outFm[k] = fm[k];
   }
   if (outFm.title === undefined) outFm.title = name;
+  // 标题查重：abbrlink 由 title 派生，重复标题会短链冲突
+  const t = String(outFm.title);
+  if (seenTitles.has(t)) { report.skipped.push({ file: rel, reason: '标题与已发布文档重复: ' + t }); continue; }
+  seenTitles.add(t);
   fs.writeFileSync(path.join(OUT_POSTS, name + '.md'), matter.stringify(body, outFm));
 
   // 与 hexo-abbrlink 相同的短链算法
