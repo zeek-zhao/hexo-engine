@@ -62,7 +62,7 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
   if (fm.status !== 'published') { report.skipped.push({ file: rel, reason: 'status !== published' }); continue; }
   if (!Array.isArray(fm.tags) || fm.tags.length < 2) { report.skipped.push({ file: rel, reason: 'tags 少于 2 个' }); continue; }
   if (!fm.description) { report.skipped.push({ file: rel, reason: '缺少 description' }); continue; }
-  if (/\{\{/.test(body) || /TODO:/.test(body)) { report.skipped.push({ file: rel, reason: '含占位符/TODO' }); continue; }
+  if (/(?<!\$)\{\{/.test(body) || /TODO:/.test(body)) { report.skipped.push({ file: rel, reason: '含占位符/TODO' }); continue; }
 
   // OB 专有语法兜底清理
   body = body.replace(/!\[\[([^\]]+)\]\]/g, '> [!warning] 未转换的 Obsidian 嵌入: $1');
