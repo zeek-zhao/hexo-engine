@@ -1,8 +1,14 @@
 name: Build and Publish
 
+# 认证设计：只需在 hexo-engine 配置一个 secret —— SSH_PRIVATE_KEY
+# （即 WSL ~/.ssh/id_rsa 私钥，其公钥已是账号 SSH key，天然可读写全部私有仓库）。
+# 不需要 CONTENT_TOKEN / PAGES_TOKEN，也不需要在 ai-obsidian / 主页仓库配置任何东西。
+#
+# schedule 暂时注释：未配置 secret 前每日 cron 会空跑失败。
+# 配好 SSH_PRIVATE_KEY 后取消注释即恢复每日自动构建。
 on:
-  schedule:
-    - cron: "0 2 * * *" # 每日 UTC 2:00（北京时间 10:00）全量重建
+  # schedule:
+  #   - cron: "0 2 * * *" # 每日 UTC 2:00（北京时间 10:00）全量重建
   workflow_dispatch: {}
   repository_dispatch:
     types: [content-updated]
@@ -21,10 +27,13 @@ jobs:
       - name: Checkout engine
         uses: actions/checkout@v4
 
-      - name: Clone content repo
-        run: |
-          git clone --depth 1 \
-            "https://x-access-token:${{ secrets.CONTENT_TOKEN }}@github.com/zeek-zhao/ai-obsidian.git" content
+      - name: Start ssh-agent with account key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Clone content repo (private, via SSH)
+        run: git clone --depth 1 git@github.com:zeek-zhao/ai-obsidian.git content
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -39,7 +48,7 @@ jobs:
       - name: Publish to Pages repo
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ secrets.PAGES_TOKEN }}
+          deploy_key: ${{ secrets.SSH_PRIVATE_KEY }}
           external_repository: zeek-zhao/zeek-zhao.github.io
           publish_branch: gh-pages
           publish_dir: ./public
