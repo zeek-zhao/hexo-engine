@@ -1,0 +1,58 @@
+title: Zeek 的 AI 知识工程
+subtitle: 用 AI 跑一条内容流水线
+description: AI 驱动的 Obsidian 知识工程博客
+language: zh-CN
+url: https://zeek-zhao.github.io
+root: /
+permalink: :year/:month/:day/:slug/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true
+  trailing_html: true
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+new_post_name: :title.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+syntax_highlighter: highlight.js
+highlight:
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
+prismjs:
+  preprocess: true
+  line_number: true
+  tab_replace: ''
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_option: 'date'
+per_page: 10
+pagination_dir: page
+theme: next
+server:
+  port: 4000
+  compress: true
+  header: true
+marked:
+  gfm: true

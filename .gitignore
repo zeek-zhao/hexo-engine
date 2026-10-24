@@ -1,0 +1,15 @@
+# 依赖与产物
+node_modules/
+public/
+db.json
+package-lock.json
+
+# 内容库拉取目录（由 CI 克隆或本地手动克隆）
+content/
+
+# 部署
+.deploy_git/
+
+# OS
+Thumbs.db
+.DS_Store
