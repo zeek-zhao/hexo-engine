@@ -64,13 +64,307 @@ footer a{color:var(--a1);text-decoration:none}
     <a href="/posts/2919529784.html">
       <span class="pin-badge">置顶</span>
       <span>📌 文章短链映射</span>
-      <span class="pin-sub">全部 914 篇文档的源路径 ↔ 短链对照</span>
+      <span class="pin-sub">全部 1124 篇文档的源路径 ↔ 短链对照</span>
     </a>
   </section>
 
   <main>
-    <h2 class="sec">全部文档 <span class="count">共 914 篇</span></h2>
+    <h2 class="sec">全部文档 <span class="count">共 1124 篇</span></h2>
     <ul class="docs">
+    <li class="doc">
+      <a class="doc-link" href="/posts/530063675.html">
+        <span class="doc-title">groovy 00-索引</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">01-Groovy简介与特性：了解 Groovy 语言背景、特性与 Apache 基金会治理。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2282500807.html">
+        <span class="doc-title">01-Groovy简介与特性</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Apache Groovy 是一种运行在 JVM 上的动态语言，语法与 Java 高度兼容，但对开发者更友好。它既可以作为脚本语言快速完成任务，也可以作为完整的编程语言构建大型应用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2192269971.html">
+        <span class="doc-title">02-安装与运行环境</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 的安装方式灵活，最常用的是通过 SDKMAN! 管理版本，也可以直接下载官方发行包并配置 PATH。在 Windows 上可以使用包管理器或免安装 zip 解压使用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1972862518.html">
+        <span class="doc-title">03-语法基础</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 使用 def 声明变量，类型由赋值推断，也可以显式声明类型。变量分为局部变量、字段与属性，属性通过 getter/setter 自动生成。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1893677660.html">
+        <span class="doc-title">04-动态类型与类型系统</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 变量在运行时持有真实类型，def 声明只是不指定类型而非无类型。方法调用基于运行时类型动态分发，这就是多态的基础。动态类型让代码灵活，但类型错误延迟到运行时才暴露。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2263298668.html">
+        <span class="doc-title">05-闭包基础</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">闭包用花括号定义，可以赋值给变量、作为参数传递、作为返回值返回。最简单的闭包打印文本，无参数，调用时用 call 方法或直接加括号。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1963770138.html">
+        <span class="doc-title">06-GString与字符串</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 字符串分为 Java String 与 GString 两类。单引号创建普通 String，双引号创建 GString（包含插值表达式时）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2926533160.html">
+        <span class="doc-title">07-操作符重载</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 中操作符本质是方法调用：加法映射为 plus 方法，等号比较映射为 equals 或 compareTo 方法，索引映射为 getAt 方法。自定义类实现对应方法即可获得操作符支持。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/137803024.html">
+        <span class="doc-title">08-与Java互操作</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 可以毫无障碍地使用所有 Java 类库，导入、实例化、调用方法与 Java 语法基本一致，无需额外配置。Java 集合、并发、IO 与网络库均可直接使用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3109056171.html">
+        <span class="doc-title">09-面向对象</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 类定义与 Java 类似，但更简洁：属性声明无需显式 getter/setter，构造器可以省略，默认无参构造器自动提供。类默认 public，字段默认 private 并自动生成访问器。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/264025632.html">
+        <span class="doc-title">10-trait与特性</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">trait 是 Groovy 的行为复用单元，类似接口但可以包含方法实现与字段。类通过 implements 混入 trait，获得其全部行为，避免多重继承的菱形问题。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3241380956.html">
+        <span class="doc-title">11-默认参数与多重赋值</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 方法参数可以带默认值，调用时省略的参数自动使用默认值。默认参数避免了 Java 中大量重载方法的样板代码。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/850744168.html">
+        <span class="doc-title">12-集合与遍历</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 用方括号创建 List、花括号创建 Map，字面量语法让集合定义极简。Range 用两个点表示区间，可以表达数值与日期范围。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1773101978.html">
+        <span class="doc-title">13-闭包进阶</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">每个闭包有 owner、delegate 与 this 三个作用域对象。方法调用先在 this 上解析，再尝试 delegate，通过 delegate 可以改变闭包内的解析上下文。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2038790379.html">
+        <span class="doc-title">14-元编程MOP</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 的对象模型基于 MetaClass 扩展：每个对象关联元类，方法调用先经过元类解析。MOP 是运行时元编程的基础设施。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3307374400.html">
+        <span class="doc-title">15-方法缺失与动态方法</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">调用对象上不存在的方法时，Groovy 会调用 methodMissing 方法，参数包含方法名与参数列表。拦截后可以动态处理或抛出异常。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/73439704.html">
+        <span class="doc-title">16-分类与扩展</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Category 是 Groovy 提供的临时扩展机制，将静态方法包装为实例方法应用到目标类型。使用 use 块限定作用范围，退出后即失效。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2022487872.html">
+        <span class="doc-title">17-字符串与正则</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 用斜杠字符串定义正则：/\d+/ 免去双重转义。find 方法判断是否匹配，matches 要求完全匹配，等号操作符简化调用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1372015587.html">
+        <span class="doc-title">18-文件IO</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">File 的 text 属性一行读取全部内容，eachLine 逐行处理大文件，readLines 返回行列表。文本编码通过参数指定。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1278490648.html">
+        <span class="doc-title">19-JSON与XML处理</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">JsonSlurper 解析 JSON 字符串或流为 Groovy 数据结构，Map 与 List 直接使用点号访问。JsonOutput 序列化对象为 JSON 文本。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1109974885.html">
+        <span class="doc-title">20-数据库访问</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 使用 java.sql 驱动连接数据库，Sql 类封装连接与查询。加载驱动、建立连接、执行 SQL 与 Java 流程一致但代码更短。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1914309065.html">
+        <span class="doc-title">21-Groovy与Gradle构建</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Gradle 是 JVM 生态的构建自动化工具，构建脚本默认使用 Groovy DSL（build.gradle），Groovy 开发者对构建脚本零学习成本。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3829449832.html">
+        <span class="doc-title">22-Spock测试框架</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Spock 是基于 Groovy 的测试与规范框架，将测试写成可读的规范：given-when-then 结构让测试意图表达清晰。它兼容 JUnit 运行器，可直接在 Gradle、Maven 与 IDE 中使用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3208685137.html">
+        <span class="doc-title">23-Groovy脚本化</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 脚本文件无需类声明，顶层语句直接执行。脚本编译为 Script 类，可以定义方法、变量与闭包。脚本适合快速任务与原型验证。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1860553690.html">
+        <span class="doc-title">24-GDK扩展</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">GDK（Groovy Development Kit）是 Groovy 对 Java 标准库的扩展，为 String、Collection、File、Class 等核心类型添加大量便捷方法。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3169274589.html">
+        <span class="doc-title">25-Groovy与Jenkins Pipeline</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Jenkins Pipeline 将持续交付流程定义为代码，Jenkinsfile 放在仓库中版本管理。Pipeline 脚本基于 Groovy，利用其动态与 DSL 能力表达构建、测试、部署流程。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1593747744.html">
+        <span class="doc-title">26-Jenkins声明式与脚本式</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">声明式语法用结构化块表达流水线：pipeline、agent、stages、steps、post。它约束结构、内置安全检查，适合绝大多数标准 CI/CD。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2901769728.html">
+        <span class="doc-title">27-DSL构建</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">DSL（领域特定语言）为特定领域提供表达性语法，让领域专家与开发者用接近业务语言的方式表达逻辑。Groovy 的动态特性使其成为构建 DSL 的利器。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1617959215.html">
+        <span class="doc-title">28-AST转换</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">AST（抽象语法树）转换在编译阶段修改或生成代码，实现编译期元编程。与运行时元编程不同，AST 转换发生在编译期，生成高效代码。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3312453882.html">
+        <span class="doc-title">29-性能优化</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 动态调用有运行时开销，性能低于 Java 静态编译代码。但大部分应用瓶颈不在语言本身，而在算法、IO 与架构，先分析再优化。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/66510573.html">
+        <span class="doc-title">30-并发与异步</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 使用 JVM 的并发设施：Thread、ExecutorService、Future。闭包作为任务单元，配合线程池执行并行任务。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4286498902.html">
+        <span class="doc-title">31-GPars并发库</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">GPars 是 Groovy 的高级并发库，提供并行集合、数据流、Actor、Agent 等抽象，让并发编程从底层线程提升到高层模式。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3824291235.html">
+        <span class="doc-title">32-Web开发与Grails</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Grails 是构建于 Spring Boot 与 GORM 之上的全栈 Web 框架，采用约定优于配置与 Groovy DSL，让 Web 开发高效简洁。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2195762983.html">
+        <span class="doc-title">33-Groovy服务与微服务</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 可以基于 Spring Boot、Micronaut 或 Grails 构建服务。脚本化原型验证、框架化生产落地的模式很常见。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3216722037.html">
+        <span class="doc-title">34-构建工具与依赖管理</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 项目主流使用 Gradle 构建，支持 Groovy 与 Java 联合编译、依赖解析、测试执行与打包发布。Maven 也可通过 gmavenplus 插件构建。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1687475308.html">
+        <span class="doc-title">35-单元测试与Mock</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Groovy 项目测试主流使用 Spock，也支持 JUnit、TestNG。Spock 的行为驱动风格最适合 Groovy 动态特性。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/734893168.html">
+        <span class="doc-title">36-代码风格与最佳实践</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">类名 PascalCase、方法变量 camelCase、常量 UPPER_SNAKE_CASE。包名小写，文件按类名组织。脚本文件以用途命名。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2569908089.html">
+        <span class="doc-title">37-调试与性能分析</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">IDE 调试器支持 Groovy 断点、逐步执行与变量查看。脚本调试用 GroovyConsole 快速实验，groovysh 交互验证。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1365861220.html">
+        <span class="doc-title">38-版本与发布管理</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">语义化版本（SemVer）：主版本不兼容变更、次版本功能新增、补丁版本缺陷修复。预发布用 alpha、beta、RC 标记。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1282058828.html">
+        <span class="doc-title">groovy 39-常见问题排查</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">MissingMethodException 多为方法名拼写或类型不匹配，检查运行时类型与动态方法注册。空指针用安全导航与 Elvis 默认值防护。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1678134708.html">
+        <span class="doc-title">40-实战项目</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">实战项目：开发一个基于 Groovy 的命令行数据处理工具，支持读取结构化数据、清洗转换、生成报告并支持插件扩展。项目整合脚本、集合、正则、IO、JSON、测试与构建全链路。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3404541891.html">
+        <span class="doc-title">groovy 资料索引指南</span>
+        <span class="doc-meta">2026-10-25 · groovy</span>
+      </a>
+      <p class="doc-desc">Apache Groovy 官网：语言特性、下载与生态概览。</p>
+    </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2644990176.html">
         <span class="doc-title">用 AI 把 Obsidian 变成一条发布流水线</span>
@@ -1091,28 +1385,28 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">qt 00-索引</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: Qt 从入门到精通</p>
+      <p class="doc-desc">本套教程目录汇总与学习路线导航</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2551524494.html">
         <span class="doc-title">01-Qt简介与生态</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: Qt 简介与生态</p>
+      <p class="doc-desc">Qt 的历史、生态组成与授权模式</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2019922303.html">
         <span class="doc-title">02-环境搭建与Qt Creator</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 环境搭建与 Qt Creator</p>
+      <p class="doc-desc">开发环境安装、配置与 Qt Creator 使用</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3929858542.html">
         <span class="doc-title">03-CMake与qmake构建</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: CMake 与 qmake 构建</p>
+      <p class="doc-desc">两种构建系统的对比与工程配置</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/4180219201.html">
@@ -1133,7 +1427,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">06-常用控件Widgets</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 常用控件 Widgets</p>
+      <p class="doc-desc">Widgets 常用界面控件与使用场景</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/321706013.html">
@@ -1154,21 +1448,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">09-QPainter绘图</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: QPainter 绘图</p>
+      <p class="doc-desc">使用 QPainter 进行自定义绘制与图形输出</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3245322074.html">
         <span class="doc-title">10-模型视图Model-View</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 模型视图 Model/View</p>
+      <p class="doc-desc">数据与界面分离的模型视图架构</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/457822583.html">
         <span class="doc-title">11-QML与Qt Quick入门</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: QML 与 Qt Quick 入门</p>
+      <p class="doc-desc">声明式界面开发的现代方法</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3819102761.html">
@@ -1203,14 +1497,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">16-XML与JSON处理</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: XML 与 JSON 处理</p>
+      <p class="doc-desc">结构化数据解析、生成与序列化</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2977710297.html">
         <span class="doc-title">17-文件与IO操作</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 文件与 IO 操作</p>
+      <p class="doc-desc">文件系统访问与输入输出流处理</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3609188709.html">
@@ -1238,7 +1532,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">21-Qt Test单元测试</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: Qt Test 单元测试</p>
+      <p class="doc-desc">使用 Qt Test 框架编写自动化测试</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2200404249.html">
@@ -1259,7 +1553,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">24-Qt与C++进阶</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: Qt 与 C++ 进阶</p>
+      <p class="doc-desc">现代 C++ 特性与 Qt 结合实践</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1295027018.html">
@@ -1273,7 +1567,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">26-OpenGL与Qt 3D</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: OpenGL 与 Qt 3D</p>
+      <p class="doc-desc">三维图形渲染与 Qt 3D 框架</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/682960497.html">
@@ -1322,7 +1616,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">33-元对象系统与反射</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 元对象系统与反射</p>
+      <p class="doc-desc">Qt 元对象机制与运行时反射能力</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2182060918.html">
@@ -1336,14 +1630,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">35-多媒体与音频视频</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 多媒体与音频视频</p>
+      <p class="doc-desc">Qt 多媒体模块播放与处理能力</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/689634519.html">
         <span class="doc-title">36-系统集成与跨平台</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 系统集成与跨平台</p>
+      <p class="doc-desc">系统能力集成与跨平台适配实践</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2899185558.html">
@@ -1357,21 +1651,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">38-Qt Quick Controls与界面美化</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: Qt Quick Controls 与界面美化</p>
+      <p class="doc-desc">现代界面组件与视觉美化实践</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2018406372.html">
         <span class="doc-title">39-性能优化与内存管理</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 性能优化与内存管理</p>
+      <p class="doc-desc">性能调优实践与内存管理策略</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2658858506.html">
         <span class="doc-title">40-架构设计与设计模式</span>
         <span class="doc-meta">2026-10-24 · qt</span>
       </a>
-      <p class="doc-desc">标题: 架构设计与设计模式</p>
+      <p class="doc-desc">大型 Qt 应用架构与设计模式实践</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1053799195.html">
@@ -1385,28 +1679,28 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">selinux 00-索引</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 从入门到精通</p>
+      <p class="doc-desc">本套教程目录汇总与学习路线导航</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1503274122.html">
         <span class="doc-title">01-SELinux简介与设计目标</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 简介与设计目标</p>
+      <p class="doc-desc">SELinux 的起源、设计思想与核心目标</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/398149781.html">
         <span class="doc-title">02-SELinux与DAC、AppArmor对比</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 与 DAC、AppArmor 对比</p>
+      <p class="doc-desc">三种访问控制机制的原理与选型对比</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3598652047.html">
         <span class="doc-title">03-LSM与SELinux架构</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: LSM 与 SELinux 架构</p>
+      <p class="doc-desc">Linux 安全模块框架与 SELinux 运行原理</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2433665952.html">
@@ -1420,21 +1714,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">05-类型强制TE模型</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 类型强制 TE 模型</p>
+      <p class="doc-desc">SELinux 核心的强制访问控制模型</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1420374886.html">
         <span class="doc-title">06-策略语言与语法基础</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 策略语言与语法基础</p>
+      <p class="doc-desc">SELinux 策略源文件的组成与规则语法</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1003762406.html">
         <span class="doc-title">07-布尔值Boolean配置</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 布尔值 Boolean 配置</p>
+      <p class="doc-desc">运行时策略开关的作用与调优方法</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2950431380.html">
@@ -1455,77 +1749,77 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">10-受限域与非受限域</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 受限域与非受限域</p>
+      <p class="doc-desc">域的分类、安全意义与切换策略</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/305583261.html">
         <span class="doc-title">11-SELinux与systemd集成</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 与 systemd 集成</p>
+      <p class="doc-desc">systemd 服务启动、标签与 SELinux 协同</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/387038460.html">
         <span class="doc-title">12-RHEL-CentOS-Fedora配置</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: RHEL/CentOS/Fedora 配置</p>
+      <p class="doc-desc">Red Hat 家族发行版的 SELinux 配置实践</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3814999692.html">
         <span class="doc-title">13-Ubuntu-Debian配置</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: Ubuntu/Debian 配置</p>
+      <p class="doc-desc">Debian 系发行版的 SELinux 启用与配置</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3545305963.html">
         <span class="doc-title">14-audit日志分析</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: audit 日志分析</p>
+      <p class="doc-desc">审计日志的解读与拒绝事件分析</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1782436599.html">
         <span class="doc-title">15-setroubleshoot排障助手</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: setroubleshoot 排障助手</p>
+      <p class="doc-desc">图形化与命令行排障工具使用</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1822616807.html">
         <span class="doc-title">16-sepolicy策略工具</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: sepolicy 策略工具</p>
+      <p class="doc-desc">生成、查询与分析策略模块的工具链</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/578018809.html">
         <span class="doc-title">17-semanage管理命令</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: semanage 管理命令</p>
+      <p class="doc-desc">集中管理策略配置的命令行工具</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1635612844.html">
         <span class="doc-title">18-sesearch与seinfo查询</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: sesearch 与 seinfo 查询</p>
+      <p class="doc-desc">策略规则与类型的检索分析工具</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2746712736.html">
         <span class="doc-title">19-编写自定义策略模块</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 编写自定义策略模块</p>
+      <p class="doc-desc">使用策略语言创建模块的完整流程</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/725454592.html">
         <span class="doc-title">20-MLS多级安全</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: MLS 多级安全</p>
+      <p class="doc-desc">多级安全模型与 MLS 策略</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2097510941.html">
@@ -1539,21 +1833,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">22-容器与虚拟化场景</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 容器与虚拟化场景</p>
+      <p class="doc-desc">SELinux 在容器与虚拟化环境中的角色</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2442163841.html">
         <span class="doc-title">23-SELinux与Docker</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 与 Docker</p>
+      <p class="doc-desc">Docker 环境的 SELinux 配置与隔离实践</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3598243312.html">
         <span class="doc-title">24-SELinux与Kubernetes</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 与 Kubernetes</p>
+      <p class="doc-desc">Kubernetes 集群中的 SELinux 集成与安全</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2972766305.html">
@@ -1588,7 +1882,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">29-audit2allow与自动修复</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: audit2allow 与自动修复</p>
+      <p class="doc-desc">从拒绝日志自动生成策略建议</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3354707006.html">
@@ -1609,63 +1903,63 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">32-文件系统打标与restorecon</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 文件系统打标与 restorecon</p>
+      <p class="doc-desc">全盘标签、恢复与自定义规则应用</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1969646752.html">
         <span class="doc-title">33-布尔值应用场景详解</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 布尔值应用场景详解</p>
+      <p class="doc-desc">典型服务布尔值配置的场景化实践</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2608411710.html">
         <span class="doc-title">34-常用服务策略配置</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 常用服务策略配置</p>
+      <p class="doc-desc">Web、数据库、文件共享等服务的策略适配</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3234103349.html">
         <span class="doc-title">35-上下文备份与恢复</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 上下文备份与恢复</p>
+      <p class="doc-desc">安全上下文的备份、迁移与灾难恢复</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1618170639.html">
         <span class="doc-title">36-策略语言高级语法</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 策略语言高级语法</p>
+      <p class="doc-desc">复杂规则、条件与接口的进阶语法</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1667022821.html">
         <span class="doc-title">37-SELinux测试与验证</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 测试与验证</p>
+      <p class="doc-desc">策略正确性与系统安全性的验证方法</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1536650361.html">
         <span class="doc-title">38-SELinux与其他安全机制协同</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 与其他安全机制协同</p>
+      <p class="doc-desc">与防火墙、审计、容器安全、加密的协同</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2558951093.html">
         <span class="doc-title">39-常见问题FAQ</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: 常见问题 FAQ</p>
+      <p class="doc-desc">SELinux 使用中的高频问题与解答</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/13954827.html">
         <span class="doc-title">40-SELinux实战案例集</span>
         <span class="doc-meta">2026-10-24 · selinux</span>
       </a>
-      <p class="doc-desc">标题: SELinux 实战案例集</p>
+      <p class="doc-desc">生产环境典型案例的完整排障过程</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/686546806.html">
@@ -1679,91 +1973,91 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">yocto 00-索引</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Yocto 从入门到精通教程索引</p>
+      <p class="doc-desc">本套 Yocto 教程的目录汇总，含学习路线与全篇导航</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1207406086.html">
         <span class="doc-title">01-Yocto简介与历史</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Yocto 简介与历史</p>
+      <p class="doc-desc">Yocto 项目背景、核心理念与版本演进</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1224211256.html">
         <span class="doc-title">02-Poky架构与组成</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Poky 架构与组成</p>
+      <p class="doc-desc">Poky 参考系统的目录结构、组件与工作机理</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/351302025.html">
         <span class="doc-title">03-环境搭建与快速入门</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 环境搭建与快速入门</p>
+      <p class="doc-desc">从零搭建 Yocto 构建环境并完成首次镜像构建</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/721182925.html">
         <span class="doc-title">04-BitBake构建引擎基础</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: BitBake 构建引擎基础</p>
+      <p class="doc-desc">BitBake 任务执行引擎的原理、语法与调度机制</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2949328265.html">
         <span class="doc-title">05-Recipe（BB文件）语法</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Recipe（BB 文件）语法</p>
+      <p class="doc-desc">配方文件的核心语法、常用变量与函数</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/616600326.html">
         <span class="doc-title">06-Layer机制与自定义层</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Layer 机制与自定义层</p>
+      <p class="doc-desc">层（Layer）的组织方式、优先级与自定义层创建</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/320111315.html">
         <span class="doc-title">07-Image镜像构建</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Image 镜像构建</p>
+      <p class="doc-desc">镜像类型、镜像配方定制与常见镜像变体</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/170608325.html">
         <span class="doc-title">08-Kernel内核配置与裁剪</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Kernel 内核配置与裁剪</p>
+      <p class="doc-desc">内核配方、配置片段与补丁管理方法</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3566516174.html">
         <span class="doc-title">09-u-boot与启动流程</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: u-boot 与启动流程</p>
+      <p class="doc-desc">引导加载器配置、启动链路与产品化定制</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/234379831.html">
         <span class="doc-title">10-devtool开发工具</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: devtool 开发工具</p>
+      <p class="doc-desc">devtool 工作流、源码修改与配方生成</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2449330059.html">
         <span class="doc-title">11-SDK与交叉编译</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: SDK 与交叉编译</p>
+      <p class="doc-desc">交叉工具链、SDK 生成与外部开发环境搭建</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2764155407.html">
         <span class="doc-title">12-镜像定制与rootfs</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 镜像定制与 rootfs</p>
+      <p class="doc-desc">根文件系统定制、包选择与目录布局</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1010491477.html">
@@ -1791,14 +2085,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">16-CI集成与自动化构建</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: CI 集成与自动化构建</p>
+      <p class="doc-desc">Yocto 与 CI/CD 集成、缓存管理与自动化测试</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3112535204.html">
         <span class="doc-title">17-QEMU测试与模拟</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: QEMU 测试与模拟</p>
+      <p class="doc-desc">QEMU 启动、测试用例与自动化验证</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3517188537.html">
@@ -1819,21 +2113,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">20-OTA升级方案</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: OTA 升级方案</p>
+      <p class="doc-desc">系统在线升级架构、A/B 分区与升级实现</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3661098300.html">
         <span class="doc-title">21-多架构与多机器支持</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 多架构与多机器支持</p>
+      <p class="doc-desc">多目标架构构建、机器配置与 BSP 管理</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3711372808.html">
         <span class="doc-title">22-Init系统与启动优化</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Init 系统与启动优化</p>
+      <p class="doc-desc">init 系统选择与启动时间优化技术</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1404298889.html">
@@ -1847,7 +2141,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">24-网络配置与联网功能</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 网络配置与联网功能</p>
+      <p class="doc-desc">网络服务集成、Wi-Fi/以太网配置与安全连接</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3716561130.html">
@@ -1875,21 +2169,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">28-测试框架（oe-selftest与ptest）</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 测试框架（oe-selftest 与 ptest）</p>
+      <p class="doc-desc">oe-selftest、ptest 与镜像测试体系</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3417160166.html">
         <span class="doc-title">29-构建缓存与sstate</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 构建缓存与 sstate</p>
+      <p class="doc-desc">sstate 缓存机制、共享缓存与加速构建</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3776100445.html">
         <span class="doc-title">30-工作流与最佳实践</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 工作流与最佳实践</p>
+      <p class="doc-desc">Yocto 团队开发工作流与工程最佳实践</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/927776964.html">
@@ -1903,14 +2197,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">32-Rust与Go等现代语言支持</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Rust 与 Go 等现代语言支持</p>
+      <p class="doc-desc">在 Yocto 中集成 Rust、Go 等现代语言组件</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1273124076.html">
         <span class="doc-title">33-实时性与PREEMPT_RT</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 实时性与 PREEMPT_RT</p>
+      <p class="doc-desc">实时内核配置、延迟评估与实时应用开发</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1479247012.html">
@@ -1931,14 +2225,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">36-Yocto与Buildroot对比</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: Yocto 与 Buildroot 对比</p>
+      <p class="doc-desc">两大嵌入式构建系统的对比与选型建议</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1009190386.html">
         <span class="doc-title">37-bbappend与补丁</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: bbappend 与补丁</p>
+      <p class="doc-desc">bbappend 文件、补丁制作与层覆盖机制</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3120456197.html">
@@ -1952,14 +2246,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">39-性能优化与磁盘瘦身</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 性能优化与磁盘瘦身</p>
+      <p class="doc-desc">镜像体积优化、运行时性能调优与资源管理</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/773126226.html">
         <span class="doc-title">40-实战：从零构建完整系统镜像</span>
         <span class="doc-meta">2026-10-24 · yocto</span>
       </a>
-      <p class="doc-desc">标题: 实战：从零构建完整系统镜像</p>
+      <p class="doc-desc">综合运用本套教程，从零构建可运行的系统镜像</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/205673976.html">
@@ -1973,14 +2267,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">FreeRTOS 00-索引</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: FreeRTOS 从入门到精通</p>
+      <p class="doc-desc">本套教程目录汇总与学习路线导航</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1571422233.html">
         <span class="doc-title">01-FreeRTOS简介与内核特性</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: FreeRTOS 简介与内核特性</p>
+      <p class="doc-desc">FreeRTOS 历史、生态与内核特性概览</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1616849365.html">
@@ -2029,7 +2323,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">08-互斥量与优先级反转</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: 互斥量与优先级反转</p>
+      <p class="doc-desc">互斥访问、优先级反转与优先级继承</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3205967530.html">
@@ -2050,7 +2344,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">11-流缓冲与消息缓冲</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: 流缓冲与消息缓冲</p>
+      <p class="doc-desc">字节流与消息流传递机制</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/479641272.html">
@@ -2071,14 +2365,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">14-中断管理与临界区</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: 中断管理与临界区</p>
+      <p class="doc-desc">中断安全 API 与临界区保护</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/339821033.html">
         <span class="doc-title">15-Tick与时间管理</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: Tick 与时间管理</p>
+      <p class="doc-desc">系统时基、延时与时间相关机制</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/224362852.html">
@@ -2099,7 +2393,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">18-低功耗与tickless</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: 低功耗与 tickless</p>
+      <p class="doc-desc">Tickless 低功耗模式实现与应用</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/544846964.html">
@@ -2113,14 +2407,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">20-FreeRTOS+TCP</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: FreeRTOS+TCP</p>
+      <p class="doc-desc">TCP/IP 协议栈集成与应用</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2850073665.html">
         <span class="doc-title">21-CMSIS-RTOS适配</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: CMSIS-RTOS 适配</p>
+      <p class="doc-desc">CMSIS-RTOS 标准接口与适配</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2762677009.html">
@@ -2141,14 +2435,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">24-内存保护MPU</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: 内存保护 MPU</p>
+      <p class="doc-desc">MPU 安全隔离机制与应用</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1361167341.html">
         <span class="doc-title">25-FreeRTOS与C++</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: FreeRTOS 与 C++</p>
+      <p class="doc-desc">C++ 开发实践与集成技巧</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3732453393.html">
@@ -2218,7 +2512,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">35-TCP网络实战</span>
         <span class="doc-meta">2026-10-24 · FreeRTOS</span>
       </a>
-      <p class="doc-desc">标题: TCP 网络实战</p>
+      <p class="doc-desc">网络应用开发与调优</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/944546225.html">
@@ -2267,14 +2561,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">RT-Thread 00-索引</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: RT-Thread 从入门到精通</p>
+      <p class="doc-desc">本套教程目录汇总与学习路线导航</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3906847031.html">
         <span class="doc-title">01-RT-Thread简介与生态</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: RT-Thread 简介与生态</p>
+      <p class="doc-desc">RT-Thread 历史、架构与生态组成</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/610362104.html">
@@ -2302,7 +2596,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">05-线程状态机与优先级</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: 线程状态机与优先级</p>
+      <p class="doc-desc">线程状态迁移与优先级调度</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/357331050.html">
@@ -2372,7 +2666,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">15-临界区与线程同步</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: 临界区与线程同步</p>
+      <p class="doc-desc">临界区保护与同步设计</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/61094340.html">
@@ -2386,14 +2680,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">17-I-O设备模型</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: I/O 设备模型</p>
+      <p class="doc-desc">I/O 设备抽象与操作接口</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3069243359.html">
         <span class="doc-title">18-FinSH控制台</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: FinSH 控制台</p>
+      <p class="doc-desc">命令行调试与控制台组件</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3174840723.html">
@@ -2407,21 +2701,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">20-Env与menuconfig配置</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: Env 与 menuconfig 配置</p>
+      <p class="doc-desc">图形化配置系统</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1358882682.html">
         <span class="doc-title">21-RT-Thread Studio</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: RT-Thread Studio</p>
+      <p class="doc-desc">一体化开发环境使用</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1974679192.html">
         <span class="doc-title">22-Scons构建</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: Scons 构建</p>
+      <p class="doc-desc">构建系统与脚本化编译</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1558395596.html">
@@ -2435,21 +2729,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">24-网络组件lwIP</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: 网络组件 lwIP</p>
+      <p class="doc-desc">TCP/IP 协议栈集成</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/4025911074.html">
         <span class="doc-title">25-DFS文件系统</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: DFS 文件系统</p>
+      <p class="doc-desc">虚拟文件系统与存储设备</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2437688169.html">
         <span class="doc-title">26-POSIX支持</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: POSIX 支持</p>
+      <p class="doc-desc">POSIX 标准接口适配</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1239645384.html">
@@ -2484,7 +2778,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">31-微内核与混合微内核</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: 微内核与混合微内核</p>
+      <p class="doc-desc">新内核架构探索</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1273830891.html">
@@ -2505,21 +2799,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">34-GUI组件与柿饼UI</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: GUI 组件与柿饼 UI</p>
+      <p class="doc-desc">图形界面与 UI 框架</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/4194237798.html">
         <span class="doc-title">35-传感器与驱动组件</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: 传感器与驱动组件</p>
+      <p class="doc-desc">传感器接入与驱动开发</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1254828870.html">
         <span class="doc-title">36-实时性分析与优化</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: 实时性分析与优化</p>
+      <p class="doc-desc">实时性评估与优化方法</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/70811593.html">
@@ -2554,7 +2848,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">RT-Thread 90-资料索引指南</span>
         <span class="doc-meta">2026-10-24 · RT-Thread</span>
       </a>
-      <p class="doc-desc">标题: RT-Thread 资料索引指南</p>
+      <p class="doc-desc">官方文档、社区与书籍等权威资料汇总</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/608772131.html">
@@ -2568,14 +2862,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">01-Zephyr简介与基金会</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: Zephyr 简介与基金会</p>
+      <p class="doc-desc">Zephyr 项目背景、基金会与社区治理</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/111570124.html">
         <span class="doc-title">02-安装与west工具</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: 安装与 west 工具</p>
+      <p class="doc-desc">搭建开发环境与 west 工作流</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/391350374.html">
@@ -2589,14 +2883,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">04-设备树Device Tree</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: 设备树 Device Tree</p>
+      <p class="doc-desc">设备树描述硬件与配置</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2760731910.html">
         <span class="doc-title">05-Kconfig配置</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: Kconfig 配置</p>
+      <p class="doc-desc">菜单式配置系统与裁剪</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2266609168.html">
@@ -2729,7 +3023,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">24-Shell子系统</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: Shell 子系统</p>
+      <p class="doc-desc">Shell 命令与交互调试</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2017556036.html">
@@ -2743,21 +3037,21 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">26-ztest测试框架</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: ztest 测试框架</p>
+      <p class="doc-desc">单元测试与集成测试</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3382284514.html">
         <span class="doc-title">27-twister测试</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: twister 测试</p>
+      <p class="doc-desc">测试运行器与 CI 集成</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2853899551.html">
         <span class="doc-title">28-构建系统CMake</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: 构建系统 CMake</p>
+      <p class="doc-desc">CMake 构建与配置</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/3766947609.html">
@@ -2799,14 +3093,14 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">34-QEMU模拟器</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: QEMU 模拟器</p>
+      <p class="doc-desc">QEMU 平台与调试</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/2564223040.html">
         <span class="doc-title">35-native模拟器</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: native 模拟器</p>
+      <p class="doc-desc">native_posix 与 native_sim</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/66503584.html">
@@ -2820,7 +3114,7 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-title">37-CMake模块</span>
         <span class="doc-meta">2026-10-24 · Zephyr</span>
       </a>
-      <p class="doc-desc">标题: CMake 模块</p>
+      <p class="doc-desc">构建模块与自定义扩展</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/1879468777.html">
@@ -6461,6 +6755,1182 @@ footer a{color:var(--a1);text-decoration:none}
         <span class="doc-meta">2026-10-22 · portainer</span>
       </a>
       <p class="doc-desc">官网：https://www.portainer.io</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2084193678.html">
+        <span class="doc-title">C/C++ 学习路线索引</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">掌握环境搭建、基础语法、运算符、控制流与函数，能够编写简单的命令行程序。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2010224224.html">
+        <span class="doc-title">环境搭建与第一个程序</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">C 与 C++ 都是编译型语言：源码先由编译器翻译成机器码，再被操作系统加载执行。编译器是核心工具，常见的有：</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3276415470.html">
+        <span class="doc-title">基础语法与数据类型</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">变量是内存中命名的存储单元，声明时需指定类型。类型决定占用字节数与可表示范围。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3694112316.html">
+        <span class="doc-title">运算符与表达式</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">运算符作用于操作数产生结果，优先级决定结合顺序，结合性决定同优先级运算符从左还是从右求值。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/989639610.html">
+        <span class="doc-title">控制流</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">分支根据条件选择执行哪段代码；循环重复执行某段代码直到条件不满足。它们与函数一起构成结构化编程的基础。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/286376949.html">
+        <span class="doc-title">函数基础</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">函数把一段逻辑封装为可复用单元。声明告诉编译器函数签名，定义提供实现。C 语言中调用前必须有声明，否则编译器报错（C99 起不允许隐式声明）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2122762525.html">
+        <span class="doc-title">指针与内存</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">指针保存另一个变量的内存地址。* 用于解引用（访问所指对象），&amp; 用于取地址。指针类型决定解引用时按多少字节、什么类型解释内存。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/137912287.html">
+        <span class="doc-title">数组与字符串</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">数组名在表达式中退化为指向首元素的指针。数组大小必须在声明时确定（C 的变长数组 VLA 仅在 C99 可选支持），C++ 推荐 std::array / std::vector。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/421182776.html">
+        <span class="doc-title">结构体与联合体</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">struct：成员依次排列（可能有填充字节），每个成员独立占内存。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3189511810.html">
+        <span class="doc-title">文件IO</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">文件 IO 的本质是把内存数据搬运到磁盘（写）或反之（读）。C 标准库提供 FILE* 流接口；C++ 用 ifstream/ofstream 封装流对象。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1851015026.html">
+        <span class="doc-title">预处理器与宏</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">预处理器（preprocessor）是编译的第一阶段，它以 # 开头的指令对源码做纯文本替换，不感知 C/C++ 语法。常见用途：包含头文件、定义常量/宏、条件编译跨平台、防止重复包含。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3132484424.html">
+        <span class="doc-title">编译与链接</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">编译单元（translation unit）：一个源文件 + 其包含的头文件展开后的整体。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3487791556.html">
+        <span class="doc-title">Make与CMake</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">Make：根据文件时间戳判断哪些目标需要重新编译，按规则执行命令。规则格式：目标: 依赖 + Tab 缩进的命令。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2247057531.html">
+        <span class="doc-title">动态库与静态库</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">// mathlib.c</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1846073231.html">
+        <span class="doc-title">STL基础</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">容器：管理元素集合的数据结构，分序列容器（vector/list/deque）与关联容器（map/set/unordered_map）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/978419494.html">
+        <span class="doc-title">类与对象</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">封装：把数据（成员变量）与操作（成员函数）绑定，用 private 隐藏内部细节。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4127262035.html">
+        <span class="doc-title">模板</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">模板是编译期代码生成机制：编译器根据实际调用类型实例化出具体版本。与运行时多态不同，模板多态发生在编译期，无运行时开销。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/42497983.html">
+        <span class="doc-title">异常处理</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">异常将错误处理与正常流程解耦：函数无需层层返回错误码，只需 throw，上层捕获。异常对象的生命周期由栈展开（stack unwinding）管理——抛出点之上的局部对象会被自动析构。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/785480470.html">
+        <span class="doc-title">并发基础</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">并发是多个执行流同时推进。多线程共享同一进程内存，因此数据竞争（data race）是头号敌人：多个线程同时读写同一变量而无同步，属于未定义行为。互斥锁（mutex）与原子操作（atomic）是基本同步手段。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2995456600.html">
+        <span class="doc-title">调试技巧</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">调试器让程序在特定点暂停，检查变量与调用栈。前提是编译时加 -g 生成调试信息；优化选项 -O0 保证变量可读、行为可预期。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2737067120.html">
+        <span class="doc-title">移动语义与智能指针</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">左值（lvalue）：有名字、可取地址的表达式；右值（rvalue）：临时对象。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4006321951.html">
+        <span class="doc-title">工程实践与代码规范</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">工程实践的三个目标：可读（别人能看懂）、可维护（改动安全）、可测试（行为可验证）。规范的核心是让团队代码风格一致，降低认知成本。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2042245035.html">
+        <span class="doc-title">综合实战项目</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">1. 添加联系人（姓名、电话、邮箱）</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/633058435.html">
+        <span class="doc-title">C/C++ 资料索引指南</span>
+        <span class="doc-meta">2026-10-22 · c-cpp</span>
+      </a>
+      <p class="doc-desc">1. 入门：选《C++ Primer》或 Learn C++，配合 cppreference 查词、菜鸟教程补语法。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3362087806.html">
+        <span class="doc-title">数据库学习索引</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">第一阶段 数据库基础（01-03）</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2785949970.html">
+        <span class="doc-title">数据库基础与SQL入门</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">数据库（DB）：按数据结构组织、存储和管理数据的仓库。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3910832008.html">
+        <span class="doc-title">MySQL 安装与配置</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">MySQL：最流行的开源关系型数据库，InnoDB 为默认存储引擎。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1137247105.html">
+        <span class="doc-title">MySQL 常用操作</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">SHOW CREATE TABLE user;</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/418285562.html">
+        <span class="doc-title">索引与执行计划</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">索引：帮助数据库高效获取数据的有序数据结构，本质是空间换时间。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1229218731.html">
+        <span class="doc-title">事务与锁</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">事务：一组不可分割的数据库操作，要么全部成功要么全部回滚。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4026121810.html">
+        <span class="doc-title">视图、存储过程与触发器</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">视图：虚拟表，封装查询逻辑，不存储数据（普通视图）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1684695169.html">
+        <span class="doc-title">SQL 优化</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">优化流程：抓慢 SQL → 分析执行计划 → 定位瓶颈 → 改写/建索引 → 验证。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/440716968.html">
+        <span class="doc-title">database 备份恢复</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">全量备份：备份某一时刻全部数据。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1216837036.html">
+        <span class="doc-title">数据库设计范式</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">范式：规范表结构、消除数据冗余与更新异常的设计准则。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3376583833.html">
+        <span class="doc-title">PostgreSQL 入门</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">PostgreSQL（PG）：功能强大的开源对象-关系型数据库，ACID 严格、扩展性强。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4079913310.html">
+        <span class="doc-title">PostgreSQL 进阶</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">PG 索引类型：BTree（默认）、GIN（数组/JSONB/全文）、GIST（几何/全文）、BRIN（大表列相关性）、Hash。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4157437049.html">
+        <span class="doc-title">Redis 入门与常用命令</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">Redis：高性能内存键值数据库，单线程事件模型（I/O 多路复用）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2585400016.html">
+        <span class="doc-title">Redis 持久化与集群</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">RDB：全量快照文件（dump.rdb），恢复快、可能丢数据。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3389292749.html">
+        <span class="doc-title">Redis 高级特性</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">缓存一致性：缓存与数据库数据保持一致的核心问题。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3026500765.html">
+        <span class="doc-title">MongoDB 入门</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">MongoDB：文档型 NoSQL 数据库，数据以 BSON 文档（类 JSON）存储。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2382930266.html">
+        <span class="doc-title">MongoDB 进阶</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">聚合管道（Aggregation Pipeline）：多阶段数据处理管道。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1017376680.html">
+        <span class="doc-title">ORM 基础</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">ORM（Object Relational Mapping）：把关系型数据库表映射为对象，屏蔽 SQL 与对象的差异，提高开发效率。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1693324160.html">
+        <span class="doc-title">读写分离与高可用</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">主从复制（Replication）：主库写 binlog，从库拉取并重放，实现数据冗余与读扩展。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3520293075.html">
+        <span class="doc-title">运维监控</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">慢查询日志：记录执行超过阈值的 SQL，是性能问题第一现场。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/260837483.html">
+        <span class="doc-title">数据库安全与权限</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">最小权限原则：每个账号只授必要库表的最小权限。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1018471082.html">
+        <span class="doc-title">分布式数据库与新技术</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">NewSQL：兼具分布式扩展能力与强一致事务的数据库，代表 TiDB、CockroachDB。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/550302554.html">
+        <span class="doc-title">综合实战：从设计到上线</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">表：user / product / orders / order_item / inventory</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1312405026.html">
+        <span class="doc-title">database 资料索引指南</span>
+        <span class="doc-meta">2026-10-22 · database</span>
+      </a>
+      <p class="doc-desc">MySQL 官方文档：https://dev.mysql.com/doc/ —— 含参考手册、版本发布说明，是查语法与参数的权威来源。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4074450660.html">
+        <span class="doc-title">Go 语言学习路线索引</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">搭建 Go 环境、掌握基础语法、控制流、函数与包、核心数据结构（数组/切片/映射）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2222052917.html">
+        <span class="doc-title">环境与工程结构</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Go 从 1.11 起引入 Go Modules 作为官方依赖管理方案，替代早期的 GOPATH 模式。现代 Go 项目都基于模块组织：一个模块由 go.mod 描述，包含模块路径、Go 版本与依赖。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1599809470.html">
+        <span class="doc-title">go 基础语法与数据类型</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Go 的关键特性：零值（声明后自动初始化为默认值）、短变量声明（:=）、强类型（不同类型不能隐式转换）、错误处理显式化（多返回值）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2006681042.html">
+        <span class="doc-title">go 控制流</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Go 去掉了 while 与 do-while，统一用 for；if/switch 支持初始化子句（作用域限定在语句内）；defer 让函数退出前执行清理逻辑，是资源管理的重要工具。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2233595580.html">
+        <span class="doc-title">函数与包</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Go 函数支持多返回值（常用于返回结果+错误）、命名返回值、可变参数。包通过 package 声明，小写开头的标识符包内可见，大写开头对外导出。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4006853306.html">
+        <span class="doc-title">数组切片与映射</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">数组：固定长度，长度是类型的一部分（[5]int 与 [3]int 是不同类型）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1502279950.html">
+        <span class="doc-title">结构体与方法</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">结构体是字段的集合；方法是为特定类型定义的函数（接收者 receiver）。值接收者操作副本，指针接收者操作原对象。Go 通过嵌入（匿名字段）实现类似继承的复用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1498536549.html">
+        <span class="doc-title">接口</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">接口定义一组方法签名。隐式实现：任何类型只要拥有这些方法就自动满足接口，编译器负责检查。这让代码可以面向接口编程，与具体实现解耦。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3252376470.html">
+        <span class="doc-title">错误处理</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">error 是内置接口：</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2438782949.html">
+        <span class="doc-title">并发goroutine与channel</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">goroutine：由 Go 运行时调度的轻量级执行单元，创建成本约 2KB 栈，可轻松创建数十万个。go func() 启动。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4019209590.html">
+        <span class="doc-title">标准库常用包</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">package main</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1273448351.html">
+        <span class="doc-title">文件与JSON</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Go 的 IO 抽象基于 io.Reader（读）与 io.Writer（写）接口：一切可读可写对象（文件、网络连接、缓冲区）都实现这两个接口。JSON 通过结构体 tag 与反射完成映射。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2187071801.html">
+        <span class="doc-title">Web编程</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">http.Handler 接口是核心：</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2645272983.html">
+        <span class="doc-title">测试</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">测试文件命名 xxx_test.go，与被测代码同包（可访问私有符号）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3617876276.html">
+        <span class="doc-title">模块管理</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">模块（module）是 Go 依赖管理的最小单位，由 go.mod 描述；go.sum 记录依赖的哈希校验，保证可复现。依赖版本遵循语义化版本（MAJOR.MINOR.PATCH）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3767251478.html">
+        <span class="doc-title">go 性能优化</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">剖析（Profiling）：通过采样了解 CPU 时间与内存分配分布，定位瓶颈。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/649712689.html">
+        <span class="doc-title">部署</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Go 的优势：静态编译、无运行时依赖、跨平台交叉编译。产物就是一个二进制文件，拷贝到目标机即可运行，非常适合容器化与云原生部署。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/869149486.html">
+        <span class="doc-title">指针与内存模型</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Go 指针：*T 类型指向变量地址，&amp; 取地址、* 解引用。Go 禁止指针算术（不能 p+1），保证内存安全。GC（三色标记清除 + 并发）自动回收堆内存。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3343202970.html">
+        <span class="doc-title">反射与泛型</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">反射：reflect.TypeOf 获取类型、reflect.ValueOf 获取值，可动态读写字段、调用方法。代价是性能与类型安全损失。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/676309271.html">
+        <span class="doc-title">Context与超时控制</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">context.Context 是一个携带截止时间、取消信号与键值对的接口。核心思想：取消要层层传递——父 context 取消，所有派生的子 context 一并取消，下游 goroutine 收到通知后主动停止工作。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/150711566.html">
+        <span class="doc-title">并发模式与sync包</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Mutex：互斥锁，保护临界区。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1926928719.html">
+        <span class="doc-title">go 工程实践与代码规范</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">Go 社区有强烈共识（gofmt 强制格式、Effective Go 官方指南），团队统一风格可极大降低维护成本。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/544488756.html">
+        <span class="doc-title">go 综合实战项目</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">1. GET /todos：列出全部待办</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/291020681.html">
+        <span class="doc-title">Go 资料索引指南</span>
+        <span class="doc-meta">2026-10-22 · go</span>
+      </a>
+      <p class="doc-desc">1. 入门：Go Tour + Go by Example 快速上手，读《The Go Programming Language》前 8 章。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2624531645.html">
+        <span class="doc-title">Java 学习路线索引</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">1. 入门阶段（01-03）：环境与构建工具、基础语法、运算符与控制流。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/900698739.html">
+        <span class="doc-title">环境与构建工具</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">JDK（Java Development Kit）：开发工具包，含 javac（编译器）、java（运行时）、jps/jstack/jmap 等诊断工具。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2802914770.html">
+        <span class="doc-title">java 基础语法与数据类型</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">Java 是强类型、面向对象语言，代码运行在 JVM 上。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2709793725.html">
+        <span class="doc-title">运算符与控制流</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">运算符：按优先级计算表达式，注意结合性与括号。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2644169279.html">
+        <span class="doc-title">面向对象基础</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">类：对象的模板（属性 + 行为）；对象：类的实例（new）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/490099472.html">
+        <span class="doc-title">接口与抽象类</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">抽象类：用 abstract 修饰，可含抽象方法与具体方法，不能实例化，用 extends 继承（单继承）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3179474559.html">
+        <span class="doc-title">常用工具类与字符串</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">String 不可变：每次拼接产生新对象，大量拼接用 StringBuilder。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3763929048.html">
+        <span class="doc-title">java 异常处理</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">异常体系：Throwable → Error（JVM 级，不可恢复）与 Exception（可处理）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2128322273.html">
+        <span class="doc-title">集合框架</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">集合框架：Collection（List/Set/Queue）与 Map 两大体系。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1987617322.html">
+        <span class="doc-title">泛型</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">泛型（Generic）：把&quot;类型&quot;作为参数，编译期保证类型安全，消除强制转换。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4237021425.html">
+        <span class="doc-title">IO与NIO</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">传统 IO（java.io）：面向流（Stream），阻塞式：InputStream/OutputStream、Reader/Writer。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2861427371.html">
+        <span class="doc-title">多线程与并发</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">进程 vs 线程：进程资源隔离，线程共享进程内存。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2319003500.html">
+        <span class="doc-title">JVM基础</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">JVM = Java Virtual Machine：一次编译到处运行的关键。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1093045828.html">
+        <span class="doc-title">注解与反射</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">注解（Annotation）：给代码加元数据，本身不改变行为，由处理器/框架解释。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3874941873.html">
+        <span class="doc-title">Lambda与Stream</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">Lambda：匿名函数，替代只含一个抽象方法的接口实现（函数式接口）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/764954799.html">
+        <span class="doc-title">JDBC与数据库访问</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">JDBC（Java Database Connectivity）：Java 访问数据库的标准接口。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4073422361.html">
+        <span class="doc-title">Spring Boot 入门</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">Spring Boot：简化 Spring 应用开发的框架，自动配置 + 起步依赖（Starter）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3258749148.html">
+        <span class="doc-title">Maven与Gradle</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">构建工具：编译、打包、依赖管理、测试执行的自动化流水线。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/306399501.html">
+        <span class="doc-title">java 性能调优</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">性能指标：延迟（Latency）、吞吐（Throughput）、QPS、响应时间、GC 停顿、CPU/内存占用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2616540108.html">
+        <span class="doc-title">java 测试</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">测试金字塔：大量单元测试 → 适量集成测试 → 少量端到端测试。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2324736803.html">
+        <span class="doc-title">java 工程实践与代码规范</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">代码规范：可读性 &gt; 炫技；命名即文档。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2391349040.html">
+        <span class="doc-title">进阶专题与框架生态</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">进阶能力分层：语言熟练 → 并发/JVM 深入 → 框架生态 → 架构设计。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/121696792.html">
+        <span class="doc-title">面试指南与学习路线</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">第一阶段 语法基础（1-2 个月）</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3339440424.html">
+        <span class="doc-title">java 资料索引指南</span>
+        <span class="doc-meta">2026-10-22 · java</span>
+      </a>
+      <p class="doc-desc">《Effective Java（第3版）》中文翻译：90 条编程原则</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3719268839.html">
+        <span class="doc-title">Python 学习路线索引</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">搭建 Python 环境与虚拟环境、掌握基础语法、控制流、核心数据结构。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2553430398.html">
+        <span class="doc-title">环境与虚拟环境</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">虚拟环境（virtual environment） 是独立的 Python 运行时目录：每个项目有自己的一套包，互不污染系统环境。现代 Python 标准库自带 venv 模块，无需额外安装。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3674709764.html">
+        <span class="doc-title">python 基础语法与数据类型</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">动态类型：变量无需声明类型，运行时绑定。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/789375585.html">
+        <span class="doc-title">python 控制流</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">Python 控制流简洁：for 遍历可迭代对象（不需要下标），if 支持链式判断，推导式用一行表达式生成集合，是 Python 代码优雅的核心。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/127297243.html">
+        <span class="doc-title">数据结构</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;]</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3603745174.html">
+        <span class="doc-title">函数与作用域</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">函数是一等对象：可作为参数、返回值、存入容器。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/673421965.html">
+        <span class="doc-title">面向对象</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">类是蓝图，实例是具体对象。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/976952921.html">
+        <span class="doc-title">模块与包</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">模块：一个 .py 文件即一个模块，名字即文件名。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2782557087.html">
+        <span class="doc-title">文件与异常</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">with 上下文管理器：自动关闭文件，无需手动 close()。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3920158161.html">
+        <span class="doc-title">迭代器与生成器</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">可迭代对象（iterable）：实现了 __iter__（如 list、dict、文件）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3662810771.html">
+        <span class="doc-title">装饰器</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">装饰器本质是&quot;接收函数、返回函数&quot;的高阶函数。@decorator 语法糖等价于 func = decorator(func)。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/451270359.html">
+        <span class="doc-title">常用标准库</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">print(os.getcwd())                 # 当前目录</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/794273428.html">
+        <span class="doc-title">正则表达式</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">re.match：从开头匹配。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3687837868.html">
+        <span class="doc-title">网络请求</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">HTTP 请求由方法（GET/POST/PUT/DELETE）、URL、请求头、请求体组成。Python 常用 requests（人性化 API）或标准库 urllib（无依赖）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2804548108.html">
+        <span class="doc-title">数据可视化基础</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">matplotlib 是 Python 最基础的绘图库：pyplot 提供命令式接口（类似 MATLAB），核心对象是 Figure（画布）与 Axes（坐标系）。数据科学场景常配合 pandas/numpy。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3982325932.html">
+        <span class="doc-title">Web框架入门</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">路由：URL 到处理函数的映射。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/633809346.html">
+        <span class="doc-title">python 测试</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">单元测试：验证单一函数/类行为。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3541108257.html">
+        <span class="doc-title">打包发布</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">pyproject.toml：现代 Python 打包标准（PEP 621），替代 setup.py/setup.cfg。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2879226760.html">
+        <span class="doc-title">python 性能优化</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">Python 是解释型动态语言，性能优化目标通常是：减少解释器开销、减少内存分配、把重活交给 C 实现（标准库/第三方 C 扩展）。铁律：用剖析数据定位热点。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1313650551.html">
+        <span class="doc-title">类型注解与异步编程</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">类型注解：运行时不强制，供 IDE 与静态检查工具使用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1812046728.html">
+        <span class="doc-title">并发编程基础</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">GIL（全局解释器锁）：同一时刻只有一个线程执行 Python 字节码，导致 CPU 密集任务多线程无加速。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4135985653.html">
+        <span class="doc-title">python 工程实践与代码规范</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">PEP 8：官方风格指南（命名、缩进、空行）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2464461139.html">
+        <span class="doc-title">python 综合实战项目</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">1. todo add &quot;写周报&quot;：新增待办</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2217638122.html">
+        <span class="doc-title">Python 资料索引指南</span>
+        <span class="doc-meta">2026-10-22 · python</span>
+      </a>
+      <p class="doc-desc">1. 入门：官方 Tutorial + 廖雪峰教程，做简单脚本（文件处理、爬虫）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3287727682.html">
+        <span class="doc-title">Shell 学习路线索引</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">Shell 基础语法、第一个脚本、变量与参数、条件与循环。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/100939485.html">
+        <span class="doc-title">基础语法与第一个脚本</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">shebang：#!/usr/bin/env bash 声明解释器。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/222000688.html">
+        <span class="doc-title">变量与参数</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">环境变量：export 后子进程可见（PATH、HOME）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4017408055.html">
+        <span class="doc-title">条件与循环</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">test 命令：[ ... ] 与  ... （推荐扩展版）做条件判断。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1907208342.html">
+        <span class="doc-title">函数</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">函数是&quot;命令组&quot;的复用单元，定义后即可像命令一样调用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3056822755.html">
+        <span class="doc-title">字符串处理</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">Bash 内置参数展开提供高效字符串操作（不启动子进程），模式语法：# 从头删除最短、## 从头删除最长、% 从尾删除最短、%% 从尾删除最长。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/196339549.html">
+        <span class="doc-title">数组与关联数组</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">索引数组：arr=(a b c)，下标从 0 开始。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3390854318.html">
+        <span class="doc-title">文件与目录操作</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">Shell 的文件操作本质是调用核心工具（cp/mv/rm/mkdir/find/ln/chmod/chown），配合 03-条件与循环 的 [ -f ] 判断做防御性处理。重点掌握 find 的组合能力与 -exec。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1083871715.html">
+        <span class="doc-title">管道与重定向</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">三个标准流：0 stdin、1 stdout、2 stderr。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2340941560.html">
+        <span class="doc-title">文本处理三剑客</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">grep &quot;error&quot; /var/log/syslog</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2916222012.html">
+        <span class="doc-title">进程与作业控制</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">进程：运行中的程序实例，有 PID；父进程 PPID。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/125459599.html">
+        <span class="doc-title">shell 正则表达式</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">字符类：[abc]、[0-9]、[^a]。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2395128666.html">
+        <span class="doc-title">脚本调试</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">bash -x：逐条打印执行的命令（展开后），是调试利器。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3386609682.html">
+        <span class="doc-title">常用脚本实战</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">set -euo pipefail</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1097168287.html">
+        <span class="doc-title">安全与健壮性</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">引号即安全：未加引号的变量展开是命令注入与单词拆分的源头。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2878192351.html">
+        <span class="doc-title">系统管理脚本</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">系统管理脚本 = 系统信息采集 + 阈值判断 + 告警/动作 + 定时执行。常用命令：df、free、ps、uptime、cron、systemctl、journalctl。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2849399902.html">
+        <span class="doc-title">命令替换与算术运算</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">命令替换：把命令 stdout 作为值使用；$(cmd) 现代写法（可嵌套），反引号旧写法。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3022682465.html">
+        <span class="doc-title">环境变量与配置文件</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">环境变量：export 后传递给子进程；env 查看、printenv 单查。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2817359151.html">
+        <span class="doc-title">信号处理与trap</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">信号：操作系统通知进程的事件；kill -l 查看列表。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3580546465.html">
+        <span class="doc-title">数组进阶与参数展开</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">参数展开：${var} 的多种修饰形式，是 Bash 最强大的文本处理能力。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3103867964.html">
+        <span class="doc-title">函数库与模块化</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">函数库：一组通用函数集合，供多个脚本 source 复用。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4270973958.html">
+        <span class="doc-title">性能与效率</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">Shell 每条外部命令都 fork 新进程，循环内频繁调用外部命令是性能头号杀手。优化方向：内建优先、批量处理、减少往返、并行化。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2758675135.html">
+        <span class="doc-title">综合实战自动化运维脚本</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">1. -h 参数解析与帮助</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2591510351.html">
+        <span class="doc-title">Shell 资料索引指南</span>
+        <span class="doc-meta">2026-10-22 · shell</span>
+      </a>
+      <p class="doc-desc">1. 入门：阮一峰 Bash 教程 + 本目录 01-05；会写简单脚本。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3745628062.html">
+        <span class="doc-title">Vue 学习路线索引</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">环境搭建、模板语法、组件基础、组件通信、生命周期、计算属性与侦听器。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3650843800.html">
+        <span class="doc-title">环境搭建与第一个项目</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">Vue 3：当前主流版本，推荐组合式 API（&lt;script setup&gt;）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1971197746.html">
+        <span class="doc-title">模板语法与指令</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">插值：{{ }} 双大括号输出响应式值。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3932569755.html">
+        <span class="doc-title">组件基础</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">组件：可复用的 UI + 逻辑单元，通过 props 接收数据、emits 发出事件。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1162395221.html">
+        <span class="doc-title">组件通信</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">单向数据流：props 向下，emits 向上。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4270092731.html">
+        <span class="doc-title">生命周期</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">生命周期钩子：组件从创建到销毁各阶段自动调用的函数。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/571520866.html">
+        <span class="doc-title">计算属性与侦听器</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">computed：基于响应式依赖计算新值，有缓存，依赖不变不重算。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4180264891.html">
+        <span class="doc-title">路由基础</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">vue-router：Vue 官方路由库（Vue 3 用 v4），管理 URL 与视图映射。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2737864006.html">
+        <span class="doc-title">路由进阶与导航守卫</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">导航守卫：路由跳转过程中的钩子，可拦截/重定向/放行。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2673001667.html">
+        <span class="doc-title">状态管理 Pinia</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">Pinia：轻量、类型友好、支持组合式 API，官方推荐替代 Vuex。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3525517994.html">
+        <span class="doc-title">组合式API</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">组合式 API（Composition API）：按逻辑关注点组织代码，替代选项式（data/computed/methods 分块）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3179177874.html">
+        <span class="doc-title">指令与插槽</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">内置指令：v-model/v-if/v-for/v-bind/v-on/v-show/v-html/v-cloak/v-once/v-memo。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1188634286.html">
+        <span class="doc-title">表单处理与v-model</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">v-model：value 属性 + input 事件的语法糖（Vue 3）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1361545107.html">
+        <span class="doc-title">动画与过渡</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">&lt;Transition&gt;：包裹单个元素/组件，进入/离开过渡。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/917590456.html">
+        <span class="doc-title">组件高级模式</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">动态组件：&lt;component :is=&quot;...&quot;&gt; 按需渲染不同组件。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/4201712671.html">
+        <span class="doc-title">工程化与构建工具</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">Vite：开发服务器（esbuild 预构建）+ 生产构建（Rollup）。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3644228676.html">
+        <span class="doc-title">vue 测试</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">Vitest：Vite 原生测试框架，快、TS 友好。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1646590434.html">
+        <span class="doc-title">vue 部署</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">npm run build 产出 dist/ 静态文件，可放任意静态服务器。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2239008446.html">
+        <span class="doc-title">组合式API进阶与Hooks</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">Hooks（组合函数）：useXxx 封装有状态逻辑，返回响应式数据与方法。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3154329587.html">
+        <span class="doc-title">TypeScript集成</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">Vue 3 对 TS 一等支持，&lt;script setup lang=&quot;ts&quot;&gt; 自动类型推导。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/1774703644.html">
+        <span class="doc-title">vue 性能优化</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">性能优化分两层：加载性能（首屏资源、分包、缓存）与运行性能（渲染、更新、交互响应）。先测量再优化，避免无依据的过度优化。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/3455342102.html">
+        <span class="doc-title">工程实践与项目架构</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">架构目标：职责分层、易扩展、可维护、团队一致。</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/2830850869.html">
+        <span class="doc-title">vue 综合实战项目</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">1. 登录与权限（路由守卫）</p>
+    </li>
+    <li class="doc">
+      <a class="doc-link" href="/posts/241163344.html">
+        <span class="doc-title">vue 资料索引指南</span>
+        <span class="doc-meta">2026-10-22 · vue</span>
+      </a>
+      <p class="doc-desc">1. 入门：HTML/CSS/JS 基础 → Vue 官方教程（模板、组件、响应式）。</p>
     </li>
     <li class="doc">
       <a class="doc-link" href="/posts/912530846.html">

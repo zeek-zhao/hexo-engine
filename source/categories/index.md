@@ -3,13 +3,14 @@ title: 分类
 comments: false
 ---
 
-共 **38** 个分类 · **914** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
+共 **46** 个分类 · **1124** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
 
 <div class="qs-pills">
 <a class="qs-pill" href="/categories/apollo/">apollo<span class="qs-pill-n">43</span></a>
 <a class="qs-pill" href="/categories/%E5%B8%95%E6%A2%85%E6%8B%89/">帕梅拉<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/categories/%E8%B5%9B%E6%99%AE%E5%81%A5%E8%BA%AB/">赛普健身<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/categories/FreeRTOS/">FreeRTOS<span class="qs-pill-n">42</span></a>
+<a class="qs-pill" href="/categories/groovy/">groovy<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/categories/Keep/">Keep<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/categories/qt/">qt<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/categories/ros1/">ros1<span class="qs-pill-n">42</span></a>
@@ -18,6 +19,13 @@ comments: false
 <a class="qs-pill" href="/categories/selinux/">selinux<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/categories/yocto/">yocto<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/categories/Zephyr/">Zephyr<span class="qs-pill-n">42</span></a>
+<a class="qs-pill" href="/categories/c-cpp/">c-cpp<span class="qs-pill-n">24</span></a>
+<a class="qs-pill" href="/categories/database/">database<span class="qs-pill-n">24</span></a>
+<a class="qs-pill" href="/categories/go/">go<span class="qs-pill-n">24</span></a>
+<a class="qs-pill" href="/categories/java/">java<span class="qs-pill-n">24</span></a>
+<a class="qs-pill" href="/categories/python/">python<span class="qs-pill-n">24</span></a>
+<a class="qs-pill" href="/categories/shell/">shell<span class="qs-pill-n">24</span></a>
+<a class="qs-pill" href="/categories/vue/">vue<span class="qs-pill-n">24</span></a>
 <a class="qs-pill" href="/categories/ubuntu24.04/">ubuntu24.04<span class="qs-pill-n">23</span></a>
 <a class="qs-pill" href="/categories/windows/">windows<span class="qs-pill-n">23</span></a>
 <a class="qs-pill" href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践<span class="qs-pill-n">21</span></a>

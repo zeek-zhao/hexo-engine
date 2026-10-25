@@ -19,6 +19,14 @@ aside:
   card_author:
     enable: true
     description: 用 AI 跑一条内容流水线
+    button:
+      enable: true
+      icon: fab fa-github
+      text: Follow Me
+      link: https://github.com/zeek-zhao
+  card_announcement:
+    enable: true
+    content: This is my Personal Blog.
 
 social:
   Github: https://github.com/zeek-zhao || fab fa-github
