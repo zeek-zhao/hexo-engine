@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /**
- * collect.js — Hexo 消费端 v3（元数据驱动，见 ob-content 90-OB工程管理/方案/04-发布工作手册）
+ * collect.js — Hexo 消费端 v4（元数据驱动，见 ob-content 90-OB工程管理/方案/04-发布工作手册）
  * 全库 find 所有 md → 按元数据过滤 → 转换 → 落位
- * 附带产出：① 短链映射页（sticky 置顶） ② 动态主页 source/index.html（全部文档列表+个人信息）
+ * 附带产出：① 短链映射页（sticky 置顶） ② 动态主页 source/index.html（搜索框+个人信息+全部文档列表）
+ *           ③ 标签/分类统计页 source/tags/index.md · source/categories/index.md  ④ 站内搜索数据 source/search.json
  * 放行条件：published === true 且 status === 'published'，tags 数量 2~3（与目录无关）
  * 短链算法与 hexo-abbrlink 一致：crc32(title) >>> 0（dec）
  */
@@ -94,13 +95,16 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
   // 与 hexo-abbrlink 相同的短链算法
   const abbrlink = crc32.str(String(outFm.title)) >>> 0;
   report.published.push(rel);
+  const flat = (v) => Array.isArray(v) ? v.map(String) : (v !== undefined && v !== null && String(v) !== '' ? [String(v)] : []);
   report.map.push({
     rel,
     title: String(outFm.title),
     url: `posts/${abbrlink}.html`,
-    date: fm.date ? String(fm.date).slice(0, 10) : '',
+    date: fm.date ? (fm.date instanceof Date ? fm.date.toISOString().slice(0, 10) : String(fm.date).slice(0, 10)) : '',
     description: String(fm.description || ''),
     categories: Array.isArray(fm.categories) ? fm.categories.join(' / ') : String(fm.categories || ''),
+    tagList: flat(fm.tags),
+    catList: flat(fm.categories),
   });
 }
 
@@ -132,7 +136,48 @@ ${rows}
   fs.writeFileSync(path.join(OUT_POSTS, 'post-map.md'), matter.stringify(mapBody, mapFm));
 }
 
-// ── 动态主页 source/index.html（编译时生成：个人信息 + 置顶映射 + 全部文档列表）──
+// ── 标签/分类统计页 + 站内搜索数据（编译时从已发布文档动态生成）──
+if (report.map.length) {
+  const tagCount = new Map(), catCount = new Map();
+  for (const m of report.map) {
+    for (const t of m.tagList) tagCount.set(t, (tagCount.get(t) || 0) + 1);
+    for (const c of m.catList) catCount.set(c, (catCount.get(c) || 0) + 1);
+  }
+  const statPage = (title, intro, counter, dir) => {
+    const entries = [...counter.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh'));
+    const pills = entries
+      .map(([k, n]) => `<a class="qs-pill" href="/${dir}/${encodeURIComponent(k)}/">${esc(k)}<span class="qs-pill-n">${n}</span></a>`)
+      .join('\n');
+    return `---
+title: ${title}
+comments: false
+---
+
+${intro}
+
+<div class="qs-pills">
+${pills}
+</div>
+`;
+  };
+  fs.writeFileSync(path.join(ROOT, 'source', 'tags', 'index.md'),
+    statPage('标签', `共 **${tagCount.size}** 个标签 · **${report.map.length}** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。`, tagCount, 'tags'));
+  fs.writeFileSync(path.join(ROOT, 'source', 'categories', 'index.md'),
+    statPage('分类', `共 **${catCount.size}** 个分类 · **${report.map.length}** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。`, catCount, 'categories'));
+
+  // search.json：全站顶部搜索框的数据源（标题/描述/标签/分类快速检索）
+  const searchData = report.map.map((m) => ({
+    title: m.title,
+    url: '/' + m.url,
+    date: m.date,
+    description: m.description,
+    tags: m.tagList,
+    categories: m.catList,
+  }));
+  fs.writeFileSync(path.join(ROOT, 'source', 'search.json'), JSON.stringify(searchData));
+}
+
+// ── 动态主页 source/index.html（编译时生成：搜索框 + 个人信息 + 置顶映射 + 全部文档列表）──
 if (report.map.length) {
   const docs = [...report.map].sort((a, b) => String(b.date).localeCompare(String(a.date)));
   const items = docs
@@ -151,6 +196,8 @@ if (report.map.length) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Zeek 的 AI 知识工程</title>
 <meta name="description" content="AI 驱动的 Obsidian 知识工程 · 用 AI 跑一条内容流水线">
+<link rel="stylesheet" href="/css/top-search.css">
+<script src="/js/top-search.js" defer></script>
 <style>
 :root{--bg:#0d0f14;--card:#161a23;--card2:#1b202c;--text:#e8eaf0;--muted:#9aa3b5;--a1:#6C7EE1;--a2:#ec4899}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -188,6 +235,7 @@ footer a{color:var(--a1);text-decoration:none}
 </head>
 <body>
 <div class="wrap">
+  <div id="qs-search-mount"></div>
   <header class="hero">
     <img class="avatar" src="/img/avatar.svg" alt="Z">
     <div>
@@ -227,4 +275,4 @@ ${items}
 }
 
 console.log(JSON.stringify(report, null, 2));
-console.log('collect done: ' + report.published.length + ' published / ' + report.scanned + ' scanned / map ' + report.map.length + ' / index.html written');
+console.log('collect done: ' + report.published.length + ' published / ' + report.scanned + ' scanned / map ' + report.map.length + ' / index.html + search.json + tags/categories 统计页 written');
