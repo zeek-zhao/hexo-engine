@@ -3,12 +3,13 @@ title: 标签
 comments: false
 ---
 
-共 **676** 个标签 · **1124** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。
+共 **678** 个标签 · **1221** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。
 
 <div class="qs-pills">
-<a class="qs-pill" href="/tags/%E7%B3%BB%E7%BB%9F/">系统<span class="qs-pill-n">281</span></a>
-<a class="qs-pill" href="/tags/%E5%B7%A5%E5%85%B7/">工具<span class="qs-pill-n">140</span></a>
+<a class="qs-pill" href="/tags/%E7%B3%BB%E7%BB%9F/">系统<span class="qs-pill-n">338</span></a>
+<a class="qs-pill" href="/tags/%E5%B7%A5%E5%85%B7/">工具<span class="qs-pill-n">180</span></a>
 <a class="qs-pill" href="/tags/%E6%8A%80%E8%83%BD/">技能<span class="qs-pill-n">130</span></a>
+<a class="qs-pill" href="/tags/apollo/">apollo<span class="qs-pill-n">83</span></a>
 <a class="qs-pill" href="/tags/Keep/">Keep<span class="qs-pill-n">43</span></a>
 <a class="qs-pill" href="/tags/%E5%B8%95%E6%A2%85%E6%8B%89/">帕梅拉<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/tags/%E8%B5%9B%E6%99%AE%E5%81%A5%E8%BA%AB/">赛普健身<span class="qs-pill-n">42</span></a>
@@ -22,7 +23,6 @@ comments: false
 <a class="qs-pill" href="/tags/selinux/">selinux<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/tags/yocto/">yocto<span class="qs-pill-n">42</span></a>
 <a class="qs-pill" href="/tags/Zephyr/">Zephyr<span class="qs-pill-n">42</span></a>
-<a class="qs-pill" href="/tags/apollo/">apollo<span class="qs-pill-n">26</span></a>
 <a class="qs-pill" href="/tags/C%2B%2B/">C++<span class="qs-pill-n">26</span></a>
 <a class="qs-pill" href="/tags/Go/">Go<span class="qs-pill-n">26</span></a>
 <a class="qs-pill" href="/tags/Java/">Java<span class="qs-pill-n">26</span></a>
@@ -31,6 +31,7 @@ comments: false
 <a class="qs-pill" href="/tags/Vue/">Vue<span class="qs-pill-n">24</span></a>
 <a class="qs-pill" href="/tags/%E5%AE%9E%E6%88%98/">实战<span class="qs-pill-n">23</span></a>
 <a class="qs-pill" href="/tags/windows/">windows<span class="qs-pill-n">23</span></a>
+<a class="qs-pill" href="/tags/obsidian/">obsidian<span class="qs-pill-n">22</span></a>
 <a class="qs-pill" href="/tags/ubuntu24.04/">ubuntu24.04<span class="qs-pill-n">22</span></a>
 <a class="qs-pill" href="/tags/%E5%B7%A5%E7%A8%8B%E7%AE%A1%E7%90%86/">工程管理<span class="qs-pill-n">21</span></a>
 <a class="qs-pill" href="/tags/%E7%B4%A2%E5%BC%95/">索引<span class="qs-pill-n">21</span></a>
@@ -38,6 +39,7 @@ comments: false
 <a class="qs-pill" href="/tags/k8s/">k8s<span class="qs-pill-n">19</span></a>
 <a class="qs-pill" href="/tags/C/">C<span class="qs-pill-n">18</span></a>
 <a class="qs-pill" href="/tags/elk/">elk<span class="qs-pill-n">18</span></a>
+<a class="qs-pill" href="/tags/hexo/">hexo<span class="qs-pill-n">18</span></a>
 <a class="qs-pill" href="/tags/jenkins/">jenkins<span class="qs-pill-n">18</span></a>
 <a class="qs-pill" href="/tags/Nginx/">Nginx<span class="qs-pill-n">18</span></a>
 <a class="qs-pill" href="/tags/Obsidian/">Obsidian<span class="qs-pill-n">18</span></a>

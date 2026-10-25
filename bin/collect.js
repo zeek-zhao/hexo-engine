@@ -173,7 +173,10 @@ function convertWikiLinks(srcRel, body) {
   return body;
 }
 
-// ── Pass 2：双链转换 + 落盘 ──
+// ── Pass 2：双链转换 + 落盘（先清空 _posts，防止旧命名/已下架文档残留重复发布） ──
+for (const f of fs.readdirSync(OUT_POSTS)) {
+  if (f.endsWith('.md')) fs.rmSync(path.join(OUT_POSTS, f));
+}
 for (const p of pending) {
   const body = convertWikiLinks(p.rel, p.body);
   fs.writeFileSync(path.join(OUT_POSTS, p.name + '.md'), matter.stringify(body, p.outFm));
