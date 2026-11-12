@@ -4,8 +4,8 @@ Hexo 装配车间：拉取私有内容库 ob-content，按 frontmatter（`publis
 
 ## 结构
 
-- `scripts/collect.js` — 消费端四步转换：识别 → 过滤 → 转换 → 落位
-- `_config.yml` — Hexo 站点配置（permalink: :year/:month/:day/:slug/，主题 NexT）
+- `bin/collect.js` — 消费端四步转换：识别 → 过滤 → 转换 → 落位（含发布黑名单目录：`99-Archive`/`90-OB工程管理`/`00-Inbox`/`10-灵感`）
+- `_config.yml` — Hexo 站点配置（abbrlink 短链，主题 Butterfly）
 - `content/` — CI 克隆 ob-content 的位置（gitignore，不入库）
 
 ## 本地验证（Docker，WSL 内执行）

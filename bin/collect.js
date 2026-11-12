@@ -4,7 +4,7 @@
  * 全库 find 所有 md → 按元数据过滤 → 转换 → 落位
  * 附带产出：① 短链映射页（sticky 置顶） ② 动态主页 source/index.html（搜索框+个人信息+全部文档列表）
  *           ③ 标签/分类统计页 source/tags/index.md · source/categories/index.md  ④ 站内搜索数据 source/search.json
- * 放行条件：published === true 且 status === 'published'，tags 数量 2~3（与目录无关）
+ * 放行条件：目录在黑名单外 且 published === true 且 status === 'published'，tags 数量 2~3
  * 双链处理：[[目标]] / [[目标|别名]] 解析为已发布文档的真实站内链接（完整路径 > 同目录 > 全局唯一 basename > 唯一 title），
  *           解析失败退化为纯文本，绝不生成错误链接
  * 短链算法与 hexo-abbrlink 一致：crc32(title) >>> 0（dec）
@@ -19,7 +19,9 @@ const CONTENT_DIR = process.env.CONTENT_DIR || path.join(ROOT, 'content');
 const OUT_POSTS = path.join(ROOT, 'source', '_posts');
 const OUT_ASSETS = path.join(ROOT, 'source', 'assets');
 const OUT_INDEX = path.join(ROOT, 'source', 'index.html');
-const SKIP_DIRS = new Set(['.git', '.obsidian', '.workbuddy', '.github', '.vscode', 'node_modules']);
+const SKIP_DIRS = new Set(['.git', '.obsidian', '.workbuddy', '.github', '.vscode', 'node_modules',
+  // 发布黑名单目录（P0-3，2026-11-12）：发布资格 = 目录 + 元数据双条件，见 ob-content 方案/05-发布流与AI使用规范.md §3
+  '99-Archive', '90-OB工程管理', '00-Inbox', '10-灵感']);
 const ASSET_DIRS = ['60-资源'];
 const MAP_TITLE = '文章短链映射';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
