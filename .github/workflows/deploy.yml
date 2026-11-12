@@ -1,8 +1,10 @@
 name: Build and Publish
 
-# 认证：使用仓库内 .github/deploy_key（WSL 私钥 id_rsa 副本，权限 600）。
-# ⚠️ 该私钥为账号级凭据：本仓库必须保持私有，任何能读到它的人可写你全部仓库。
-# 无需任何 secrets / PAT / deploy key 配置。
+# 认证：全部走 HTTPS + PAT secret，仓库内不再保存任何 SSH 私钥。
+# DEPLOY_TOKEN 需要具备：读 zeek-zhao/ai-obsidian（私有内容库）+
+#                        写 zeek-zhao/zeek-zhao.github.io（公开产物仓）。
+# 提交身份统一为 zeek.zhao <zeek.zhao@foxmail.com>，
+# 依据见 ai-obsidian/90-OB工程管理/方案/05-发布流与AI使用规范.md「提交身份基线」。
 on:
   schedule:
     - cron: "0 2 * * *" # 每日 UTC 2:00（北京时间 10:00）全量重建
@@ -26,16 +28,11 @@ jobs:
       - name: Checkout engine
         uses: actions/checkout@v4
 
-      - name: Setup SSH key from committed file
+      - name: Clone content repo (private, via HTTPS + DEPLOY_TOKEN)
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
-          mkdir -p ~/.ssh
-          cp .github/deploy_key ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
-          git config --global core.sshCommand "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes"
-
-      - name: Clone content repo (private, via SSH)
-        run: git clone --depth 1 git@github.com:zeek-zhao/ai-obsidian.git content
+          git clone --depth 1 https://x-access-token:${DEPLOY_TOKEN}@github.com/zeek-zhao/ai-obsidian.git content
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -48,11 +45,14 @@ jobs:
           npm run build
 
       - name: Publish to Pages repo (orphan push)
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
           cd public
           git init -q -b gh-pages
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "zeek.zhao"
+          git config user.email "zeek.zhao@foxmail.com"
+          git remote add origin https://x-access-token:${DEPLOY_TOKEN}@github.com/zeek-zhao/zeek-zhao.github.io.git
           git add -A
           git commit -q -m "publish from ob-content (cloud-actions ${GITHUB_SHA::7})"
-          git push -f git@github.com:zeek-zhao/zeek-zhao.github.io.git gh-pages:gh-pages
+          git push -f origin gh-pages:gh-pages
