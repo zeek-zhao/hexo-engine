@@ -26,9 +26,15 @@
     const tree = catTree(site);
     const tocData = is_post() && page.content ? heads(page.content) : null;
     /* 当前页定位：分类页 → 该分类的领域根组；文章页 → 其叶子分类的领域根组 */
+    /* 注意：hexo 的 page.category 是「名称字符串」而非分类对象（page.tag 同理），
+     * 必须按名称回查 site.categories 取到对象，才能沿 parent 上溯到领域根；
+     * 直接把字符串传给 rootOf 会得到 undefined._id，侧栏过滤失效（8 组全渲染）。 */
     let activeRootId = null;
     if (is_category() && page.category) {
-      const r = tree.rootOf(page.category);
+      const catObj = typeof page.category === 'string'
+        ? site.categories.findOne({ name: page.category })
+        : page.category;
+      const r = catObj ? tree.rootOf(catObj) : null;
       activeRootId = r ? r._id : null;
     } else if (is_post() && page.categories) {
       const cs = []; page.categories.each((c) => cs.push(c));

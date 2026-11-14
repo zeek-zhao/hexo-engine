@@ -2,17 +2,21 @@
 /* 分类聚合页（对照原型 viewArchive 单组形态）：复用归档列表渲染，标题为该分类。
  * 两级分类（OB-ENG-SOP-06）：面包屑 首页 / 分类 / 领域 / 细分；领域页列出下属细分 chips。 */
 const catName = page.category || page.name || '';
+/* page.category 是名称字符串；回查 site.categories 拿对象，才能上溯 parent 拼面包屑链 */
+const catObj = typeof page.category === 'string'
+  ? site.categories.findOne({ name: page.category })
+  : (page.category || null);
 const items = [];
 if (page.posts) page.posts.each((p) => items.push(p));
 const tree = catTree(site);
 const chain = [];
 (function () {
-  let c = page.category || null;
+  let c = catObj;
   while (c) { chain.unshift(c); c = c.parent ? site.categories.findOne({ _id: c.parent }) : null; }
 })();
-const isRoot = chain.length === 1;
-const kids = isRoot && page.category
-  ? (tree.childrenOf.get(page.category._id) || [])
+const isRoot = chain.length <= 1;
+const kids = isRoot && catObj
+  ? (tree.childrenOf.get(catObj._id) || [])
   : [];
 %>
 
