@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 /**
- * collect.js — Hexo 消费端 v6（元数据驱动，见 ob-content 90-OB工程管理/方案/04-发布工作手册）
+ * collect.js — Hexo 消费端 v7（元数据驱动，见 ob-content 90-OB工程管理/方案/04-发布工作手册）
  * 全库 find 所有 md → 按元数据过滤 → 转换 → 落位
  * 附带产出：① 短链映射页（sticky 置顶） ② 标签/分类统计页 source/tags/index.md · source/categories/index.md
  *           ③ 站内搜索数据 source/search.json
  * （v6：删除动态主页 source/index.html 生成，首页改由 themes/zeek 主题提供）
+ * （v7：两级分类 —— 读 ob-content 方案/06-分类映射.json，为每篇注入 hexo 嵌套 categories [[领域, 细分]]，
+ *       分类统计页两级渲染，search.json 增加 group 字段；二级分类 URL 不变）
  * 放行条件：目录在黑名单外 且 published === true 且 status === 'published'，tags 数量 2~3
  * 双链处理：[[目标]] / [[目标|别名]] 解析为已发布文档的真实站内链接（完整路径 > 同目录 > 全局唯一 basename > 唯一 title），
  *           解析失败退化为纯文本，绝不生成错误链接
@@ -24,6 +26,15 @@ const SKIP_DIRS = new Set(['.git', '.obsidian', '.workbuddy', '.github', '.vscod
   '99-Archive', '90-OB工程管理', '00-Inbox', '10-灵感']);
 const ASSET_DIRS = ['60-资源'];
 const MAP_TITLE = '文章短链映射';
+// v7 两级分类映射（OB-ENG-SOP-06）：一级领域 ← frontmatter categories 值；未登记分类归 fallback
+const CATMAP_PATH = path.join(CONTENT_DIR, '90-OB工程管理', '方案', '06-分类映射.json');
+let CATMAP = { fallback: '其他', categories: {} };
+try {
+  CATMAP = JSON.parse(fs.readFileSync(CATMAP_PATH, 'utf8'));
+} catch (e) {
+  console.warn('[collect] 分类映射表缺失或非法（' + CATMAP_PATH + '），未登记分类将全部归入「' + CATMAP.fallback + '」: ' + e.message);
+}
+const groupOf = (cat) => (CATMAP.categories && CATMAP.categories[cat]) || CATMAP.fallback || '未分组';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function* walk(dir, filterFn) {
@@ -115,8 +126,11 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
   if (seenTitles.has(t)) { report.skipped.push({ file: rel, reason: '标题与已发布文档重复: ' + t }); continue; }
   seenTitles.add(t);
 
-  const abbrlink = crc32.str(String(outFm.title)) >>> 0;
   const flat = (v) => Array.isArray(v) ? v.map(String) : (v !== undefined && v !== null && String(v) !== '' ? [String(v)] : []);
+  const catArr = flat(fm.categories);
+  const cat0 = catArr[0] || '';
+  if (cat0) outFm.categories = [[groupOf(cat0), cat0]]; // v7：hexo 嵌套分类 [[领域, 细分]]，细分 URL 不变
+  const abbrlink = crc32.str(String(outFm.title)) >>> 0;
   pending.push({ rel, name, body, outFm, abbrlink, url: `posts/${abbrlink}.html` });
   report.published.push(rel);
   report.map.push({
@@ -125,9 +139,10 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
     url: `posts/${abbrlink}.html`,
     date: fm.date ? (fm.date instanceof Date ? fm.date.toISOString().slice(0, 10) : String(fm.date).slice(0, 10)) : '',
     description: String(fm.description || ''),
-    categories: Array.isArray(fm.categories) ? fm.categories.join(' / ') : String(fm.categories || ''),
+    categories: catArr.join(' / '),
     tagList: flat(fm.tags),
-    catList: flat(fm.categories),
+    catList: catArr,
+    group: groupOf(cat0),
   });
 }
 
@@ -207,7 +222,7 @@ ${rows}
     date: today,
     updated: today,
     tags: ['流水线', '映射'],
-    categories: ['工程实践'],
+    categories: [[groupOf('工程实践'), '工程实践']], // v7：与正文文章保持两级结构一致
     description: '全部已发布文档的源路径与 abbrlink 短链对照表，由流水线自动生成。',
     sticky: 999,
   };
@@ -240,8 +255,40 @@ ${pills}
   };
   fs.writeFileSync(path.join(ROOT, 'source', 'tags', 'index.md'),
     statPage('标签', `共 **${tagCount.size}** 个标签 · **${report.map.length}** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。`, tagCount, 'tags'));
-  fs.writeFileSync(path.join(ROOT, 'source', 'categories', 'index.md'),
-    statPage('分类', `共 **${catCount.size}** 个分类 · **${report.map.length}** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。`, catCount, 'categories'));
+
+  // v7：分类统计页两级渲染 —— 领域（details 分组）← 细分分类（tagbig 链接，URL 不变）
+  const grpCount = new Map();
+  for (const m of report.map) {
+    if (!grpCount.has(m.group)) grpCount.set(m.group, new Map());
+    for (const c of m.catList) {
+      const cm = grpCount.get(m.group);
+      cm.set(c, (cm.get(c) || 0) + 1);
+    }
+  }
+  const groupBlocks = [...grpCount.entries()]
+    .sort((a, b) => {
+      const sa = [...a[1].values()].reduce((x, y) => x + y, 0);
+      const sb = [...b[1].values()].reduce((x, y) => x + y, 0);
+      return sb - sa || a[0].localeCompare(b[0], 'zh');
+    })
+    .map(([g, cm]) => {
+      const sum = [...cm.values()].reduce((x, y) => x + y, 0);
+      const pills = [...cm.entries()]
+        .sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0], 'zh'))
+        .map(([k, n]) => `<a class="tagbig" href="/categories/${encodeURIComponent(k)}/">${esc(k)}<b>${n}</b></a>`)
+        .join('\n');
+      return `<details class="catgroup" open><summary>📁 ${esc(g)}<span class="cnt">${sum} 篇</span></summary>\n<div class="tagcloud">\n${pills}\n</div>\n</details>`;
+    })
+    .join('\n');
+  fs.writeFileSync(path.join(ROOT, 'source', 'categories', 'index.md'), `---
+title: 分类
+comments: false
+---
+
+按领域分组的全部分类，共 **${catCount.size}** 个细分分类 · **${report.map.length}** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
+
+${groupBlocks}
+`);
 
   // search.json：全站顶部搜索框的数据源（标题/描述/标签/分类快速检索）
   const searchData = report.map.map((m) => ({
@@ -251,6 +298,7 @@ ${pills}
     description: m.description,
     tags: m.tagList,
     categories: m.catList,
+    group: m.group, // v7：一级领域，搜索结果可直接展示归属
   }));
   fs.writeFileSync(path.join(ROOT, 'source', 'search.json'), JSON.stringify(searchData));
 }

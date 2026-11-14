@@ -33,6 +33,7 @@ npx hexo generate ; npx hexo server                              # 3. 构建并�
 
 - `content/` 已 gitignore；collect.js 输出的 `source/_posts/`、`search.json`、`post-map`、tags/categories 统计页全部是**构建产物，禁止手工编辑**。
 - 主页 `/` 由主题提供；`source/index.html` 动态主页生成已停用（URD-01 FR-4）。
+- **两级分类（OB-ENG-SOP-06，2026-11-14）**：内容库每篇文章 frontmatter 只有单一细分分类；`bin/collect.js`（v7）构建期读取 `content/90-OB工程管理/方案/06-分类映射.json` 把 46 个细分分类归入 8 个领域，注入嵌套 `categories: [[领域, 细分]]`。主题侧（layout.ejs 侧栏 / archive.ejs / category.ejs / index.ejs）按 hexo 分类树两级渲染。**改分类归属只改映射 JSON，不动 collect.js**；映射文件缺失时构建告警并 fallback 到「其他」。
 
 ## 5 部署机制
 
@@ -81,7 +82,7 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 | 5 | 评论系统 / 访问统计 | 本轮不加，记 TODO | 人拍板后立项 |
 | 6 | 首页为精选落地页（最近 6 篇 + 热门 + 分类卡），无翻页链接；generator-index 仍生成 /page/N/ 但未被链接引用 | 可选优化 | AI |
 
-已落地（2026-11-14）：自研主题 zeek 上线并部署验收；hexo-engine 改 public（红线 §8）；P1-5 门禁收紧；P1-6 package-lock.json 入库；docs/ 四份文档；模板修复三连——①侧栏分组默认折叠且修复 sg-head 内联 onclick 与 JS 监听**双触发抵消**导致的"不能折叠"②分类归档页侧栏只渲染当前分类（layout.ejs `activeCat` 过滤）③搜索修复（main.js 引用 `cmdkInput`/`drawerBtn` 与实际 DOM id `cmdkQ`/`menuBtn` 不匹配，已对齐）；`_config.yml` 孤儿 `search:`（search.xml）配置已清理。
+已落地（2026-11-14）：自研主题 zeek 上线并部署验收；hexo-engine 改 public（红线 §8）；P1-5 门禁收紧；P1-6 package-lock.json 入库；docs/ 四份文档；模板修复三连——①侧栏分组默认折叠且修复 sg-head 内联 onclick 与 JS 监听**双触发抵消**导致的"不能折叠"②分类归档页侧栏只渲染当前分类（layout.ejs `activeCat` 过滤）③搜索修复（main.js 引用 `cmdkInput`/`drawerBtn` 与实际 DOM id `cmdkQ`/`menuBtn` 不匹配，已对齐）；`_config.yml` 孤儿 `search:`（search.xml）配置已清理。同日追加：**两级分类体系**（OB-ENG-SOP-06 映射 JSON + collect.js v7 注入嵌套 categories + 主题两级渲染，见 §4）。
 
 ## 10 已知坑与教训
 

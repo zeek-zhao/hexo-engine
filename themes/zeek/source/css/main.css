@@ -74,6 +74,36 @@ button{font-family:inherit;cursor:pointer}
 .sg-items a:hover{background:var(--bg-mute);color:var(--text);text-decoration:none}
 .sg-items a.active{color:var(--accent);background:var(--accent-soft);font-weight:600}
 .sg-items .cnt{font-size:11px;color:var(--text-3)}
+/* v7 两级侧栏：领域 → 细分分类 → 文章（OB-ENG-SOP-06） */
+.sg-head .cnt{margin-left:auto;font-weight:400}
+.sidegroup>.sg-head .cnt+.arrow{margin-left:2px}
+.sg-sub{margin:1px 0}
+.sg-subhead{display:flex;align-items:center;gap:2px;padding-right:6px}
+.sg-subhead>a{display:flex;align-items:center;gap:6px;flex:1;min-width:0;padding:5px 8px;border-radius:6px;
+  font-size:13px;color:var(--text-2);margin:1px 0;text-decoration:none}
+.sg-subhead>a:hover{background:var(--bg-mute);color:var(--text);text-decoration:none}
+.sg-subhead>a.active{color:var(--accent);background:var(--accent-soft);font-weight:600}
+.sg-subhead>a>span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sg-subhead .cnt{font-size:11px;color:var(--text-3);flex-shrink:0}
+.sg-sub .subarrow{cursor:pointer;font-size:10px;color:var(--text-3);transition:transform .15s;
+  padding:6px 4px;flex-shrink:0;user-select:none}
+.sg-sub .subarrow:hover{color:var(--text)}
+.sg-sub.collapsed .subarrow{transform:rotate(-90deg)}
+.sg-sub.collapsed .sg-items2{display:none}
+.sg-items2{padding-left:16px}
+.sg-items2 a{display:flex;justify-content:space-between;gap:8px;padding:5px 10px;border-radius:6px;
+  font-size:13px;color:var(--text-2);margin:1px 0;overflow:hidden}
+.sg-items2 a:hover{background:var(--bg-mute);color:var(--text);text-decoration:none}
+.sg-items2 a.active{color:var(--accent);background:var(--accent-soft);font-weight:600}
+/* v7 归档页领域分组 */
+.archdomain{margin-bottom:14px}
+.archdomain-head{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;
+  padding:7px 10px;border-radius:6px;background:var(--bg-mute)}
+.archdomain-head .cnt{font-size:11px;color:var(--text-3);font-weight:400;margin-left:auto}
+.archdomain .archgroup{margin:4px 0 0 12px}
+.archdomain .archgroup>summary{font-weight:400}
+.chipgrp-label{display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:var(--text-3);
+  padding:0 4px 0 8px;white-space:nowrap}
 .main{flex:1;min-width:0;display:flex;justify-content:center;padding:28px 32px 80px}
 .content{width:100%;max-width:var(--maxw)}
 .toc{width:var(--toc-w);flex-shrink:0;position:sticky;top:84px;height:calc(100vh - 120px);
@@ -202,6 +232,13 @@ details.archgroup summary .cnt{font-size:12px;font-weight:400;color:var(--text-3
   background:var(--bg);color:var(--text-2);cursor:pointer}
 .tagbig:hover{border-color:var(--accent);color:var(--accent)}
 .tagbig b{color:var(--text-3);font-weight:400;font-size:12px;margin-left:4px}
+/* v7 分类统计页领域分组 */
+.catgroup{margin-bottom:10px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.catgroup>summary{display:flex;align-items:center;gap:6px;padding:10px 14px;font-size:14px;font-weight:600;
+  cursor:pointer;user-select:none;background:var(--bg-mute);list-style:none}
+.catgroup>summary::-webkit-details-marker{display:none}
+.catgroup>summary .cnt{font-size:11px;color:var(--text-3);font-weight:400;margin-left:auto}
+.catgroup>details, .catgroup>.tagcloud{padding:4px 10px 10px}
 
 /* ============ 改造对照页 ============ */
 .rule-list{margin:12px 0}
@@ -338,7 +375,7 @@ details.archgroup summary .cnt{font-size:12px;font-weight:400;color:var(--text-3
   .searchbox{width:auto;padding:5px 8px}
   .searchbox .s-label,.searchbox kbd{display:none}
   .iconbtn{width:44px;height:44px;min-height:44px}
-  .mobile-nav a,.sg-items a,.cmd-item,.chip,.topnav a{min-height:44px}
+  .mobile-nav a,.sg-items a,.sg-items2 a,.sg-subhead>a,.sg-sub .subarrow,.cmd-item,.chip,.topnav a{min-height:44px}
   .chip{display:inline-flex;align-items:center}
   .link-grid{grid-template-columns:1fr}
 }

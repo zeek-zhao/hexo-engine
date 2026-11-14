@@ -247,19 +247,28 @@
       }
     });
   }
-  // 侧栏分组折叠（单监听，勿再叠加内联 onclick 否则双触发互相抵消）
+  // 侧栏折叠（单监听，勿再叠加内联 onclick 否则双触发互相抵消）
   document.querySelectorAll('.sidegroup > .sg-head').forEach(function (h) {
     h.addEventListener('click', function () { h.parentElement.classList.toggle('collapsed'); });
   });
-  // 默认折叠全部分组：仅展开当前文章所在分组；分类归档页（唯一分组）展开
+  // 二级细分分类：点击箭头展开/收起文章列表（点击分类名仍走导航）
+  document.querySelectorAll('.sg-sub .subarrow').forEach(function (a) {
+    var toggle = function () { a.closest('.sg-sub').classList.toggle('collapsed'); };
+    a.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); toggle(); });
+    a.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggle(); } });
+  });
+  // 默认折叠全部领域组与细分分类：仅展开当前页所在的领域组与细分分类；分类领域页（唯一分组）展开
   (function () {
     var groups = document.querySelectorAll('.sidegroup');
     groups.forEach(function (g) { g.classList.add('collapsed'); });
+    document.querySelectorAll('.sg-sub').forEach(function (s) { s.classList.add('collapsed'); });
     if (groups.length === 1) groups[0].classList.remove('collapsed');
-    var activeA = document.querySelector('.sg-items a.active');
+    var activeA = document.querySelector('.sg-items a.active, .sg-items2 a.active, .sg-subhead a.active');
     if (activeA && activeA.closest) {
       var g = activeA.closest('.sidegroup');
       if (g) g.classList.remove('collapsed');
+      var sub = activeA.closest('.sg-sub');
+      if (sub) sub.classList.remove('collapsed');
     }
   })();
 
@@ -296,6 +305,11 @@
         g.hidden = n === 0;
         g.open = !!q || g.open || n > 0 && !!q;
         if (!g.hidden) { shown += n; var cnt = g.querySelector('.cnt'); if (cnt) cnt.textContent = n + ' 篇'; }
+      });
+      // 领域分组：全部细分组都无命中时整组隐藏
+      c.querySelectorAll('.archdomain').forEach(function (d) {
+        var any = Array.prototype.some.call(d.querySelectorAll('details.archgroup'), function (g) { return !g.hidden; });
+        d.hidden = !any;
       });
       if (!c.hidden) total += shown;
     });

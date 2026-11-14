@@ -22,17 +22,22 @@
       { key: 'tags',    label: '标签', href: url_for('tags/'),     match: (p) => p.indexOf('tags') === 0 },
       { key: 'about',   label: '关于', href: url_for('about/'),    match: (p) => p.indexOf('about') === 0 },
     ];
-    /* 分类树数据：按收录量排序；文章按其分类归组 */
-    const catList = []; site.categories.each((c) => catList.push(c));
-    catList.sort((a, b) => b.length - a.length);
-    const byCat = {};
-    site.posts.each((p) => p.categories.each((c) => {
-      (byCat[c.name] = byCat[c.name] || []).push(p);
-    }));
-    /* 文章页 TOC 数据（与 post.ejs 的 heads() 解析保持同一 id） */
+    /* 分类两级树（OB-ENG-SOP-06）：领域 → 细分分类 → 文章，供侧栏渲染 */
+    const tree = catTree(site);
     const tocData = is_post() && page.content ? heads(page.content) : null;
-    /* 分类归档页：侧栏只显示当前分类，其余分组不渲染 */
-    const activeCat = is_category() ? page.category : null;
+    /* 当前页定位：分类页 → 该分类的领域根组；文章页 → 其叶子分类的领域根组 */
+    let activeRootId = null;
+    if (is_category() && page.category) {
+      const r = tree.rootOf(page.category);
+      activeRootId = r ? r._id : null;
+    } else if (is_post() && page.categories) {
+      const cs = []; page.categories.each((c) => cs.push(c));
+      const leaf = cs.length ? cs[cs.length - 1] : null;
+      if (leaf) {
+        const r = tree.rootOf(leaf);
+        activeRootId = r ? r._id : null;
+      }
+    }
   %>
   <nav class="topnav" id="topnav">
     <% NAV.forEach((n) => { %><a href="<%- n.href %>" data-nav="<%= n.key %>" class="<%= n.match(page.path) ? 'active' : '' %>"><%= n.label %></a><% }) %>
@@ -53,15 +58,30 @@
       <% NAV.forEach((n) => { %><a href="<%- n.href %>" data-nav="<%= n.key %>" class="<%= n.match(page.path) ? 'active' : '' %>"><%= n.label %></a><% }) %>
     </nav>
     <div id="sideTree">
-      <% catList.forEach((c) => { if (activeCat && c.name !== activeCat) return; %>
-        <div class="sidegroup" data-cat="<%= c.name %>">
+      <% tree.roots.forEach((g) => { if (activeRootId && g._id !== activeRootId) return; %>
+        <div class="sidegroup" data-cat="<%= g.name %>">
           <div class="sg-head">
-            <span>📁</span><span><%= c.name %></span><span class="arrow">▼</span>
+            <span>📁</span><span><%= g.name %></span><span class="cnt"><%= g.length %> 篇</span><span class="arrow">▼</span>
           </div>
           <div class="sg-items">
-            <% (byCat[c.name] || []).forEach((p) => { %>
-              <a href="<%- url_for(p.path) %>" class="<%= page.path === p.path ? 'active' : '' %>"><%= p.title %></a>
+            <% (tree.childrenOf.get(g._id) || []).forEach((c) => { %>
+              <div class="sg-sub" data-cat="<%= c.name %>">
+                <div class="sg-subhead">
+                  <a href="<%- url_for(c.path) %>" class="<%= page.path === c.path ? 'active' : '' %>"><span>🔖</span><span><%= c.name %></span><span class="cnt"><%= c.length %></span></a>
+                  <span class="subarrow arrow" role="button" tabindex="0" aria-label="展开 <%= c.name %> 的文章列表">▼</span>
+                </div>
+                <div class="sg-items2">
+                  <% (tree.byLeaf.get(c._id) || []).forEach((p) => { %>
+                    <a href="<%- url_for(p.path) %>" class="<%= page.path === p.path ? 'active' : '' %>"><%= p.title %></a>
+                  <% }) %>
+                </div>
+              </div>
             <% }) %>
+            <% if (!(tree.childrenOf.get(g._id) || []).length) { %>
+              <% (tree.byLeaf.get(g._id) || []).forEach((p) => { %>
+                <a href="<%- url_for(p.path) %>" class="<%= page.path === p.path ? 'active' : '' %>"><%= p.title %></a>
+              <% }) %>
+            <% } %>
           </div>
         </div>
       <% }) %>

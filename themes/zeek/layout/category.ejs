@@ -1,13 +1,35 @@
 <%
-/* 分类聚合页（对照原型 viewArchive 单组形态）：复用归档列表渲染，标题为该分类 */
+/* 分类聚合页（对照原型 viewArchive 单组形态）：复用归档列表渲染，标题为该分类。
+ * 两级分类（OB-ENG-SOP-06）：面包屑 首页 / 分类 / 领域 / 细分；领域页列出下属细分 chips。 */
 const catName = page.category || page.name || '';
 const items = [];
 if (page.posts) page.posts.each((p) => items.push(p));
+const tree = catTree(site);
+const chain = [];
+(function () {
+  let c = page.category || null;
+  while (c) { chain.unshift(c); c = c.parent ? site.categories.findOne({ _id: c.parent }) : null; }
+})();
+const isRoot = chain.length === 1;
+const kids = isRoot && page.category
+  ? (tree.childrenOf.get(page.category._id) || [])
+  : [];
 %>
 
-<div class="crumb"><a href="<%- url_for('') %>">首页</a> / <a href="<%- url_for('categories/') %>">分类</a> / <span><%= catName %></span></div>
+<div class="crumb">
+  <a href="<%- url_for('') %>">首页</a> / <a href="<%- url_for('categories/') %>">分类</a> /
+  <% chain.forEach((c, i) => { %>
+    <% if (i < chain.length - 1) { %><a href="<%- url_for(c.path) %>"><%= c.name %></a> / <% } else { %><span><%= c.name %></span><% } %>
+  <% }) %>
+</div>
 <h1 style="font-size:26px;margin-bottom:6px">📁 <%= catName %></h1>
-<p style="color:var(--text-2);margin-bottom:18px">分类「<%= catName %>」下共 <%= items.length %> 篇文档。</p>
+<p style="color:var(--text-2);margin-bottom:18px"><%= isRoot ? '领域' : '分类' %>「<%= catName %>」下共 <%= items.length %> 篇文档<%= isRoot ? '，含下属全部分类' : '' %>。</p>
+
+<% if (kids.length) { %>
+<div class="cat-chips">
+  <% kids.forEach((c) => { %><a class="chip" href="<%- url_for(c.path) %>">🔖 <%= c.name %><b><%= c.length %></b></a><% }) %>
+</div>
+<% } %>
 
 <details class="archgroup" open><summary>📁 <%= catName %><span class="cnt"><%= items.length %> 篇</span></summary>
   <div class="archlist">

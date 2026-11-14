@@ -1,12 +1,12 @@
 <%
-/* 归档页（对照原型 viewArchive）：全量文章按分类 / 年份双分组，JS 切换 + 客户端筛选。
+/* 归档页（对照原型 viewArchive）：全量文章按 领域→细分分类 / 年份 分组，JS 切换 + 客户端筛选。
  * cat-chips 深链走真实的 /categories/:name/ 页面（MPA 适配）。 */
 const all = []; site.posts.each((p) => all.push(p));
 all.sort((a, b) => b.date.valueOf() - a.date.valueOf());
-const byCat = new Map();
-all.forEach((p) => p.categories.each((c) => {
-  if (!byCat.has(c.name)) byCat.set(c.name, []);
-  byCat.get(c.name).push(p);
+const tree = catTree(site); /* 两级分类（OB-ENG-SOP-06）：chips 与列表均按领域分组 */
+const chipGroups = tree.roots.map((g) => ({
+  root: g,
+  kids: (tree.childrenOf.get(g._id) || []),
 }));
 const byYear = new Map();
 all.forEach((p) => {
@@ -14,8 +14,6 @@ all.forEach((p) => {
   if (!byYear.has(y)) byYear.set(y, []);
   byYear.get(y).push(p);
 });
-const chips = []; site.categories.each((c) => chips.push(c));
-chips.sort((a, b) => b.length - a.length);
 %>
 
 <h1 style="font-size:26px;margin-bottom:6px">全部归档</h1>
@@ -23,7 +21,10 @@ chips.sort((a, b) => b.length - a.length);
 
 <div class="cat-chips">
   <a class="chip on" href="<%- url_for('archives/') %>">全部</a>
-  <% chips.forEach((c) => { %><a class="chip" href="<%- url_for(c.path) %>">📁 <%= c.name %></a><% }) %>
+  <% chipGroups.forEach((grp) => { %>
+    <span class="chipgrp-label">📁 <%= grp.root.name %></span>
+    <% grp.kids.forEach((c) => { %><a class="chip" href="<%- url_for(c.path) %>"><%= c.name %><b><%= c.length %></b></a><% }) %>
+  <% }) %>
 </div>
 
 <div class="arch-head">
@@ -37,14 +38,19 @@ chips.sort((a, b) => b.length - a.length);
 
 <div id="archlist">
   <div id="archlist-cat">
-    <% byCat.forEach((items, name) => { if (!items.length) return; %>
-    <details class="archgroup" open><summary>📁 <%= name %><span class="cnt"><%= items.length %> 篇</span></summary>
-      <div class="archlist">
-        <% items.forEach((p) => { %>
-        <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('YYYY-MM-DD') %></span><span><%= p.title %></span>
-          <span class="ai-sub"><%= p.description || '' %></span></a>
-        <% }) %>
-      </div></details>
+    <% chipGroups.forEach((grp) => { %>
+    <div class="archdomain" data-domain="<%= grp.root.name %>">
+      <div class="archdomain-head">📁 <%= grp.root.name %><span class="cnt"><%= grp.root.length %> 篇</span></div>
+      <% grp.kids.forEach((c) => { const its = tree.byLeaf.get(c._id) || []; if (!its.length) return; %>
+      <details class="archgroup" open><summary>🔖 <%= c.name %><span class="cnt"><%= its.length %> 篇</span></summary>
+        <div class="archlist">
+          <% its.forEach((p) => { %>
+          <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('YYYY-MM-DD') %></span><span><%= p.title %></span>
+            <span class="ai-sub"><%= p.description || '' %></span></a>
+          <% }) %>
+        </div></details>
+      <% }) %>
+    </div>
     <% }) %>
   </div>
   <div id="archlist-year" hidden>
