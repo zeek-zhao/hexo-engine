@@ -31,6 +31,8 @@
     }));
     /* 文章页 TOC 数据（与 post.ejs 的 heads() 解析保持同一 id） */
     const tocData = is_post() && page.content ? heads(page.content) : null;
+    /* 分类归档页：侧栏只显示当前分类，其余分组不渲染 */
+    const activeCat = is_category() ? page.category : null;
   %>
   <nav class="topnav" id="topnav">
     <% NAV.forEach((n) => { %><a href="<%- n.href %>" data-nav="<%= n.key %>" class="<%= n.match(page.path) ? 'active' : '' %>"><%= n.label %></a><% }) %>
@@ -51,9 +53,9 @@
       <% NAV.forEach((n) => { %><a href="<%- n.href %>" data-nav="<%= n.key %>" class="<%= n.match(page.path) ? 'active' : '' %>"><%= n.label %></a><% }) %>
     </nav>
     <div id="sideTree">
-      <% catList.forEach((c) => { %>
+      <% catList.forEach((c) => { if (activeCat && c.name !== activeCat) return; %>
         <div class="sidegroup" data-cat="<%= c.name %>">
-          <div class="sg-head" onclick="this.parentElement.classList.toggle('collapsed')">
+          <div class="sg-head">
             <span>📁</span><span><%= c.name %></span><span class="arrow">▼</span>
           </div>
           <div class="sg-items">

@@ -45,7 +45,7 @@
   /* ---------- ⌘K / Ctrl+K / / 唤起搜索面板 ---------- */
   var searchIndex = null; // [{title,url,date,description,tags,categories}]
   var cmdk = document.getElementById('cmdk');
-  var cmdkInput = document.getElementById('cmdkInput');
+  var cmdkInput = document.getElementById('cmdkQ');
   var cmdkResults = document.getElementById('cmdkResults');
   var selIdx = -1;
 
@@ -237,7 +237,7 @@
   if (backtop) backtop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
   /* ---------- 移动端抽屉 ---------- */
-  var drawerBtn = document.getElementById('drawerBtn');
+  var drawerBtn = document.getElementById('menuBtn');
   var sidebar = document.querySelector('.sidebar');
   if (drawerBtn && sidebar) {
     drawerBtn.addEventListener('click', function () { sidebar.classList.toggle('open'); });
@@ -247,10 +247,21 @@
       }
     });
   }
-  // 侧栏分组折叠（原型 sg-head onclick）
+  // 侧栏分组折叠（单监听，勿再叠加内联 onclick 否则双触发互相抵消）
   document.querySelectorAll('.sidegroup > .sg-head').forEach(function (h) {
     h.addEventListener('click', function () { h.parentElement.classList.toggle('collapsed'); });
   });
+  // 默认折叠全部分组：仅展开当前文章所在分组；分类归档页（唯一分组）展开
+  (function () {
+    var groups = document.querySelectorAll('.sidegroup');
+    groups.forEach(function (g) { g.classList.add('collapsed'); });
+    if (groups.length === 1) groups[0].classList.remove('collapsed');
+    var activeA = document.querySelector('.sg-items a.active');
+    if (activeA && activeA.closest) {
+      var g = activeA.closest('.sidegroup');
+      if (g) g.classList.remove('collapsed');
+    }
+  })();
 
   /* ---------- 归档页：分组方式切换 + 客户端筛选 ---------- */
   var archq = document.getElementById('archq');

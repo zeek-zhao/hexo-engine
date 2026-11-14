@@ -70,19 +70,18 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 3. **未发布内容门禁（G1~G3）必须在公开前生效**：未过门禁的内容不得出现在任何公开产物。
 4. fork 本仓者拿不到 secrets（GitHub secrets 不随 fork 传递），无法拉取私有内容库——内容机密性由 ai-obsidian 的 private 设置承担。
 
-## 9 遗留清单
+## 9 遗留清单（2026-11-14 同步）
 
 | # | 项 | 状态 | 负责人 |
 |---|---|---|---|
-| 6 | fine-grained PAT 替换（替换 NOTIFY_TOKEN / DEPLOY_TOKEN，权限矩阵见 05 规范 §5.1；GitHub 无创建 API，须网页手动） | 待执行 | 人（Zeek） |
-| 7 | 05 规范 draft → 正式签发（置 `status: published`） | 待人评审 | 人（Zeek） |
-| 8 | ai-obsidian vault 6 个本地提交未推送 | 待推送（认证见 §5 basic extraheader） | AI / 人确认后执行 |
-| 9 | P1-4 quality-gate 完整脚本化（check-tags.py strict + CI fail） | 待执行（跟踪于 05 规范 §7） | AI |
-| — | 自研主题 zeek 移植（UI 已定稿，模板未入库；完成后 `_config.yml` 切 theme 并移除 butterfly 依赖） | 进行中 | AI |
-| — | 评论系统 / 访问统计 | 本轮不加，记 TODO | 人拍板后立项 |
-| — | `_config.yml` 遗留 `search.xml` 配置清理（主题只消费 /search.json） | 待执行 | AI（随主题移植） |
+| 1 | fine-grained PAT 替换（替换 NOTIFY_TOKEN / DEPLOY_TOKEN，权限矩阵见 05 规范 §5.1；GitHub 无创建 API，须网页手动） | 待执行 | 人（Zeek） |
+| 2 | 05 规范 draft → 正式签发（置 `status: published`） | 待人评审 | 人（Zeek） |
+| 3 | ai-obsidian vault 6 个本地提交未推送 | 待推送（认证见 §6） | 人定时机 |
+| 4 | P1-4 quality-gate 完整脚本化（check-tags.py strict + CI fail） | 待执行（跟踪于 05 规范 §7） | AI |
+| 5 | 评论系统 / 访问统计 | 本轮不加，记 TODO | 人拍板后立项 |
+| 6 | 首页为精选落地页（最近 6 篇 + 热门 + 分类卡），无翻页链接；generator-index 仍生成 /page/N/ 但未被链接引用 | 可选优化 | AI |
 
-本轮（2026-11-14）已完成：UI 定稿并转代码移植启动、门禁 P1-5 收紧、P1-6 package-lock.json 入库、docs/ 四份文档、hexo-engine 改 public 决议。
+已落地（2026-11-14）：自研主题 zeek 上线并部署验收；hexo-engine 改 public（红线 §8）；P1-5 门禁收紧；P1-6 package-lock.json 入库；docs/ 四份文档；模板修复三连——①侧栏分组默认折叠且修复 sg-head 内联 onclick 与 JS 监听**双触发抵消**导致的"不能折叠"②分类归档页侧栏只渲染当前分类（layout.ejs `activeCat` 过滤）③搜索修复（main.js 引用 `cmdkInput`/`drawerBtn` 与实际 DOM id `cmdkQ`/`menuBtn` 不匹配，已对齐）；`_config.yml` 孤儿 `search:`（search.xml）配置已清理。
 
 ## 10 已知坑与教训
 

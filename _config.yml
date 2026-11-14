@@ -66,9 +66,5 @@ abbrlink:
 aplayer:
   meting: false
   asset_inject: false
-# 站内搜索（hexo-generator-search 生成 search.xml，主题侧 local_search 消费）
-search:
-  path: search.xml
-  field: post
-  content: true
-  format: html
+# 站内搜索数据源唯一为 bin/collect.js 生成的 source/search.json（原 search.xml 配置已随
+# hexo-generator-search 移除，见 docs/SDD-01-概要设计.md §搜索）
