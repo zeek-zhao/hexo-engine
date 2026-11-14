@@ -1,4 +1,4 @@
-<%
+﻿<%
 /* 归档页（对照原型 viewArchive）：全量文章按 领域→细分分类 / 年份 分组，JS 切换 + 客户端筛选。
  * cat-chips 深链走真实的 /categories/:name/ 页面（MPA 适配）。 */
 const all = []; site.posts.each((p) => all.push(p));
@@ -22,7 +22,7 @@ all.forEach((p) => {
 <div class="cat-chips">
   <a class="chip on" href="<%- url_for('archives/') %>">全部</a>
   <% chipGroups.forEach((grp) => { %>
-    <span class="chipgrp-label">📁 <%= grp.root.name %></span>
+    <span class="chipgrp-label"><%= catIcon(grp.root.name) %> <%= grp.root.name %></span>
     <% grp.kids.forEach((c) => { %><a class="chip" href="<%- url_for(c.path) %>"><%= c.name %><b><%= c.length %></b></a><% }) %>
   <% }) %>
 </div>
@@ -40,9 +40,9 @@ all.forEach((p) => {
   <div id="archlist-cat">
     <% chipGroups.forEach((grp) => { %>
     <div class="archdomain" data-domain="<%= grp.root.name %>">
-      <div class="archdomain-head">📁 <%= grp.root.name %><span class="cnt"><%= grp.root.length %> 篇</span></div>
+      <div class="archdomain-head"><%= catIcon(grp.root.name) %> <%= grp.root.name %><span class="cnt"><%= grp.root.length %> 篇</span></div>
       <% grp.kids.forEach((c) => { const its = tree.byLeaf.get(c._id) || []; if (!its.length) return; %>
-      <details class="archgroup" open><summary>🔖 <%= c.name %><span class="cnt"><%= its.length %> 篇</span></summary>
+      <details class="archgroup" open><summary><%= catIcon(c.name) %> <%= c.name %><span class="cnt"><%= its.length %> 篇</span></summary>
         <div class="archlist">
           <% its.forEach((p) => { %>
           <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('YYYY-MM-DD') %></span><span><%= p.title %></span>

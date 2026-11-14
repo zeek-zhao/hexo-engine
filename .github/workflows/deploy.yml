@@ -44,6 +44,10 @@ jobs:
           npm install --no-audit --no-fund
           npm run build
 
+      # 全站渲染体检（按语法类型断言，见 docs/SDD-01 §门禁）：失败则不发布
+      - name: Check rendered pages
+        run: node scripts/check-pages.js
+
       - name: Publish to Pages repo (orphan push)
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}

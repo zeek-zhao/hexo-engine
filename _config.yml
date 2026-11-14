@@ -1,4 +1,4 @@
-title: Zeek 的 AI 知识工程
+﻿title: Zeek 的 AI 知识工程
 subtitle: 用 AI 跑一条内容流水线
 description: AI 驱动的 Obsidian 知识工程博客
 keywords: Obsidian, AI, Hexo, 知识管理
@@ -68,3 +68,10 @@ aplayer:
   asset_inject: false
 # 站内搜索数据源唯一为 bin/collect.js 生成的 source/search.json（原 search.xml 配置已随
 # hexo-generator-search 移除，见 docs/SDD-01-概要设计.md §搜索）
+
+# ── 主题 zeek 装饰与渲染开关（themes/zeek/scripts + main.js 装饰增强层） ──
+zeek:
+  katex: true      # 数学公式 KaTeX（CDN 客户端渲染，正文含 $ 时才加载 JS）
+  mermaid: true    # mermaid 图（CDN 客户端渲染，失败回退原代码块）
+  mascot: true     # 右下角 live2d 形象（CDN 加载，失败静默；窄屏/减少动效自动关闭）
+  bgm: ""          # 背景音乐 URL（如 /audio/bgm.mp3，文件放入 hexo-engine source/audio/）；空 = 不渲染播放按钮

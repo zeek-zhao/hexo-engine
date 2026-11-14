@@ -7,6 +7,10 @@
 <meta name="description" content="<%= page.description || page.title || config.description %>">
 <% if (page.current && page.current > 1) { %><meta name="robots" content="noindex"><% } %>
 <link rel="stylesheet" href="<%- url_for('css/main.css') %>">
+<% /* KaTeX：数学公式（客户端渲染，配置开关见 _config.yml zeek 段） */ %>
+<% if (config.zeek && config.zeek.katex) { %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<% } %>
 </head>
 <body data-page="<%= is_post() ? 'post' : 'page' %>">
 
@@ -51,6 +55,9 @@
   <div class="topbar-actions">
     <button class="searchbox" id="openSearch" type="button" title="搜索文章（Ctrl+K / ⌘K / 按 / 唤起）">🔍<span class="s-label">搜索文章…</span><kbd>Ctrl K</kbd></button>
     <button class="iconbtn" id="themeBtn" title="切换明暗主题">◐</button>
+    <% if (config.zeek && config.zeek.bgm) { %>
+    <button class="iconbtn bgmbtn" id="bgmBtn" type="button" title="背景音乐" aria-label="背景音乐开关" hidden>🎵</button>
+    <% } %>
     <button class="iconbtn" id="menuBtn" style="display:none" title="导航与目录">☰</button>
   </div>
 </header>
@@ -67,13 +74,13 @@
       <% tree.roots.forEach((g) => { if (activeRootId && g._id !== activeRootId) return; %>
         <div class="sidegroup" data-cat="<%= g.name %>">
           <div class="sg-head">
-            <span>📁</span><span><%= g.name %></span><span class="cnt"><%= g.length %> 篇</span><span class="arrow">▼</span>
+            <span><%= catIcon(g.name) %></span><span><%= g.name %></span><span class="cnt"><%= g.length %> 篇</span><span class="arrow">▼</span>
           </div>
           <div class="sg-items">
             <% (tree.childrenOf.get(g._id) || []).forEach((c) => { %>
               <div class="sg-sub" data-cat="<%= c.name %>">
                 <div class="sg-subhead">
-                  <a href="<%- url_for(c.path) %>" class="<%= page.path === c.path ? 'active' : '' %>"><span>🔖</span><span><%= c.name %></span><span class="cnt"><%= c.length %></span></a>
+                  <a href="<%- url_for(c.path) %>" class="<%= page.path === c.path ? 'active' : '' %>"><span><%= catIcon(c.name) %></span><span><%= c.name %></span><span class="cnt"><%= c.length %></span></a>
                   <span class="subarrow arrow" role="button" tabindex="0" aria-label="展开 <%= c.name %> 的文章列表">▼</span>
                 </div>
                 <div class="sg-items2">
@@ -115,6 +122,12 @@
   </div>
 </div>
 
+<script>window.ZEEK_CFG = <%- JSON.stringify({
+  katex: !!(config.zeek && config.zeek.katex),
+  mermaid: !!(config.zeek && config.zeek.mermaid),
+  mascot: !!(config.zeek && config.zeek.mascot),
+  bgm: (config.zeek && config.zeek.bgm) || ''
+}) %>;</script>
 <script src="<%- url_for('js/main.js') %>" data-search="<%- url_for('search.json') %>" defer></script>
 </body>
 </html>

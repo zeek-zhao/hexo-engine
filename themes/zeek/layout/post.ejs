@@ -1,4 +1,4 @@
-<%
+﻿<%
 /* 文章页（对照原型 viewArticle）：面包屑 + meta + 正文（含 ¶ 锚点）+ author-card + 上一篇/下一篇。
  * TOC 侧栏由 layout.ejs 用同一 heads() 解析结果渲染，保证 id 一致。 */
 const th = heads(page.content);
@@ -13,7 +13,7 @@ const chain = [];
 })();
 %>
 
-<div class="crumb"><a href="<%- url_for('') %>">首页</a> / <a href="<%- url_for('archives/') %>">归档</a><% chain.forEach((c) => { %> / <a href="<%- url_for(c.path) %>"><%= c.name %></a><% }) %> / <span><%= page.title %></span></div>
+<div class="crumb"><a href="<%- url_for('') %>">首页</a> / <a href="<%- url_for('archives/') %>">归档</a><% chain.forEach((c) => { %> / <a href="<%- url_for(c.path) %>"><%= catIcon(c.name) %> <%= c.name %></a><% }) %> / <span><%= page.title %></span></div>
 
 <h1><%= page.title %></h1>
 <% if (page.description) { %><div class="subtitle"><%= page.description %></div><% } %>

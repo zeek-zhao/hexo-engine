@@ -177,12 +177,13 @@ function resolveLink(srcRel, rawTarget) {
 }
 
 // [[目标|别名]] → [别名](短链)；[[目标]] → [文件名](短链)；解析失败 → 纯文本
+// 目标名排除嵌套方括号：防止行内代码 `[[` 被当成开括号吞掉后续真双链的 ]]（2026-11-14 体检发现）
 function convertWikiLinks(srcRel, body) {
-  body = body.replace(/\[\[([^\]|#]+)(#[^\]|]*)?\|([^\]]+)\]\]/g, (m0, tgt, _a, alias) => {
+  body = body.replace(/\[\[([^\[\]|#]+)(#[^\]|]*)?\|([^\[\]]+)\]\]/g, (m0, tgt, _a, alias) => {
     const p = resolveLink(srcRel, tgt);
     return p ? `[${alias.trim()}](/${p.url})` : alias.trim();
   });
-  body = body.replace(/\[\[([^\]]+)\]\]/g, (m0, tgt) => {
+  body = body.replace(/\[\[([^\[\]]+)\]\]/g, (m0, tgt) => {
     const p = resolveLink(srcRel, tgt);
     const label = String(tgt).trim().split('#')[0].split('/').pop();
     return p ? `[${label}](/${p.url})` : label;

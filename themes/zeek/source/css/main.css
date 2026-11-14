@@ -424,3 +424,73 @@ figure.highlight .line{font-family:var(--font-mono);font-size:13px;line-height:1
 .hljs-deletion{color:var(--amber)}
 .hljs-emphasis{font-style:italic}
 .hljs-strong{font-weight:700}
+
+
+/* ============ Obsidian 方言渲染（obsidian.js 滤镜产物） ============ */
+#view mark{background:color-mix(in srgb,var(--amber-bg) 82%,#ffd54f);color:var(--text);
+  padding:.05em .3em;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.callout{border:1px solid var(--border);border-left:3px solid var(--co,var(--accent));border-radius:var(--radius);
+  background:color-mix(in srgb,var(--co,var(--accent)) 5%,var(--bg));margin:14px 0;overflow:hidden}
+.callout-title{display:flex;align-items:center;gap:8px;padding:9px 14px;font-weight:600;font-size:14px}
+.callout-title-inner{flex:1}
+.callout-fold{color:var(--text-3);font-size:12px;transition:transform .2s}
+details.callout[open] .callout-fold{transform:rotate(180deg)}
+details.callout .callout-title{cursor:pointer;list-style:none}
+details.callout .callout-title::-webkit-details-marker{display:none}
+.callout-body{padding:2px 14px 12px;font-size:14px}
+.callout-body > :first-child{margin-top:2px}
+.callout-body > :last-child{margin-bottom:0}
+.callout.note{--co:#0969da}
+.callout.info,.callout.abstract{--co:#3fb2a5}
+.callout.tip{--co:#00b8a9}
+.callout.success{--co:#1a7f37}
+.callout.question{--co:#9a6700}
+.callout.warning{--co:#d29922}
+.callout.failure,.callout.danger,.callout.bug{--co:#cf222e}
+.callout.example{--co:#8250df}
+.callout.quote{--co:#59636e}
+[data-theme="dark"] .callout.note{--co:#539bf5}
+[data-theme="dark"] .callout.success{--co:#57ab5a}
+[data-theme="dark"] .callout.warning{--co:#c69026}
+[data-theme="dark"] .callout.failure,[data-theme="dark"] .callout.danger,[data-theme="dark"] .callout.bug{--co:#f85149}
+[data-theme="dark"] .callout.example{--co:#b083f0}
+
+/* 脚注 */
+.footnotes{margin-top:28px;font-size:13px;color:var(--text-2)}
+.footnotes hr{border:none;border-top:1px solid var(--border);margin:12px 0}
+.fnlist{padding-left:22px}
+.fnlist li{margin:4px 0}
+.fnref a{color:var(--accent);text-decoration:none;font-size:.82em}
+.fnback{text-decoration:none;color:var(--text-3);font-size:.85em;margin-left:4px}
+
+/* 任务列表 */
+#view input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;vertical-align:-2px;margin-right:6px}
+
+/* mermaid / KaTeX */
+.mermaid{text-align:center;margin:16px 0;overflow-x:auto}
+.mermaid svg{max-width:100%;height:auto}
+.mermaid.mermaid-err{font-family:var(--mono);font-size:13px;white-space:pre;text-align:left;padding:14px 16px;border-radius:10px;background:var(--card);border:1px solid var(--border)}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+
+/* ============ 装饰层（reveal / hero blobs / bgm / mascot） ============ */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+.hero{position:relative;overflow:hidden}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.16;pointer-events:none;z-index:0}
+.hero-blob.b1{width:340px;height:340px;background:#58a6ff;top:-120px;right:-60px;animation:blobFloat 14s ease-in-out infinite alternate}
+.hero-blob.b2{width:280px;height:280px;background:#8250df;bottom:-110px;left:-40px;animation:blobFloat 18s ease-in-out infinite alternate-reverse}
+.hero > *{position:relative;z-index:1}
+.hero-blob{z-index:0}
+@keyframes blobFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(-36px,26px) scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.hero-blob{animation:none}}
+
+.bgmbtn.on{color:var(--accent);animation:notePulse 1.6s ease-in-out infinite}
+@keyframes notePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.bgmbtn.on{animation:none}}
+
+/* live2d 形象（stevenjoezhang/live2d-widget 挂 #waifu） */
+#waifu{left:auto !important;right:12px;bottom:0;transition:width .3s}
+#waifu-tips{max-width:240px !important}
+@media (max-width:900px){#waifu{display:none !important}}

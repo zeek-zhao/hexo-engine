@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "hexo-engine",
   "version": "0.2.0",
   "private": true,
@@ -7,7 +7,7 @@
   },
   "scripts": {
     "collect": "node bin/collect.js",
-    "build": "npm run collect && hexo clean && hexo generate",
+    "build": "npm run collect && hexo clean && hexo generate && node scripts/check-pages.js",
     "server": "hexo server"
   },
   "dependencies": {

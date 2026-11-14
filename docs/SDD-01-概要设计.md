@@ -1,7 +1,7 @@
----
+﻿---
 title: 概要设计说明书（SDD-01）
 doc_id: HEXO-ENG-SDD-01
-version: v1.1
+version: v1.2
 date: 2026-11-14
 updated: 2026-11-14
 status: draft
@@ -16,7 +16,7 @@ description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三�
 | 项 | 值 |
 |---|---|
 | 文件编号 | HEXO-ENG-SDD-01（下称 SDD-01） |
-| 版本 | v1.1（自研主题已上线 + 两级分类体系） |
+| 版本 | v1.2（方言转换 + 图标 + 装饰层 + 体检门禁） |
 | 编制 | AI（依据 2026-11-14 UI 定稿与公开仓决议） |
 | 审核 / 批准 | 人（Zeek） |
 | 生效条件 | 人批准后置 `status: published` |
@@ -29,6 +29,7 @@ description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三�
 |---|---|---|---|
 | v1.0 | 2026-11-14 | 首版：架构数据流、主题结构、门禁与部署链、暴露面设计、回滚预案、ADR×4 | 待人批准 |
 | v1.1 | 2026-11-14 | 主题 zeek 已上线并验收；§2 模板表按实际落地状态校正；新增 §2.1 两级分类体系（OB-ENG-SOP-06：映射 JSON → collect.js v7 注入嵌套 categories → catTree helper → 主题两级渲染）；ADR-3 补注 search.json 增加 group 字段 | 待人批准 |
+| v1.2 | 2026-11-14 | 第五轮：新增 §2.2 Obsidian 方言转换与装饰层（obsidian.js 优先级 1 抢跑 / mermaid 构建期 div / 图标表 / zeek 配置段 / check-pages 体检门禁）；ADR-5 | 待人批准 |
 
 ## 1 架构与数据流
 
@@ -87,6 +88,19 @@ repository_dispatch                    │   → tags/categories 统计页      
 
 维护约束：改领域归属只改映射 JSON，collect.js 与主题模板都不动；`search.json` 每条增加 `group` 字段供搜索面板按领域展示。**hexo 分类页 `page.category` 是名称字符串**，主题内一律先 `site.categories.findOne({name})` 回查对象再沿 `parent` 上溯。
 
+### 2.2 Obsidian 方言转换与装饰层（v1.2 追加）
+
+人需求：Obsidian 全语法在转换后正常显示、全站体检、分类图标、页面装饰。设计要点：
+
+| 决策 | 结论 | 理由 |
+|---|---|---|
+| 转换落点 | `themes/zeek/scripts/obsidian.js` 注册 **before_post_render 优先级 1**：`==高亮==`→`<mark>`、`%%注释%%` 删除、脚注、callout（12 类型+别名表）→ 结构化 div、```mermaid → `<div class="mermaid">` | hexo 内置 `backtick_code_block` 是同名滤镜（优先级 10、先注册先跑），不抢优先级则 mermaid 围栏永远拿不到原文 |
+| mermaid 渲染 | 构建期出 `<div class="mermaid">`，客户端 CDN mermaid@10 渲染，失败回退代码块（mermaid-err 显示源码） | 渲染失败不阻断阅读；构建期不做图形渲染，保持纯静态输出 |
+| 数学公式 | KaTeX CSS 进 `<head>`，正文含 `$` 才动态加载 JS + auto-render（ignoredTags pre/code） | 全站只有少数篇目有公式，按需加载省带宽 |
+| 图标数据 | 06-分类映射.json v1.1.0 `icons`（46 细分）+ `groupIcons`（8 领域+其他）表；icons.js `catIcon()` helper，读不到缺省 📁、读文件失败 warn 不 fail | 与两级分类同一数据源，改图标只改映射 JSON |
+| 装饰开关 | `_config.yml zeek:` 段（katex/mermaid/mascot: true, bgm: ""）；main.js 按 `window.ZEEK_CFG` 启用；全部 CDN 失败静默、reduce-motion 与窄屏自动关 live2d | 公开仓红线：第三方 CDN 内容失败不影响正文；BGM 默认关 |
+| 体检门禁 | `scripts/check-pages.js`：public/ 按页面类型断言 + 文章特征数比对（源文计数 vs HTML 计数），先剥 head/subtitle/pre/figure/行内 code 再断言防误报；`npm run build` 与 deploy.yml 发布前各跑一次，fail exit 1 | 语法转换正确性从「人工抽查」变「流水线门禁」（URD-01 FR-20） |
+
 ## 3 门禁设计（三级，前一级不 PASS 后一级禁止执行）
 
 | 级 | 落点 | 通过条件 | 设计说明 |
@@ -138,6 +152,8 @@ repository_dispatch                    │   → tags/categories 统计页      
 | ADR-2 | **EJS 而非 pug**（或引入其他模板引擎） | 零新增依赖：`hexo-renderer-ejs`/`hexo-renderer-stylus` 已在依赖树；Hexo 默认模板语言即 EJS，生态与 hexo 内置变量直接可用 | pug（需新增渲染器依赖，违背 FR-15）；原生 JS 拼字符串（collect.js 动态主页的老路，维护性差，正是 FR-4 停用它的原因） |
 | ADR-3 | **search.json 作唯一搜索数据源** | collect.js 编译期从已放行文档生成，字段即查询所需（title/url/date/description/tags/categories），与 ⌘K 面板一一对应；json 比 xml 更易前端消费 | hexo-generator-search 的 search.xml（`_config.yml` 仍遗留该配置）：字段与主题需求不匹配，主题只消费 /search.json；该配置清理记 TODO |
 | ADR-4 | **热门排行用 MOCK_VIEWS + 可见「示例数据」标注** | 本轮不加访问统计（Out of scope）；先占位 UI 结构，接真实统计时只换数据源；mock 数据在页面上以「示例数据」标签明示，不冒充真实排行 | 上线前隐藏热门模块：原型已定稿含该模块，隐藏=偏离定稿 |
+| ADR-5 | **语法转换在主题 scripts 层（obsidian.js）而非 collect.js** | ① 职责分离：collect.js 管「哪些文章进站 + 元数据规范化 + 双链」，主题脚本管「语法到 HTML 的呈现转换」，两边独立演进；② before_post_render 优先级 1 可抢在内置 backtick_code_block 之前，collect.js 里做没有这个钩子位置；③ 转换结果随 hexo 缓存，重跑 generate 无需重 collect | 全放 collect.js：mermaid 围栏拿不到原文（内置滤镜先跑），且主题与转换耦合 |
+| ADR-6 | **发布前体检门禁 check-pages.js 构建期断言**（非 CI 单独 step 起源） | 断言随构建跑，本地与 CI 同一入口（npm run build 末尾），deploy.yml 再显式跑一次防绕过；fail 即 exit 1 阻断发布，语法坏页不可能上线 | 只在 CI 跑：本地构建无反馈，坏页要到推送后才发现；人工抽查：1150+ 页覆盖不住 |
 
 ## 8 引用文件
 

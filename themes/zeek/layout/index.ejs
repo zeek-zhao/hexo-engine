@@ -7,12 +7,13 @@ const recent = all.slice(0, 6);
  * 待接入真实统计（如不蒜子/自建计数）后，把 MOCK_VIEWS 换成按 post 查询的真实阅读数。 */
 const MOCK_VIEWS = [4820, 3960, 3510, 2870, 2410, 1980, 1760, 1540, 1320, 1100];
 const hot = all.slice(0, 5).map((p, i) => ({ p, views: MOCK_VIEWS[i] || 300 + i * 137 }));
-const CAT_ICONS = ['📝', '⚙️', '📦', '🤖', '🧠'];
 const CAT_COLORS = ['#0969da', '#41c143', '#8250df', '#d29922', '#3fb2a5'];
 const tree = catTree(site); /* 两级分类（OB-ENG-SOP-06）：首页分类卡按领域（8 组）渲染 */
 %>
 
 <section class="hero">
+  <div class="hero-blob b1" aria-hidden="true"></div>
+  <div class="hero-blob b2" aria-hidden="true"></div>
   <div class="hero-byline"><a class="byline" href="<%- url_for('about/') %>">
     <span class="avatar xs" aria-hidden="true">Z</span>
     <b>zeek.zhao</b><span>· 关于我 →</span>
@@ -31,7 +32,7 @@ const tree = catTree(site); /* 两级分类（OB-ENG-SOP-06）：首页分类卡
 <div class="sect-head"><h2>最近更新</h2><a class="more" href="<%- url_for('archives/') %>">全部归档 →</a></div>
 <ul class="postlist">
   <% recent.forEach((p) => { const cs = []; p.categories.each((c) => cs.push(c)); const cname = cs.length ? cs[cs.length - 1].name : '未分类'; %>
-  <li><span class="badge"><%= cname %></span>
+  <li><span class="badge"><%= catIcon(cname) %> <%= cname %></span>
     <span class="pl-title"><a href="<%- url_for(p.path) %>"><%= p.title %></a><span class="pl-sub"><%= p.description || '' %></span></span>
     <span class="pl-date"><%= p.date.format('YYYY-MM-DD') %></span></li>
   <% }) %>
@@ -51,7 +52,7 @@ const tree = catTree(site); /* 两级分类（OB-ENG-SOP-06）：首页分类卡
 <div class="card-grid">
   <% tree.roots.forEach((g, i) => { const kids = (tree.childrenOf.get(g._id) || []).map((c) => c.name); %>
   <a class="cat-card" href="<%- url_for(g.path) %>">
-    <div class="cc-top"><span class="cc-icon" style="background:color-mix(in srgb,<%= CAT_COLORS[i % CAT_COLORS.length] %> 15%,transparent)"><%= CAT_ICONS[i % CAT_ICONS.length] %></span>
+    <div class="cc-top"><span class="cc-icon" style="background:color-mix(in srgb,<%= CAT_COLORS[i % CAT_COLORS.length] %> 15%,transparent)"><%= catIcon(g.name) %></span>
       <h3><%= g.name %></h3><span class="cc-cnt"><%= g.length %> 篇</span></div>
     <p><%= kids.length ? kids.slice(0, 6).join(' · ') + (kids.length > 6 ? ' 等 ' + kids.length + ' 个分类' : '') : '共 ' + g.length + ' 篇文章' %> · 点击查看全部内容</p></a>
   <% }) %>

@@ -3,7 +3,7 @@ title: 分类
 comments: false
 ---
 
-按领域分组的全部分类，共 **46** 个细分分类 · **1145** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
+按领域分组的全部分类，共 **46** 个细分分类 · **1146** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
 
 <details class="catgroup" open><summary>📁 操作系统与机器人<span class="cnt">318 篇</span></summary>
 <div class="tagcloud">
@@ -77,9 +77,9 @@ comments: false
 <a class="tagbig" href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践<b>1</b></a>
 </div>
 </details>
-<details class="catgroup" open><summary>📁 知识工具<span class="cnt">40 篇</span></summary>
+<details class="catgroup" open><summary>📁 知识工具<span class="cnt">41 篇</span></summary>
 <div class="tagcloud">
-<a class="tagbig" href="/categories/obsidian/">obsidian<b>22</b></a>
+<a class="tagbig" href="/categories/obsidian/">obsidian<b>23</b></a>
 <a class="tagbig" href="/categories/hexo/">hexo<b>18</b></a>
 </div>
 </details>

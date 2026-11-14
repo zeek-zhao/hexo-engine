@@ -332,4 +332,116 @@
     var t = document.getElementById(skip.getAttribute('href').slice(1));
     if (t) { t.setAttribute('tabindex', '-1'); t.focus(); }
   });
+
+  /* ============================================================
+   * 装饰增强层（config.zeek 开关，_config.yml zeek 段 → window.ZEEK_CFG）
+   * KaTeX 数学 / mermaid 图 / live2d 形象 / 背景音乐 / 滚动显现
+   * 全部失败静默：CDN 不可达时页面退化为纯文本/代码块，不阻塞交互。
+   * ============================================================ */
+  var CFG = window.ZEEK_CFG || {};
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- KaTeX：正文含 $..$ / $$..$$ / \(..\) 时渲染 ---------- */
+  function loadScript(src, onload, onerror) {
+    var s = document.createElement('script');
+    s.src = src; s.defer = true;
+    s.onload = onload || null; s.onerror = onerror || null;
+    document.head.appendChild(s);
+    return s;
+  }
+  var view = document.getElementById('view');
+  if (CFG.katex && view) {
+    var txt = view.textContent || '';
+    if (txt.indexOf('$') !== -1 || txt.indexOf('\\(') !== -1) {
+      var tryKatex = function () {
+        if (!window.katex || !window.renderMathInElement) return;
+        window.renderMathInElement(view, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '\\[', right: '\\]', display: true },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '$', right: '$', display: false }
+          ],
+          ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        });
+      };
+      loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js', function () {
+        loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js', tryKatex);
+      });
+    }
+  }
+
+  /* ---------- mermaid：渲染 div.mermaid（构建期已生成）+ 旧形态 pre>code.language-mermaid ---------- */
+  if (CFG.mermaid) {
+    var mmDivs = [];
+    document.querySelectorAll('div.mermaid').forEach(function (div) {
+      mmDivs.push({ div: div, pre: null });
+    });
+    document.querySelectorAll('pre > code.language-mermaid').forEach(function (code) {
+      var pre = code.parentElement;
+      if (pre.nextElementSibling && pre.nextElementSibling.classList.contains('mermaid')) return;
+      var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = code.textContent;
+        pre.parentNode.insertBefore(div, pre);
+        pre.style.display = 'none';
+        mmDivs.push({ div: div, pre: pre });
+      });
+      if (mmDivs.length) loadScript('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js', function () {
+        if (!window.mermaid) return;
+        var dark = (root.dataset.theme === 'dark') || (root.style.colorScheme === 'dark');
+        try {
+          window.mermaid.initialize({ startOnLoad: false, theme: dark ? 'dark' : 'neutral' });
+          window.mermaid.run({ nodes: mmDivs.map(function (x) { return x.div; }) }).catch(fallback);
+        } catch (e) { fallback(); }
+        function fallback() { mmDivs.forEach(function (x) { if (x.pre) x.pre.style.display = ''; x.div.textContent = x.div.getAttribute('data-src') || x.div.textContent; x.div.classList.add('mermaid-err'); }); }
+      }, function () {
+        mmDivs.forEach(function (x) { x.div.remove(); if (x.pre) x.pre.style.display = ''; });
+      });
+  }
+
+  /* ---------- live2d 形象（CDN widget，失败静默；窄屏/减少动效不加载） ---------- */
+  if (CFG.mascot && !reduceMotion && window.innerWidth > 900) {
+    loadScript('https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js');
+  }
+
+  /* ---------- 背景音乐：顶部 🎵 开关，音频 404 时按钮自动隐藏 ---------- */
+  (function () {
+    if (!CFG.bgm) return;
+    var btn = document.getElementById('bgmBtn');
+    if (!btn) return;
+    var audio = new Audio(CFG.bgm);
+    audio.loop = true;
+    audio.volume = 0.35;
+    audio.addEventListener('error', function () { btn.hidden = true; });
+    btn.addEventListener('click', function () {
+      if (audio.paused) { audio.play().catch(function () { btn.hidden = true; }); btn.classList.add('on'); }
+      else { audio.pause(); btn.classList.remove('on'); }
+    });
+    btn.hidden = false;
+  })();
+
+  /* ---------- 滚动显现：正文块 / 领域卡 / 归档组 进入视口后淡入上移 ---------- */
+  (function () {
+    if (reduceMotion || !('IntersectionObserver' in window)) return;
+    var targets = [];
+    if (view) {
+      if (document.body.dataset.page === 'post') {
+        // 文章：除面包屑外逐块显现
+        Array.prototype.forEach.call(view.children, function (el) {
+          if (!el.classList.contains('crumb')) targets.push(el);
+        });
+      } else {
+        targets = Array.prototype.slice.call(view.querySelectorAll('.cat-card, .archdomain, .postlist, .hotlist, details.archgroup'));
+      }
+    }
+    if (!targets.length) return;
+    targets.forEach(function (el) { el.classList.add('reveal'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    targets.forEach(function (el) { io.observe(el); });
+  })();
 })();

@@ -33,7 +33,11 @@ npx hexo generate ; npx hexo server                              # 3. 构建并�
 
 - `content/` 已 gitignore；collect.js 输出的 `source/_posts/`、`search.json`、`post-map`、tags/categories 统计页全部是**构建产物，禁止手工编辑**。
 - 主页 `/` 由主题提供；`source/index.html` 动态主页生成已停用（URD-01 FR-4）。
+- 完整构建：`npm run build` = collect → `hexo clean` → `hexo generate` → `node scripts/check-pages.js`（体检不过即 exit 1，deploy.yml 在发布前也跑同一门禁）。**坑**：hexo generate 不清理 `public/` 旧产物，重建必须先 clean。
 - **两级分类（OB-ENG-SOP-06，2026-11-14）**：内容库每篇文章 frontmatter 只有单一细分分类；`bin/collect.js`（v7）构建期读取 `content/90-OB工程管理/方案/06-分类映射.json` 把 46 个细分分类归入 8 个领域，注入嵌套 `categories: [[领域, 细分]]`。主题侧（layout.ejs 侧栏 / archive.ejs / category.ejs / index.ejs）按 hexo 分类树两级渲染。**改分类归属只改映射 JSON，不动 collect.js**；映射文件缺失时构建告警并 fallback 到「其他」。
+- **Obsidian 方言转换（themes/zeek/scripts/obsidian.js）**：before_post_render 优先级 **1**（必须先于 hexo 内置 `backtick_code_block`，否则 ```mermaid 围栏已被降级成 highlight 代码块）：`==高亮==`→`<mark>`、`%%注释%%` 删除、脚注 `[^id]`、`[!type]` callout（12 类型 + 别名表）→ 结构化 div、```mermaid → `<div class="mermaid">`。客户端增强（main.js）按 `window.ZEEK_CFG`（_config.yml `zeek:` 段）加载 KaTeX / mermaid / live2d / 背景音乐，CDN 失败一律静默降级。
+- **分类图标（themes/zeek/scripts/icons.js）**：`catIcon()` helper 读 06-分类映射.json 的 `icons` / `groupIcons` 表（v1.1.0），缺省 📁；**改图标只改映射 JSON**。
+- **全站体检（scripts/check-pages.js）**：对 `public/` 按页面类型断言（chrome/分类树/文章特征/无 Obsidian 语法残留），`source/_posts/` 与 search.json 交叉核对；fail 输出明细并 exit 1。
 
 ## 5 部署机制
 
@@ -82,7 +86,7 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 | 5 | 评论系统 / 访问统计 | 本轮不加，记 TODO | 人拍板后立项 |
 | 6 | 首页为精选落地页（最近 6 篇 + 热门 + 分类卡），无翻页链接；generator-index 仍生成 /page/N/ 但未被链接引用 | 可选优化 | AI |
 
-已落地（2026-11-14）：自研主题 zeek 上线并部署验收；hexo-engine 改 public（红线 §8）；P1-5 门禁收紧；P1-6 package-lock.json 入库；docs/ 四份文档；模板修复三连——①侧栏分组默认折叠且修复 sg-head 内联 onclick 与 JS 监听**双触发抵消**导致的"不能折叠"②分类归档页侧栏只渲染当前分类（layout.ejs `activeCat` 过滤）③搜索修复（main.js 引用 `cmdkInput`/`drawerBtn` 与实际 DOM id `cmdkQ`/`menuBtn` 不匹配，已对齐）；`_config.yml` 孤儿 `search:`（search.xml）配置已清理。同日追加：**两级分类体系**（OB-ENG-SOP-06 映射 JSON + collect.js v7 注入嵌套 categories + 主题两级渲染，见 §4）。
+已落地（2026-11-14）：自研主题 zeek 上线并部署验收；hexo-engine 改 public（红线 §8）；P1-5 门禁收紧；P1-6 package-lock.json 入库；docs/ 四份文档；模板修复三连——①侧栏分组默认折叠且修复 sg-head 内联 onclick 与 JS 监听**双触发抵消**导致的"不能折叠"②分类归档页侧栏只渲染当前分类（layout.ejs `activeCat` 过滤）③搜索修复（main.js 引用 `cmdkInput`/`drawerBtn` 与实际 DOM id `cmdkQ`/`menuBtn` 不匹配，已对齐）；`_config.yml` 孤儿 `search:`（search.xml）配置已清理。同日追加：**两级分类体系**（OB-ENG-SOP-06 映射 JSON + collect.js v7 注入嵌套 categories + 主题两级渲染，见 §4）；**第五轮**：OB 语法模板文章（`32-工具/obsidian/Obsidian 语法模板与转换体检.md`）+ obsidian.js 方言滤镜（callout/高亮/脚注/mermaid，collect.js 双链正则修复排除行内码嵌套）+ check-pages.js 全站体检门禁（deploy.yml 发布前 step）+ 分类图标表（06 映射 v1.1.0 `icons`/`groupIcons` + icons.js `catIcon`）+ 装饰层（KaTeX/mermaid/live2d/背景音乐/滚动显现，`_config.yml zeek:` 段开关，CDN 失败静默）。
 
 ## 10 已知坑与教训
 
@@ -91,6 +95,8 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 3. **rebase 不改作者身份**：rebase 保留原 author，若历史身份错误需用 `filter-branch --env-filter` 类**二次改写**，且改写后旧 SHA 全部失效——文档不固化 SHA，核对以 `git log` 为准（05 规范 §5.3）。
 4. **Windows 中文编码**：md 一律 UTF-8（无 BOM）；PowerShell 读写文件显式 `-Encoding utf8`，避免 GBK 混入导致 frontmatter 解析失败。
 5. **改标题 = 换短链**：abbrlink = crc32(title)，正式发布后改标题会断链；改前查 post-map 映射页（05 规范 §4.2 习惯 5）。
+6. **before_post_render 优先级**：hexo 内置 `backtick_code_block` 与自定义滤镜同为 before_post_render；obsidian.js 注册优先级 1 先行，晚注册/低优先级会拿到被降级的 highlight 代码块，```mermaid 围栏转换失效（第五轮实测）。
+7. **regex 计数类断言要先剥代码**：check-pages.js 的 no-raw / mermaid / callout 计数先剥 `<head>`、subtitle、pre/figure、行内 `<code>` 与教学围栏内容，再对剩余正文断言，否则模板篇与教程篇必误报（第五轮实测）。
 
 ## 11 AI 使用边界（引自 05 规范 §4.2，摘要）
 

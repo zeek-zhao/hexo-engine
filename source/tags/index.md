@@ -3,7 +3,7 @@ title: 标签
 comments: false
 ---
 
-共 **631** 个标签 · **1145** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。
+共 **632** 个标签 · **1146** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。
 
 <div class="tagcloud">
 <a class="tagbig" href="/tags/%E7%B3%BB%E7%BB%9F/">系统<b>317</b></a>
@@ -29,9 +29,9 @@ comments: false
 <a class="tagbig" href="/tags/Python/">Python<b>26</b></a>
 <a class="tagbig" href="/tags/Shell/">Shell<b>24</b></a>
 <a class="tagbig" href="/tags/Vue/">Vue<b>24</b></a>
+<a class="tagbig" href="/tags/obsidian/">obsidian<b>23</b></a>
 <a class="tagbig" href="/tags/windows/">windows<b>23</b></a>
 <a class="tagbig" href="/tags/%E5%AE%9E%E6%88%98/">实战<b>22</b></a>
-<a class="tagbig" href="/tags/obsidian/">obsidian<b>22</b></a>
 <a class="tagbig" href="/tags/ubuntu24.04/">ubuntu24.04<b>22</b></a>
 <a class="tagbig" href="/tags/%E7%B4%A2%E5%BC%95/">索引<b>19</b></a>
 <a class="tagbig" href="/tags/k8s/">k8s<b>19</b></a>
@@ -64,11 +64,11 @@ comments: false
 <a class="tagbig" href="/tags/%E5%9F%BA%E7%A1%80/">基础<b>7</b></a>
 <a class="tagbig" href="/tags/%E9%85%8D%E7%BD%AE/">配置<b>7</b></a>
 <a class="tagbig" href="/tags/Docker/">Docker<b>7</b></a>
+<a class="tagbig" href="/tags/%E6%B5%8B%E8%AF%95/">测试<b>6</b></a>
 <a class="tagbig" href="/tags/%E6%81%A2%E5%A4%8D/">恢复<b>6</b></a>
 <a class="tagbig" href="/tags/%E6%9D%83%E9%99%90/">权限<b>6</b></a>
 <a class="tagbig" href="/tags/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">学习路线<b>6</b></a>
 <a class="tagbig" href="/tags/%E5%A4%87%E4%BB%BD/">备份<b>5</b></a>
-<a class="tagbig" href="/tags/%E6%B5%8B%E8%AF%95/">测试<b>5</b></a>
 <a class="tagbig" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践<b>5</b></a>
 <a class="tagbig" href="/tags/%E8%BF%9B%E9%98%B6/">进阶<b>5</b></a>
 <a class="tagbig" href="/tags/%E6%8E%92%E6%9F%A5/">排查<b>5</b></a>
@@ -569,6 +569,7 @@ comments: false
 <a class="tagbig" href="/tags/List/">List<b>1</b></a>
 <a class="tagbig" href="/tags/Macro/">Macro<b>1</b></a>
 <a class="tagbig" href="/tags/Make/">Make<b>1</b></a>
+<a class="tagbig" href="/tags/markdown/">markdown<b>1</b></a>
 <a class="tagbig" href="/tags/matplotlib/">matplotlib<b>1</b></a>
 <a class="tagbig" href="/tags/Maven/">Maven<b>1</b></a>
 <a class="tagbig" href="/tags/merge/">merge<b>1</b></a>

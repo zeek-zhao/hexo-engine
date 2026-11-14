@@ -1,7 +1,7 @@
 ---
 title: 需求规格说明书（URD-01）
 doc_id: HEXO-ENG-URD-01
-version: v1.1
+version: v1.2
 date: 2026-11-14
 updated: 2026-11-14
 status: draft
@@ -16,7 +16,7 @@ description: hexo-engine 工程库的需求规格：内容采集与双链转换�
 | 项 | 值 |
 |---|---|
 | 文件编号 | HEXO-ENG-URD-01（下称 URD-01） |
-| 版本 | v1.1（主题上线 + 两级分类） |
+| 版本 | v1.2（语法模板 + 体检门禁 + 图标 + 装饰层） |
 | 编制 | AI（依据 2026-11-14 UI 定稿与公开仓决议） |
 | 审核 / 批准 | 人（Zeek） |
 | 生效条件 | 人批准后置 `status: published`；批准前不得作为实施验收依据 |
@@ -30,6 +30,7 @@ description: hexo-engine 工程库的需求规格：内容采集与双链转换�
 |---|---|---|---|
 | v1.0 | 2026-11-14 | 首版：范围、功能需求 FR、非功能需求 NFR、验收标准 | 待人批准 |
 | v1.1 | 2026-11-14 | 主题 zeek 已上线验收（FR-9~14 状态由「移植中」改为「已上线」）；新增 FR-16 两级分类体系（OB-ENG-SOP-06）与 AC-16 | 待人批准 |
+| v1.2 | 2026-11-14 | 第五轮：新增 FR-17 Obsidian 方言转换 / FR-18 分类图标 / FR-19 装饰层 / FR-20 发布前体检门禁与 AC-17/AC-18；引用 06 映射 v1.1.0 | 待人批准 |
 
 ## 1 背景与目标
 
@@ -83,6 +84,10 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | FR-14 | 404 | 主题 404 页：错误码 + 回首页 / 搜索 / 归档三出口 | 已上线 |
 | FR-15 | 零新增依赖 | 主题移植不新增 npm 依赖：渲染器用既有 `hexo-renderer-ejs` + `hexo-renderer-stylus` | 约束生效 |
 | FR-16 | 两级分类 | 侧栏/归档/统计页/面包屑按「领域 → 细分分类 → 文章」两级展示，8 个领域由 ai-obsidian `90-OB工程管理/方案/06-分类映射.json` 定义；collect.js 构建期注入嵌套 `categories: [[领域, 细分]]`；vault frontmatter 仍只写单一细分分类（写作习惯不变）；分类页与文章页侧栏只渲染当前领域一组；映射缺失告警 + fallback「其他」 | 已上线（OB-ENG-SOP-06） |
+| FR-17 | Obsidian 方言转换 | 模板渲染层（themes/zeek/scripts/obsidian.js）在构建期转换 Obsidian 语法：`==高亮==`→`<mark>`、`%%注释%%` 不输出、脚注 `[^id]` → 文末脚注区、`[!type]` callout（12 类型 + 别名）→ 结构化卡片（`[-]`/`[+]` 可折叠）、```mermaid 围栏 → `<div class="mermaid">`（客户端 CDN 渲染，失败回退代码块）；双链由 collect.js 转站内链接，行内代码中的 `[[` 不误吞 | 已上线 |
+| FR-18 | 分类图标 | 每个领域与细分分类配专属图标（emoji），数据存 06-分类映射.json `icons`/`groupIcons` 表（v1.1.0），icons.js `catIcon()` helper 全站消费，缺省 📁；改图标只改映射 JSON | 已上线 |
+| FR-19 | 装饰层 | `_config.yml zeek:` 段开关控制：KaTeX 数学公式（正文含 `$` 才加载）、mermaid 客户端渲染、右下角 live2d 形象（窄屏/减少动效自动关闭）、背景音乐（bgm 为空不渲染）；全部 CDN 加载、失败静默降级，不阻塞正文阅读 | 已上线（bgm 默认关闭） |
+| FR-20 | 发布前体检门禁 | scripts/check-pages.js 对 public/ 全站按页面类型断言（chrome 完整性/分类树/文章特征/无 Obsidian 语法残留），与 search.json、source/_posts 交叉核对；`npm run build` 末尾与 deploy.yml 发布前各跑一次，fail 即阻断发布 | 已上线 |
 
 > UI 需求的完整交互清单、设计 tokens、原型↔线上差异**引用** docs/UI-01-原型说明.md，本文件不重复。
 
@@ -118,11 +123,13 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | AC-14 | 仓库无 artifact 产物；`git log --all` 提交身份仅 `zeek.zhao <zeek.zhao@foxmail.com>` 一行 | NFR-SEC/05 §5.2 |
 | AC-15 | 首页渲染 8 张领域卡、无扁平分类卡；侧栏 `<div class="sidegroup">` 在首页为 8 组、分类页与文章页均为 1 组；`/categories/<领域>/<细分>/` 可访问且面包屑含领域链；`search.json` 每条含 `group` 字段且 group 去重为 8 | FR-16 |
 | AC-16 | 删除 `06-分类映射.json` 后构建输出告警且文章归入「其他」，构建不失败 | FR-16 |
+| AC-17 | 模板文章（`32-工具/obsidian/Obsidian 语法模板与转换体检.md`）转换后：callout/mark/脚注/任务列表/mermaid 各特征数与源文一致；正文无 `==`/`%%`/`[!type]`/未转换双链残留；mermaid 输出 `<div class="mermaid">` 且数学公式页含 KaTeX 资源；check-pages.js 全站 PASS | FR-17/FR-20 |
+| AC-18 | 首页与侧栏分类均带各自图标（无默认 📁 残留于已配图分类）；06 映射 v1.1.0 图标表全量覆盖 8 领域 + 46 细分 | FR-18 |
 
 ## 6 引用文件
 
 - ai-obsidian `90-OB工程管理/方案/05-发布流与AI使用规范.md`（OB-ENG-SOP-05 v1.3）：三级门禁模型 §3、AI 使用边界 §4.2、凭据与提交身份 §5.2、公开仓暴露面红线 §5.4
-- ai-obsidian `90-OB工程管理/方案/06-分类与目录映射.md`（OB-ENG-SOP-06 v1.0）与同目录 `06-分类映射.json`：两级分类领域定义与细分归属（FR-16 数据源）
+- ai-obsidian `90-OB工程管理/方案/06-分类与目录映射.md`（OB-ENG-SOP-06 v1.1）与同目录 `06-分类映射.json`（v1.1.0）：两级分类领域定义、细分归属与分类图标表（FR-16/FR-18 数据源）
 - docs/SDD-01-概要设计.md：架构、门禁与部署链设计、ADR
 - docs/UI-01-原型说明.md：原型定稿状态、视图映射、交互清单、设计 tokens
 - 仓库事实：`package.json`（Hexo 7.3.0 与依赖清单）、`_config.yml`（permalink `posts/:abbrlink.html`、per_page 10）、`bin/collect.js`（352 行）、`.github/workflows/deploy.yml`

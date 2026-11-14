@@ -1,4 +1,4 @@
-<%
+﻿<%
 /* 分类聚合页（对照原型 viewArchive 单组形态）：复用归档列表渲染，标题为该分类。
  * 两级分类（OB-ENG-SOP-06）：面包屑 首页 / 分类 / 领域 / 细分；领域页列出下属细分 chips。 */
 const catName = page.category || page.name || '';
@@ -26,16 +26,16 @@ const kids = isRoot && catObj
     <% if (i < chain.length - 1) { %><a href="<%- url_for(c.path) %>"><%= c.name %></a> / <% } else { %><span><%= c.name %></span><% } %>
   <% }) %>
 </div>
-<h1 style="font-size:26px;margin-bottom:6px">📁 <%= catName %></h1>
+<h1 style="font-size:26px;margin-bottom:6px"><%= catIcon(catName) %> <%= catName %></h1>
 <p style="color:var(--text-2);margin-bottom:18px"><%= isRoot ? '领域' : '分类' %>「<%= catName %>」下共 <%= items.length %> 篇文档<%= isRoot ? '，含下属全部分类' : '' %>。</p>
 
 <% if (kids.length) { %>
 <div class="cat-chips">
-  <% kids.forEach((c) => { %><a class="chip" href="<%- url_for(c.path) %>">🔖 <%= c.name %><b><%= c.length %></b></a><% }) %>
+  <% kids.forEach((c) => { %><a class="chip" href="<%- url_for(c.path) %>"><%= catIcon(c.name) %> <%= c.name %><b><%= c.length %></b></a><% }) %>
 </div>
 <% } %>
 
-<details class="archgroup" open><summary>📁 <%= catName %><span class="cnt"><%= items.length %> 篇</span></summary>
+<details class="archgroup" open><summary><%= catIcon(catName) %> <%= catName %><span class="cnt"><%= items.length %> 篇</span></summary>
   <div class="archlist">
     <% items.forEach((p) => { %>
     <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('YYYY-MM-DD') %></span><span><%= p.title %></span>
