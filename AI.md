@@ -1,4 +1,4 @@
-# AI.md — AI 接手本项目的入口
+﻿# AI.md — AI 接手本项目的入口
 
 > AI 每次任务先读本文件；与上位规范冲突时，以 ai-obsidian `90-OB工程管理/方案/05-发布流与AI使用规范.md`（OB-ENG-SOP-05）为准。
 > 本仓库 2026-11-14 起为 **public** 仓库，暴露面红线见 §8 与 05 规范 §5.4。
@@ -87,6 +87,8 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 | 6 | 首页为精选落地页（最近 6 篇 + 热门 + 分类卡），无翻页链接；generator-index 仍生成 /page/N/ 但未被链接引用 | 可选优化 | AI |
 
 已落地（2026-11-14）：自研主题 zeek 上线并部署验收；hexo-engine 改 public（红线 §8）；P1-5 门禁收紧；P1-6 package-lock.json 入库；docs/ 四份文档；模板修复三连——①侧栏分组默认折叠且修复 sg-head 内联 onclick 与 JS 监听**双触发抵消**导致的"不能折叠"②分类归档页侧栏只渲染当前分类（layout.ejs `activeCat` 过滤）③搜索修复（main.js 引用 `cmdkInput`/`drawerBtn` 与实际 DOM id `cmdkQ`/`menuBtn` 不匹配，已对齐）；`_config.yml` 孤儿 `search:`（search.xml）配置已清理。同日追加：**两级分类体系**（OB-ENG-SOP-06 映射 JSON + collect.js v7 注入嵌套 categories + 主题两级渲染，见 §4）；**第五轮**：OB 语法模板文章（`32-工具/obsidian/Obsidian 语法模板与转换体检.md`）+ obsidian.js 方言滤镜（callout/高亮/脚注/mermaid，collect.js 双链正则修复排除行内码嵌套）+ check-pages.js 全站体检门禁（deploy.yml 发布前 step）+ 分类图标表（06 映射 v1.1.0 `icons`/`groupIcons` + icons.js `catIcon`）+ 装饰层（KaTeX/mermaid/live2d/背景音乐/滚动显现，`_config.yml zeek:` 段开关，CDN 失败静默）。
+
+**第六轮（2026-11-14）已落地**：评论 giscus（文章页懒加载 + 主题切换同步换肤，Discussions 已开启，Announcements 分类）；RSS tom.xml 摘要模式（footer 链接 + head 发现）；SEO 三件套（canonical 剥 index.html / OG / Twitter Card / sitemap.xml / robots.txt）；首页与归档分页导航；图片点击放大（自研 lightbox 零依赖）；复制本文链接；手机端补强（宽表格与 cmp-table 横向滚动、cmdk 92vw、article-meta 换行）。新增流水线依赖 hexo-generator-feed / hexo-generator-sitemap（主题仍零依赖）。写作指南见 §7 第 7 条。
 
 ## 10 已知坑与教训
 

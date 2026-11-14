@@ -494,3 +494,39 @@ details.callout .callout-title::-webkit-details-marker{display:none}
 #waifu{left:auto !important;right:12px;bottom:0;transition:width .3s}
 #waifu-tips{max-width:240px !important}
 @media (max-width:900px){#waifu{display:none !important}}
+/* ---------- 第六轮：RSS/giscus/lightbox/复制链接/翻页/手机端补强 ---------- */
+/* 评论 giscus */
+.comments{margin:26px 0 8px;border-top:1px solid var(--border);padding-top:18px}
+.comments-title{font-size:15px;font-weight:600;margin-bottom:12px}
+.giscus-box{min-height:120px}
+/* 复制本文链接 */
+.copy-link{border:1px solid var(--border);background:var(--bg-soft);border-radius:999px;
+  padding:3px 10px;font-size:12px;color:var(--text-2);cursor:pointer;min-height:28px;
+  transition:color .15s,border-color .15s}
+.copy-link:hover{color:var(--accent);border-color:var(--accent)}
+.copy-link.copied{color:#1a7f37;border-color:#1a7f37}
+/* 首页翻页 */
+.index-pager{margin:24px 0 6px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.more-posts{font-size:14px;color:var(--accent);text-decoration:none}
+.index-pager .pagination{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:13.5px}
+.index-pager a,.index-pager span{min-width:36px;min-height:36px;display:inline-flex;align-items:center;
+  justify-content:center;padding:4px 8px;border:1px solid var(--border);border-radius:8px;
+  color:var(--text-2);text-decoration:none}
+.index-pager span.current{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.index-pager a:hover{border-color:var(--accent);color:var(--accent)}
+.index-pager .space{border:none;min-width:12px}
+/* 图片点击放大 */
+.lightbox{position:fixed;inset:0;z-index:1000;background:rgba(10,12,16,.82);
+  display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.lightbox img{max-width:100%;max-height:92vh;border-radius:10px;box-shadow:0 24px 64px rgba(0,0,0,.5);cursor:default}
+.lightbox .lb-close{position:absolute;top:14px;right:18px;font-size:30px;line-height:1;
+  color:#fff;background:none;border:none;cursor:pointer;padding:8px;min-width:44px;min-height:44px}
+/* 手机端补强：宽表格/长行横向滚动 */
+.content table{display:block;width:max-content;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cmp-table{display:block;width:max-content;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.article-meta{flex-wrap:wrap;row-gap:6px}
+@media (max-width:560px){
+  .cmdk-panel{width:92vw}
+  .lightbox{padding:10px}
+  .index-pager{font-size:13px}
+}

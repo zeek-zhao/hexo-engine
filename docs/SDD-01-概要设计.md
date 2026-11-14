@@ -1,7 +1,7 @@
 ﻿---
 title: 概要设计说明书（SDD-01）
 doc_id: HEXO-ENG-SDD-01
-version: v1.2
+version: v1.3
 date: 2026-11-14
 updated: 2026-11-14
 status: draft
@@ -29,6 +29,7 @@ description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三�
 |---|---|---|---|
 | v1.0 | 2026-11-14 | 首版：架构数据流、主题结构、门禁与部署链、暴露面设计、回滚预案、ADR×4 | 待人批准 |
 | v1.1 | 2026-11-14 | 主题 zeek 已上线并验收；§2 模板表按实际落地状态校正；新增 §2.1 两级分类体系（OB-ENG-SOP-06：映射 JSON → collect.js v7 注入嵌套 categories → catTree helper → 主题两级渲染）；ADR-3 补注 search.json 增加 group 字段 | 待人批准 |
+| v1.3 | 2026-11-14 | 第六轮：新增 §2.3 评论与分发层（giscus 懒加载+主题同步 / RSS 摘要 / SEO / 分页 / lightbox / 复制链接）；ADR-7 giscus 选型 | 待人批准 |
 | v1.2 | 2026-11-14 | 第五轮：新增 §2.2 Obsidian 方言转换与装饰层（obsidian.js 优先级 1 抢跑 / mermaid 构建期 div / 图标表 / zeek 配置段 / check-pages 体检门禁）；ADR-5 | 待人批准 |
 
 ## 1 架构与数据流
@@ -101,6 +102,18 @@ repository_dispatch                    │   → tags/categories 统计页      
 | 装饰开关 | `_config.yml zeek:` 段（katex/mermaid/mascot: true, bgm: ""）；main.js 按 `window.ZEEK_CFG` 启用；全部 CDN 失败静默、reduce-motion 与窄屏自动关 live2d | 公开仓红线：第三方 CDN 内容失败不影响正文；BGM 默认关 |
 | 体检门禁 | `scripts/check-pages.js`：public/ 按页面类型断言 + 文章特征数比对（源文计数 vs HTML 计数），先剥 head/subtitle/pre/figure/行内 code 再断言防误报；`npm run build` 与 deploy.yml 发布前各跑一次，fail exit 1 | 语法转换正确性从「人工抽查」变「流水线门禁」（URD-01 FR-20） |
 
+
+### 2.3 评论与分发层（v1.3 追加）
+
+| 关注点 | 设计 |
+|---|---|
+| 评论 giscus | 文章页 `#giscusWrap` 容器；main.js IntersectionObserver 400px 懒加载 giscus script；配置 `_config.yml zeek.giscus`（repo zeek-zhao/zeek-zhao.github.io、repoId `R_kgDOOQtDmA`、Announcements 分类 `DIC_kwDOOQtDmM4DLIB1`，仅维护者开帖）；applyTheme 包装把三态主题 postMessage 到 `iframe.giscus.app` 同步换肤；noscript 兜底链接 |
+| RSS | `hexo-generator-feed`：atom.xml 摘要模式（limit 20，content false）；footer 链接 + layout head `<link rel=alternate>` |
+| SEO | layout head：canonical（`page.path` 剥 `index.html`）、OG（og:type article/website、og:url/title/description/locale、article:published_time）、twitter:card；`hexo-generator-sitemap` sitemap.xml；source/robots.txt（Allow all + Sitemap 行） |
+| 分页 | hexo 内置 paginator（mid_size 1）：首页与归档末尾；分类/标签页不分页 |
+| 图片放大 | 自研 lightbox（main.js 零依赖）：.content/.post-body img 点击 → 全屏 overlay，esc/点击关闭，排除 a 内与头像 logo |
+| 复制链接 | article-meta copy-link 按钮（data-url=full_url_for），clipboard API + execCommand fallback，✓ 已复制 1.6s |
+
 ## 3 门禁设计（三级，前一级不 PASS 后一级禁止执行）
 
 | 级 | 落点 | 通过条件 | 设计说明 |
@@ -153,7 +166,8 @@ repository_dispatch                    │   → tags/categories 统计页      
 | ADR-3 | **search.json 作唯一搜索数据源** | collect.js 编译期从已放行文档生成，字段即查询所需（title/url/date/description/tags/categories），与 ⌘K 面板一一对应；json 比 xml 更易前端消费 | hexo-generator-search 的 search.xml（`_config.yml` 仍遗留该配置）：字段与主题需求不匹配，主题只消费 /search.json；该配置清理记 TODO |
 | ADR-4 | **热门排行用 MOCK_VIEWS + 可见「示例数据」标注** | 本轮不加访问统计（Out of scope）；先占位 UI 结构，接真实统计时只换数据源；mock 数据在页面上以「示例数据」标签明示，不冒充真实排行 | 上线前隐藏热门模块：原型已定稿含该模块，隐藏=偏离定稿 |
 | ADR-5 | **语法转换在主题 scripts 层（obsidian.js）而非 collect.js** | ① 职责分离：collect.js 管「哪些文章进站 + 元数据规范化 + 双链」，主题脚本管「语法到 HTML 的呈现转换」，两边独立演进；② before_post_render 优先级 1 可抢在内置 backtick_code_block 之前，collect.js 里做没有这个钩子位置；③ 转换结果随 hexo 缓存，重跑 generate 无需重 collect | 全放 collect.js：mermaid 围栏拿不到原文（内置滤镜先跑），且主题与转换耦合 |
-| ADR-6 | **发布前体检门禁 check-pages.js 构建期断言**（非 CI 单独 step 起源） | 断言随构建跑，本地与 CI 同一入口（npm run build 末尾），deploy.yml 再显式跑一次防绕过；fail 即 exit 1 阻断发布，语法坏页不可能上线 | 只在 CI 跑：本地构建无反馈，坏页要到推送后才发现；人工抽查：1150+ 页覆盖不住 |
+| ADR-6 | **发布前体检门禁 check-pages.js 构建期断言**（非 CI 单独 step 起源） | 断言随构建跑，本地与 CI 
+| ADR-7 | **评论选 giscus 而非 utterances/Valine/Disqus** | GitHub Discussions 原生承载、无后端无追踪第三方、读者凭 GitHub 账号、主题三态可 postMessage 同步；Announcements 分类防游客灌水。feed/sitemap 为流水线级新依赖（hexo 官方插件），主题层保持零依赖（FR-15 v1.3 修订） |同一入口（npm run build 末尾），deploy.yml 再显式跑一次防绕过；fail 即 exit 1 阻断发布，语法坏页不可能上线 | 只在 CI 跑：本地构建无反馈，坏页要到推送后才发现；人工抽查：1150+ 页覆盖不住 |
 
 ## 8 引用文件
 

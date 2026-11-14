@@ -444,4 +444,98 @@
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
     targets.forEach(function (el) { io.observe(el); });
   })();
+
+  /* ---------- 评论 giscus（第六轮）：进入视口懒加载，主题切换同步 ---------- */
+  (function () {
+    var wrap = document.getElementById('giscusWrap');
+    var box = document.getElementById('giscusBox');
+    var g = CFG.giscus;
+    if (!wrap || !box || !g || !g.repo) return;
+    var currentTheme = getTheme();
+    function giscusTheme(mode) { return mode === 'dark' ? 'dark' : mode === 'light' ? 'light' : (mq.matches ? 'dark' : 'light'); }
+    var loaded = false;
+    function load() {
+      if (loaded) return; loaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://giscus.app/client.js';
+      s.async = true; s.crossOrigin = 'anonymous';
+      var params = {
+        'data-repo': g.repo, 'data-repo-id': g.repoId,
+        'data-category': g.category || 'Announcements', 'data-category-id': g.categoryId,
+        'data-mapping': 'pathname', 'data-strict': '1',
+        'data-reactions-enabled': '1', 'data-emit-metadata': '0',
+        'data-input-position': 'top', 'data-theme': giscusTheme(currentTheme),
+        'data-lang': g.lang || 'zh-CN', 'data-loading': 'lazy'
+      };
+      Object.keys(params).forEach(function (k) { s.setAttribute(k, params[k]); });
+      box.innerHTML = '';
+      box.appendChild(s);
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries, obs) {
+        if (entries.some(function (e) { return e.isIntersecting; })) { load(); obs.disconnect(); }
+      }, { rootMargin: '400px' }).observe(wrap);
+    } else load();
+    // 主题切换 → 通知 giscus iframe 换肤
+    function pushTheme() {
+      var frame = document.querySelector('iframe.giscus-frame');
+      if (!frame) return;
+      frame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme(getTheme()) } } }, 'https://giscus.app');
+    }
+    var origApply = applyTheme;
+    applyTheme = function (mode) { origApply(mode); pushTheme(); };
+    mq.addEventListener('change', function () { if (getTheme() === 'system') pushTheme(); });
+  })();
+
+  /* ---------- 图片点击放大（第六轮，自研 lightbox 零依赖） ---------- */
+  (function () {
+    var overlay = null;
+    function open(src, alt) {
+      close();
+      overlay = document.createElement('div');
+      overlay.className = 'lightbox';
+      overlay.innerHTML = '<img alt="' + (alt || '') + '" src="' + src + '"><button type="button" class="lb-close" aria-label="关闭">×</button>';
+      overlay.addEventListener('click', function (ev) { if (ev.target !== overlay.querySelector('img')) close(); });
+      document.addEventListener('keydown', onKey);
+      document.body.appendChild(overlay);
+      document.body.style.overflow = 'hidden';
+    }
+    function onKey(ev) { if (ev.key === 'Escape') close(); }
+    function close() {
+      if (!overlay) return;
+      document.removeEventListener('keydown', onKey);
+      document.body.removeChild(overlay); overlay = null;
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('click', function (ev) {
+      var img = ev.target && ev.target.closest ? ev.target.closest('.content img, .post-body img') : null;
+      if (!img || ev.target.closest('a')) return;
+      if (img.closest('.author-card, .avatar, #waifu, .logo')) return;
+      ev.preventDefault();
+      open(img.currentSrc || img.src, img.alt);
+    });
+  })();
+
+  /* ---------- 复制本文链接（第六轮） ---------- */
+  (function () {
+    var btn = document.querySelector('.copy-link');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var url = btn.getAttribute('data-url') || location.href;
+      function done() {
+        btn.classList.add('copied'); btn.textContent = '✓ 已复制';
+        setTimeout(function () { btn.classList.remove('copied'); btn.textContent = '🔗 复制链接'; }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, function () { fallback(); });
+      } else fallback();
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+  })();
 })();

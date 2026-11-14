@@ -57,3 +57,11 @@ const tree = catTree(site); /* 两级分类（OB-ENG-SOP-06）：首页分类卡
     <p><%= kids.length ? kids.slice(0, 6).join(' · ') + (kids.length > 6 ? ' 等 ' + kids.length + ' 个分类' : '') : '共 ' + g.length + ' 篇文章' %> · 点击查看全部内容</p></a>
   <% }) %>
 </div>
+
+<% /* 翻页（第六轮）：首页为精选落地页，仅第 2 页起显示「更多文章」入口与分页器 */ %>
+<% if (page.total > 1) { %>
+<nav class="index-pager" aria-label="文章分页">
+  <% if (page.current === 1) { %><a class="more-posts" href="<%- url_for('page/2/') %>">更多文章 →</a><% } %>
+  <%- paginator({ mid_size: 1, prev_text: '← 上一页', next_text: '下一页 →', escape: false }) %>
+</nav>
+<% } %>

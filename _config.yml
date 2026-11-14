@@ -1,4 +1,4 @@
-﻿title: Zeek 的 AI 知识工程
+title: Zeek 的 AI 知识工程
 subtitle: 用 AI 跑一条内容流水线
 description: AI 驱动的 Obsidian 知识工程博客
 keywords: Obsidian, AI, Hexo, 知识管理
@@ -75,3 +75,21 @@ zeek:
   mermaid: true    # mermaid 图（CDN 客户端渲染，失败回退原代码块）
   mascot: true     # 右下角 live2d 形象（CDN 加载，失败静默；窄屏/减少动效自动关闭）
   bgm: ""          # 背景音乐 URL（如 /audio/bgm.mp3，文件放入 hexo-engine source/audio/）；空 = 不渲染播放按钮
+  # 评论 giscus（GitHub Discussions，仅文章页懒加载；id 为公开的 widget 参数非密钥）
+  giscus:
+    repo: zeek-zhao/zeek-zhao.github.io
+    repoId: R_kgDOOQtDmA
+    category: Announcements
+    categoryId: DIC_kwDOOQtDmM4DLIB1
+    lang: zh-CN
+
+# ── RSS（atom.xml 摘要模式，2026-11-14 第六轮）──
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  content: false   # 摘要模式：description/摘要，不输出全文
+
+# ── sitemap（SEO 收录）──
+sitemap:
+  path: sitemap.xml
