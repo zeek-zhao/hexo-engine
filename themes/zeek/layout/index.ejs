@@ -1,0 +1,59 @@
+<%
+/* 首页：hero + 最新文章 + 分类卡片 + 热门排行（对照原型 viewHome） */
+const all = []; site.posts.each((p) => all.push(p));
+all.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+const recent = all.slice(0, 6);
+/* 热门排行：线上暂无阅读统计，沿用原型 MOCK_VIEWS 的示例值，按最新文章顺序赋值；
+ * 待接入真实统计（如不蒜子/自建计数）后，把 MOCK_VIEWS 换成按 post 查询的真实阅读数。 */
+const MOCK_VIEWS = [4820, 3960, 3510, 2870, 2410, 1980, 1760, 1540, 1320, 1100];
+const hot = all.slice(0, 5).map((p, i) => ({ p, views: MOCK_VIEWS[i] || 300 + i * 137 }));
+const CAT_ICONS = ['📝', '⚙️', '📦', '🤖', '🧠'];
+const CAT_COLORS = ['#0969da', '#41c143', '#8250df', '#d29922', '#3fb2a5'];
+const cats = []; site.categories.each((c) => cats.push(c));
+cats.sort((a, b) => b.length - a.length);
+%>
+
+<section class="hero">
+  <div class="hero-byline"><a class="byline" href="<%- url_for('about/') %>">
+    <span class="avatar xs" aria-hidden="true">Z</span>
+    <b>zeek.zhao</b><span>· 关于我 →</span>
+  </a></div>
+  <h1>AI 驱动的知识工程</h1>
+  <p>嵌入式与 DevOps 工程师，折腾 Yocto 构建、CI 流水线和 Obsidian 知识管理，顺手写点学习笔记</p>
+  <div class="hero-stats">
+    <span class="atag">Yocto / 嵌入式 Linux</span>
+    <span class="atag">CI/CD &amp; DevOps</span>
+    <span class="atag">Obsidian 知识管理</span>
+    <span class="atag">技术写作</span>
+    <span class="atag"><b><%= all.length %></b> 篇文档</span>
+  </div>
+</section>
+
+<div class="sect-head"><h2>最近更新</h2><a class="more" href="<%- url_for('archives/') %>">全部归档 →</a></div>
+<ul class="postlist">
+  <% recent.forEach((p) => { let cname = '未分类'; p.categories.each((c) => { if (cname === '未分类') cname = c.name; }); %>
+  <li><span class="badge"><%= cname %></span>
+    <span class="pl-title"><a href="<%- url_for(p.path) %>"><%= p.title %></a><span class="pl-sub"><%= p.description || '' %></span></span>
+    <span class="pl-date"><%= p.date.format('YYYY-MM-DD') %></span></li>
+  <% }) %>
+</ul>
+
+<div class="sect-head"><h2>热门内容</h2><span class="mock-tag">示例排行 · 示例数据</span></div>
+<ol class="hotlist">
+  <% hot.forEach((h, i) => { %>
+  <li><span class="hot-no <%= i < 3 ? 'top' : '' %>"><%= String(i + 1).padStart(2, '0') %></span>
+    <span class="hot-main"><a href="<%- url_for(h.p.path) %>"><%= h.p.title %></a>
+      <span class="hot-sub"><%= h.p.description || '' %></span></span>
+    <span class="hot-views"><%= h.views.toLocaleString() %> 次阅读</span></li>
+  <% }) %>
+</ol>
+
+<div class="sect-head"><h2>按分类浏览</h2><a class="more" href="<%- url_for('categories/') %>">查看全部 →</a></div>
+<div class="card-grid">
+  <% cats.forEach((c, i) => { %>
+  <a class="cat-card" href="<%- url_for(c.path) %>">
+    <div class="cc-top"><span class="cc-icon" style="background:color-mix(in srgb,<%= CAT_COLORS[i % CAT_COLORS.length] %> 15%,transparent)"><%= CAT_ICONS[i % CAT_ICONS.length] %></span>
+      <h3><%= c.name %></h3><span class="cc-cnt"><%= c.length %> 篇</span></div>
+    <p>共 <%= c.length %> 篇文章 · 点击查看该分类下的全部内容</p></a>
+  <% }) %>
+</div>

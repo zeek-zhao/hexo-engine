@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
- * collect.js — Hexo 消费端 v5（元数据驱动，见 ob-content 90-OB工程管理/方案/04-发布工作手册）
+ * collect.js — Hexo 消费端 v6（元数据驱动，见 ob-content 90-OB工程管理/方案/04-发布工作手册）
  * 全库 find 所有 md → 按元数据过滤 → 转换 → 落位
- * 附带产出：① 短链映射页（sticky 置顶） ② 动态主页 source/index.html（搜索框+个人信息+全部文档列表）
- *           ③ 标签/分类统计页 source/tags/index.md · source/categories/index.md  ④ 站内搜索数据 source/search.json
+ * 附带产出：① 短链映射页（sticky 置顶） ② 标签/分类统计页 source/tags/index.md · source/categories/index.md
+ *           ③ 站内搜索数据 source/search.json
+ * （v6：删除动态主页 source/index.html 生成，首页改由 themes/zeek 主题提供）
  * 放行条件：目录在黑名单外 且 published === true 且 status === 'published'，tags 数量 2~3
  * 双链处理：[[目标]] / [[目标|别名]] 解析为已发布文档的真实站内链接（完整路径 > 同目录 > 全局唯一 basename > 唯一 title），
  *           解析失败退化为纯文本，绝不生成错误链接
@@ -18,7 +19,6 @@ const ROOT = path.join(__dirname, '..');
 const CONTENT_DIR = process.env.CONTENT_DIR || path.join(ROOT, 'content');
 const OUT_POSTS = path.join(ROOT, 'source', '_posts');
 const OUT_ASSETS = path.join(ROOT, 'source', 'assets');
-const OUT_INDEX = path.join(ROOT, 'source', 'index.html');
 const SKIP_DIRS = new Set(['.git', '.obsidian', '.workbuddy', '.github', '.vscode', 'node_modules',
   // 发布黑名单目录（P0-3，2026-11-12）：发布资格 = 目录 + 元数据双条件，见 ob-content 方案/05-发布流与AI使用规范.md §3
   '99-Archive', '90-OB工程管理', '00-Inbox', '10-灵感']);
@@ -181,7 +181,9 @@ for (const f of fs.readdirSync(OUT_POSTS)) {
 }
 for (const p of pending) {
   const body = convertWikiLinks(p.rel, p.body);
-  fs.writeFileSync(path.join(OUT_POSTS, p.name + '.md'), matter.stringify(body, p.outFm));
+  const dest = path.join(OUT_POSTS, p.name + '.md');
+  fs.mkdirSync(path.dirname(dest), { recursive: true }); // name 含子目录路径时先建目录
+  fs.writeFileSync(dest, matter.stringify(body, p.outFm));
 }
 
 // 生成短链映射页（sticky 置顶，随站点发布）
@@ -222,7 +224,7 @@ if (report.map.length) {
   const statPage = (title, intro, counter, dir) => {
     const entries = [...counter.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh'));
     const pills = entries
-      .map(([k, n]) => `<a class="qs-pill" href="/${dir}/${encodeURIComponent(k)}/">${esc(k)}<span class="qs-pill-n">${n}</span></a>`)
+      .map(([k, n]) => `<a class="tagbig" href="/${dir}/${encodeURIComponent(k)}/">${esc(k)}<b>${n}</b></a>`)
       .join('\n');
     return `---
 title: ${title}
@@ -231,7 +233,7 @@ comments: false
 
 ${intro}
 
-<div class="qs-pills">
+<div class="tagcloud">
 ${pills}
 </div>
 `;
@@ -253,102 +255,5 @@ ${pills}
   fs.writeFileSync(path.join(ROOT, 'source', 'search.json'), JSON.stringify(searchData));
 }
 
-// ── 动态主页 source/index.html（编译时生成：搜索框 + 个人信息 + 置顶映射 + 全部文档列表）──
-if (report.map.length) {
-  const docs = [...report.map].sort((a, b) => String(b.date).localeCompare(String(a.date)));
-  const items = docs
-    .map((m) => `    <li class="doc">
-      <a class="doc-link" href="/${m.url}">
-        <span class="doc-title">${esc(m.title)}</span>
-        <span class="doc-meta">${esc(m.date)}${m.categories ? ' · ' + esc(m.categories) : ''}</span>
-      </a>
-      <p class="doc-desc">${esc(m.description)}</p>
-    </li>`)
-    .join('\n');
-  const html = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zeek 的 AI 知识工程</title>
-<meta name="description" content="AI 驱动的 Obsidian 知识工程 · 用 AI 跑一条内容流水线">
-<link rel="stylesheet" href="/css/top-search.css">
-<script src="/js/top-search.js" defer></script>
-<style>
-:root{--bg:#0d0f14;--card:#161a23;--card2:#1b202c;--text:#e8eaf0;--muted:#9aa3b5;--a1:#6C7EE1;--a2:#ec4899}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;line-height:1.65;min-height:100vh;
-background-image:radial-gradient(1000px 500px at 80% -10%,rgba(108,126,225,.12),transparent),radial-gradient(800px 400px at -10% 110%,rgba(236,72,153,.08),transparent)}
-.wrap{max-width:880px;margin:0 auto;padding:48px 20px 40px}
-.hero{display:flex;align-items:center;gap:22px;background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid #262c3a;border-radius:20px;padding:28px 30px}
-.avatar{width:92px;height:92px;border-radius:22px;flex-shrink:0;box-shadow:0 6px 24px rgba(108,126,225,.35)}
-.hero h1{font-size:1.7rem;letter-spacing:.5px}
-.hero h1 .grad{background:linear-gradient(90deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero .desc{color:var(--muted);margin-top:4px;font-size:.98rem}
-.links{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
-.links a{color:var(--text);text-decoration:none;font-size:.9rem;padding:6px 14px;border-radius:999px;border:1px solid #2c3344;transition:.25s}
-.links a:hover{border-color:var(--a1);color:#fff;background:rgba(108,126,225,.15)}
-.pin{margin-top:18px}
-.pin a{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);background:linear-gradient(90deg,rgba(108,126,225,.16),rgba(236,72,153,.10));border:1px solid rgba(108,126,225,.45);border-radius:14px;padding:14px 18px;transition:.25s}
-.pin a:hover{border-color:var(--a2);transform:translateY(-1px)}
-.pin-badge{background:linear-gradient(90deg,var(--a1),var(--a2));color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:999px;flex-shrink:0}
-.pin .pin-sub{color:var(--muted);font-size:.86rem;margin-left:auto}
-h2.sec{margin:34px 0 14px;font-size:1.18rem;display:flex;align-items:center;gap:10px}
-h2.sec:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#2c3344,transparent)}
-.count{color:var(--muted);font-weight:400;font-size:.9rem}
-.docs{list-style:none}
-.doc{background:var(--card);border:1px solid #232937;border-radius:14px;padding:14px 18px;margin-bottom:10px;transition:.25s}
-.doc:hover{border-color:var(--a1);transform:translateX(4px)}
-.doc-link{display:flex;justify-content:space-between;gap:14px;text-decoration:none;color:var(--text);flex-wrap:wrap}
-.doc-title{font-weight:600;font-size:1.02rem}
-.doc-link:hover .doc-title{background:linear-gradient(90deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.doc-meta{color:var(--muted);font-size:.82rem;white-space:nowrap}
-.doc-desc{color:var(--muted);font-size:.88rem;margin-top:5px}
-footer{margin-top:38px;text-align:center;color:var(--muted);font-size:.85rem}
-footer a{color:var(--a1);text-decoration:none}
-@media(max-width:600px){.hero{flex-direction:column;text-align:center;align-items:center}.pin .pin-sub{display:none}}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div id="qs-search-mount"></div>
-  <header class="hero">
-    <img class="avatar" src="/img/avatar.svg" alt="Z">
-    <div>
-      <h1>Zeek <span class="grad">Zhao</span></h1>
-      <p class="desc">AI 驱动的知识工程 · Obsidian + Hexo 内容流水线</p>
-      <div class="links">
-        <a href="https://github.com/zeek-zhao" target="_blank" rel="noopener">GitHub</a>
-        <a href="/archives/">归档</a>
-        <a href="/tags/">标签</a>
-        <a href="/categories/">分类</a>
-        <a href="/${mapUrl}">短链映射</a>
-      </div>
-    </div>
-  </header>
-
-  <section class="pin">
-    <a href="/${mapUrl}">
-      <span class="pin-badge">置顶</span>
-      <span>📌 文章短链映射</span>
-      <span class="pin-sub">全部 ${report.map.length} 篇文档的源路径 ↔ 短链对照</span>
-    </a>
-  </section>
-
-  <main>
-    <h2 class="sec">全部文档 <span class="count">共 ${report.map.length} 篇</span></h2>
-    <ul class="docs">
-${items}
-    </ul>
-  </main>
-
-  <footer>© 2026 Zeek Zhao · <a href="https://github.com/zeek-zhao/ai-obsidian" target="_blank" rel="noopener">ob-content</a> · 由 AI 流水线构建</footer>
-</div>
-</body>
-</html>
-`;
-  fs.writeFileSync(OUT_INDEX, html);
-}
-
 console.log(JSON.stringify(report, null, 2));
-console.log('collect done: ' + report.published.length + ' published / ' + report.scanned + ' scanned / map ' + report.map.length + ' / index.html + search.json + tags/categories 统计页 written');
+console.log('collect done: ' + report.published.length + ' published / ' + report.scanned + ' scanned / map ' + report.map.length + ' / search.json + tags/categories 统计页 written');

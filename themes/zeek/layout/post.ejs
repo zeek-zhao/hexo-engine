@@ -1,0 +1,30 @@
+<%
+/* 文章页（对照原型 viewArticle）：面包屑 + meta + 正文（含 ¶ 锚点）+ author-card + 上一篇/下一篇。
+ * TOC 侧栏由 layout.ejs 用同一 heads() 解析结果渲染，保证 id 一致。 */
+const th = heads(page.content);
+let cname = '';
+page.categories.each((c) => { if (!cname) cname = c.name; });
+%>
+
+<div class="crumb"><a href="<%- url_for('') %>">首页</a> / <a href="<%- url_for('archives/') %>">归档</a><% if (cname) { %> / <a href="<%- url_for('categories/' + encodeURIComponent(cname) + '/') %>"><%= cname %></a><% } %> / <span><%= page.title %></span></div>
+
+<h1><%= page.title %></h1>
+<% if (page.description) { %><div class="subtitle"><%= page.description %></div><% } %>
+<div class="article-meta">
+  <span>📅 <%= date(page.date, 'YYYY-MM-DD') %></span><span>· 更新于 <%= date(page.updated || page.date, 'YYYY-MM-DD') %></span>
+  <a class="meta-author" href="<%- url_for('about/') %>">✍ zeek.zhao</a>
+  <% page.tags.each((t) => { %><a class="tagchip" href="<%- url_for(t.path) %>">#<%= t.name %></a><% }) %>
+</div>
+
+<%- th.body %>
+
+<a class="author-card" href="<%- url_for('about/') %>">
+  <span class="avatar sm" aria-hidden="true">Z</span>
+  <span class="ac-text"><b>zeek.zhao</b><span class="ac-sub">嵌入式与 DevOps 工程师 · 折腾 Yocto、CI 与 Obsidian 知识管理</span></span>
+  <span class="ac-go">查看个人主页 →</span>
+</a>
+
+<div class="pager">
+  <% if (page.prev) { %><a href="<%- url_for(page.prev.path) %>"><span class="pg-label">← 上一篇</span><%= page.prev.title %></a><% } else { %><span style="flex:1"></span><% } %>
+  <% if (page.next) { %><a class="next" href="<%- url_for(page.next.path) %>"><span class="pg-label">下一篇 →</span><%= page.next.title %></a><% } else { %><span style="flex:1"></span><% } %>
+</div>

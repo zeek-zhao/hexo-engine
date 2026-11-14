@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= page.title ? page.title + ' · ' : '' %><%= config.title %></title>
+<meta name="description" content="<%= page.description || page.title || config.description %>">
+<% if (page.current && page.current > 1) { %><meta name="robots" content="noindex"><% } %>
+<link rel="stylesheet" href="<%- url_for('css/main.css') %>">
+</head>
+<body data-page="<%= is_post() ? 'post' : 'page' %>">
+
+<a class="skip-link" href="#view" onclick="event.preventDefault();const v=document.querySelector('#view');v.setAttribute('tabindex','-1');v.focus()">跳到主要内容</a>
+
+<header class="topbar">
+  <a class="brand" href="<%- url_for('') %>"><span class="logo">Z</span><%= config.title %></a>
+  <%
+    /* 单一导航数据源：桌面顶栏 + 移动端抽屉共用（原型 NAV） */
+    const NAV = [
+      { key: 'home',    label: '首页', href: url_for(''),          match: (p) => p === 'index.html' },
+      { key: 'archive', label: '归档', href: url_for('archives/'), match: (p) => p.indexOf('archives') === 0 },
+      { key: 'tags',    label: '标签', href: url_for('tags/'),     match: (p) => p.indexOf('tags') === 0 },
+      { key: 'about',   label: '关于', href: url_for('about/'),    match: (p) => p.indexOf('about') === 0 },
+    ];
+    /* 分类树数据：按收录量排序；文章按其分类归组 */
+    const catList = []; site.categories.each((c) => catList.push(c));
+    catList.sort((a, b) => b.length - a.length);
+    const byCat = {};
+    site.posts.each((p) => p.categories.each((c) => {
+      (byCat[c.name] = byCat[c.name] || []).push(p);
+    }));
+    /* 文章页 TOC 数据（与 post.ejs 的 heads() 解析保持同一 id） */
+    const tocData = is_post() && page.content ? heads(page.content) : null;
+  %>
+  <nav class="topnav" id="topnav">
+    <% NAV.forEach((n) => { %><a href="<%- n.href %>" data-nav="<%= n.key %>" class="<%= n.match(page.path) ? 'active' : '' %>"><%= n.label %></a><% }) %>
+  </nav>
+  <div class="topbar-actions">
+    <button class="searchbox" id="openSearch" type="button" title="搜索文章（Ctrl+K / ⌘K / 按 / 唤起）">🔍<span class="s-label">搜索文章…</span><kbd>Ctrl K</kbd></button>
+    <button class="iconbtn" id="themeBtn" title="切换明暗主题">◐</button>
+    <button class="iconbtn" id="menuBtn" style="display:none" title="导航与目录">☰</button>
+  </div>
+</header>
+
+<div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
+<button class="backtop" id="backtop" type="button" title="返回顶部" aria-label="返回顶部">↑</button>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="mobile-nav" id="mobileNav">
+      <% NAV.forEach((n) => { %><a href="<%- n.href %>" data-nav="<%= n.key %>" class="<%= n.match(page.path) ? 'active' : '' %>"><%= n.label %></a><% }) %>
+    </nav>
+    <div id="sideTree">
+      <% catList.forEach((c) => { %>
+        <div class="sidegroup" data-cat="<%= c.name %>">
+          <div class="sg-head" onclick="this.parentElement.classList.toggle('collapsed')">
+            <span>📁</span><span><%= c.name %></span><span class="arrow">▼</span>
+          </div>
+          <div class="sg-items">
+            <% (byCat[c.name] || []).forEach((p) => { %>
+              <a href="<%- url_for(p.path) %>" class="<%= page.path === p.path ? 'active' : '' %>"><%= p.title %></a>
+            <% }) %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </aside>
+  <main class="main"><div class="content" id="view"><%- body %>
+    <div class="footer">© <%= new Date().getFullYear() %> <b><%= config.title %></b> · <a href="<%- url_for('about/') %>">About me</a> · 由 AI 流水线构建</div>
+  </div></main>
+  <aside class="toc" id="toc">
+    <% if (tocData && tocData.heads.length) { %>
+      <div class="toc-title">本页目录</div>
+      <% tocData.heads.forEach((h) => { %>
+        <a href="#<%= h.id %>" data-h="<%= h.id %>" class="<%= h.level === 3 ? 'l2' : '' %>"><%- h.text %></a>
+      <% }) %>
+    <% } %>
+  </aside>
+</div>
+
+<div class="cmdk" id="cmdk" hidden>
+  <div class="cmdk-backdrop" id="cmdkBackdrop"></div>
+  <div class="cmdk-panel" role="dialog" aria-label="搜索文章">
+    <div class="cmdk-input">🔍<input id="cmdkQ" placeholder="搜索标题、描述、标签或分类…"><kbd>Esc</kbd></div>
+    <div class="cmdk-results" id="cmdkResults"></div>
+    <div class="cmdk-foot"><span>↑↓ 选择 · ↵ 打开 · Esc 关闭</span><span>数据源 search.json</span></div>
+  </div>
+</div>
+
+<script src="<%- url_for('js/main.js') %>" data-search="<%- url_for('search.json') %>" defer></script>
+</body>
+</html>

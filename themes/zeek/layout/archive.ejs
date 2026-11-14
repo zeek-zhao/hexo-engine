@@ -1,0 +1,62 @@
+<%
+/* 归档页（对照原型 viewArchive）：全量文章按分类 / 年份双分组，JS 切换 + 客户端筛选。
+ * cat-chips 深链走真实的 /categories/:name/ 页面（MPA 适配）。 */
+const all = []; site.posts.each((p) => all.push(p));
+all.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+const byCat = new Map();
+all.forEach((p) => p.categories.each((c) => {
+  if (!byCat.has(c.name)) byCat.set(c.name, []);
+  byCat.get(c.name).push(p);
+}));
+const byYear = new Map();
+all.forEach((p) => {
+  const y = p.date.format('YYYY');
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y).push(p);
+});
+const chips = []; site.categories.each((c) => chips.push(c));
+chips.sort((a, b) => b.length - a.length);
+%>
+
+<h1 style="font-size:26px;margin-bottom:6px">全部归档</h1>
+<p style="color:var(--text-2);margin-bottom:18px">共 <%= all.length %> 篇已发布文档，按分类或年份分组浏览，支持标题 / 描述 / 标签即时筛选。</p>
+
+<div class="cat-chips">
+  <a class="chip on" href="<%- url_for('archives/') %>">全部</a>
+  <% chips.forEach((c) => { %><a class="chip" href="<%- url_for(c.path) %>">📁 <%= c.name %></a><% }) %>
+</div>
+
+<div class="arch-head">
+  <label class="arch-search">🔍<input id="archq" placeholder="按标题 / 描述 / 标签筛选…"></label>
+  <span class="mode-toggle" role="group" aria-label="分组方式">
+    <button class="chip on" type="button" data-mode="cat">按分类</button>
+    <button class="chip" type="button" data-mode="year">按年份</button>
+  </span>
+  <span class="arch-count" id="archcount">共 <%= all.length %> 篇</span>
+</div>
+
+<div id="archlist">
+  <div id="archlist-cat">
+    <% byCat.forEach((items, name) => { if (!items.length) return; %>
+    <details class="archgroup" open><summary>📁 <%= name %><span class="cnt"><%= items.length %> 篇</span></summary>
+      <div class="archlist">
+        <% items.forEach((p) => { %>
+        <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('YYYY-MM-DD') %></span><span><%= p.title %></span>
+          <span class="ai-sub"><%= p.description || '' %></span></a>
+        <% }) %>
+      </div></details>
+    <% }) %>
+  </div>
+  <div id="archlist-year" hidden>
+    <% Array.from(byYear.entries()).sort((a, b) => b[0].localeCompare(a[0])).forEach((pair) => { const items = pair[1]; %>
+    <details class="archgroup" open><summary>📅 <%= pair[0] %><span class="cnt"><%= items.length %> 篇</span></summary>
+      <div class="archlist">
+        <% items.forEach((p) => { %>
+        <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('MM-DD') %></span><span><%= p.title %></span>
+          <span class="ai-sub"><%= p.description || '' %></span></a>
+        <% }) %>
+      </div></details>
+    <% }) %>
+  </div>
+  <div class="noresult" id="arch-empty" hidden>没有匹配的文档</div>
+</div>
