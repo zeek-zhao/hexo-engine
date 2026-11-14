@@ -1,7 +1,7 @@
 ---
 title: 概要设计说明书（SDD-01）
 doc_id: HEXO-ENG-SDD-01
-version: v1.0
+version: v1.1
 date: 2026-11-14
 updated: 2026-11-14
 status: draft
@@ -16,7 +16,7 @@ description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三�
 | 项 | 值 |
 |---|---|
 | 文件编号 | HEXO-ENG-SDD-01（下称 SDD-01） |
-| 版本 | v1.0 |
+| 版本 | v1.1（自研主题已上线 + 两级分类体系） |
 | 编制 | AI（依据 2026-11-14 UI 定稿与公开仓决议） |
 | 审核 / 批准 | 人（Zeek） |
 | 生效条件 | 人批准后置 `status: published` |
@@ -28,6 +28,7 @@ description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三�
 | 版本 | 日期 | 修订内容 | 批准 |
 |---|---|---|---|
 | v1.0 | 2026-11-14 | 首版：架构数据流、主题结构、门禁与部署链、暴露面设计、回滚预案、ADR×4 | 待人批准 |
+| v1.1 | 2026-11-14 | 主题 zeek 已上线并验收；§2 模板表按实际落地状态校正；新增 §2.1 两级分类体系（OB-ENG-SOP-06：映射 JSON → collect.js v7 注入嵌套 categories → catTree helper → 主题两级渲染）；ADR-3 补注 search.json 增加 group 字段 | 待人批准 |
 
 ## 1 架构与数据流
 
@@ -60,16 +61,31 @@ repository_dispatch                    │   → tags/categories 统计页      
 
 | 模板/目录 | 职责 |
 |---|---|
-| `layout/index.ejs` | 首页（/）：hero + 精选 + 热门（MOCK_VIEWS，带「示例数据」标注）+ 最近更新 + 分类卡片；取代 collect.js 停用的动态主页（URD-01 FR-4） |
-| `layout/archive.ejs` | 归档（/archives/）：按年分组（`<details>` 折叠）、分类 chips、客户端真过滤、分组方式切换（按分类/按年份） |
+| `layout/index.ejs` | 首页（/）：hero + 精选 + 热门（MOCK_VIEWS，带「示例数据」标注）+ 最近更新 + **8 张领域卡**（两级分类后，见 §2.1）；取代 collect.js 停用的动态主页（URD-01 FR-4） |
+| `layout/archive.ejs` | 归档（/archives/）：按年分组（`<details>` 折叠）、**按领域分组的分类 chips**、客户端真过滤、分组方式切换（按分类/按年份）；两级分类下再按 `archdomain → archgroup`（领域 → 细分）折叠 |
 | `layout/tag.ejs` / 标签页 | 标签聚合（/tags/）：标签云 + 计数；collect.js 的 tags/categories 统计页职责并入标签视图呈现 |
-| `layout/post.ejs` | 文章页（/posts/:abbrlink.html）：面包屑、meta（日期 + 更新于 + 系列进度）、TOC scrollspy、¶ 锚点、代码复制、作者卡、上一篇/下一篇 |
+| `layout/post.ejs` | 文章页（/posts/:abbrlink.html）：**首页/归档/领域/细分/标题 面包屑全链**、meta（日期 + 更新于 + 系列进度）、TOC scrollspy、¶ 锚点、代码复制、作者卡、上一篇/下一篇 |
 | `layout/page.ejs` | 独立页（关于 /about/ 等）：PROFILE 数据驱动（Projects 网格 + Find me on 行式） |
 | `layout/404.ejs` | 404 页：错误码 + 回首页/搜索/归档三出口 |
-| partials（head/topbar/sidebar/toc/footer） | 顶栏（搜索框 + 主题按钮 + 移动端菜单）、分类树侧栏、TOC、页脚；head 内落 SEO title/description/OG 标签 |
+| partials（head/topbar/sidebar/toc/footer） | 顶栏（搜索框 + 主题按钮 + 移动端菜单）、**两级分类树侧栏**（`sidegroup → sg-sub → sg-items2`，默认折叠，分类/文章页只渲染当前领域）、TOC、页脚；head 内落 title / description / robots（**canonical 与 OG 尚未加，记 AI.md §9 后续轮**） |
+| `scripts/helpers.js` | `heads()` 编译期 h2/h3 id + ¶ 锚点；`catTree(site)` 两级分类树（roots / childrenOf / byLeaf / rootOf），供侧栏、面包屑、归档共用 |
 | `source/`（主题内） | stylus 样式（tokens 见 UI-01 §4）、少量 JS（⌘K、scrollspy、复制、主题三态、移动端抽屉） |
 
-状态说明：截至本文档 v1.0，`themes/zeek` 模板尚未入库（移植进行中），上表为目标结构；`_config.yml` 的 `theme:` 仍是 `butterfly`，切换随移植完成落地。Butterfly（npm 包 hexo-theme-butterfly + `_config.butterfly.yml` 注入）在主题切换完成后从依赖与配置中移除。
+状态说明（v1.1 校正）：`themes/zeek` 已入库并上线验收通过；`_config.yml` 的 `theme: zeek` 已生效，`hexo-theme-butterfly` 与 `hexo-generator-search` 依赖及 `_config.butterfly.yml` 均已移除，改为 `hexo-generator-index`。下方 §2.1 为定稿后追加的两级分类体系。
+
+### 2.1 两级分类体系（OB-ENG-SOP-06）
+
+人反馈原型侧栏 46 个扁平分类组过长、缺二级分级。设计要点：
+
+| 决策 | 结论 | 理由 |
+|---|---|---|
+| 领域划分 | 8 个领域：工程规范 / DevOps 与 CI / 自托管服务 / 知识工具 / 技能专项 / 操作系统与机器人 / 编程语言 / 健身 | 按 vault 顶层编号目录的语义归并（46 个细分分类与顶层目录一一对应） |
+| 映射存放 | ai-obsidian `90-OB工程管理/方案/06-分类映射.json`（机器读）+ `06-分类与目录映射.md`（OB-ENG-SOP-06 受控说明） | 单一数据源放在内容库受控文档，避免双源漂移；hexo-engine 只登记引用 |
+| 注入时机 | `bin/collect.js` v7 **构建期**读取映射，把 `categories: [细分]` 改写为 `categories: [[领域, 细分]]` | vault 里 frontmatter 仍只写单一细分分类，**写作/目录维护习惯零改动**；映射缺失时告警 + fallback「其他」 |
+| 主题消费 | `catTree(site)` helper 用 hexo 分类的 `parent` 关系构造树；侧栏 / 归档 / 统计页 / 面包屑两级渲染 | 分类/文章页只渲染当前领域一组，侧栏长度从 46 组降到 8 组（默认全折叠） |
+| URL | `/categories/<领域>/<细分>/` | 细分分类名不变，旧扁平 URL 不再生成（全站重建） |
+
+维护约束：改领域归属只改映射 JSON，collect.js 与主题模板都不动；`search.json` 每条增加 `group` 字段供搜索面板按领域展示。**hexo 分类页 `page.category` 是名称字符串**，主题内一律先 `site.categories.findOne({name})` 回查对象再沿 `parent` 上溯。
 
 ## 3 门禁设计（三级，前一级不 PASS 后一级禁止执行）
 

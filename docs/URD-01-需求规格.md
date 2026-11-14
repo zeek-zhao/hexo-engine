@@ -1,7 +1,7 @@
 ---
 title: 需求规格说明书（URD-01）
 doc_id: HEXO-ENG-URD-01
-version: v1.0
+version: v1.1
 date: 2026-11-14
 updated: 2026-11-14
 status: draft
@@ -16,7 +16,7 @@ description: hexo-engine 工程库的需求规格：内容采集与双链转换�
 | 项 | 值 |
 |---|---|
 | 文件编号 | HEXO-ENG-URD-01（下称 URD-01） |
-| 版本 | v1.0 |
+| 版本 | v1.1（主题上线 + 两级分类） |
 | 编制 | AI（依据 2026-11-14 UI 定稿与公开仓决议） |
 | 审核 / 批准 | 人（Zeek） |
 | 生效条件 | 人批准后置 `status: published`；批准前不得作为实施验收依据 |
@@ -29,6 +29,7 @@ description: hexo-engine 工程库的需求规格：内容采集与双链转换�
 | 版本 | 日期 | 修订内容 | 批准 |
 |---|---|---|---|
 | v1.0 | 2026-11-14 | 首版：范围、功能需求 FR、非功能需求 NFR、验收标准 | 待人批准 |
+| v1.1 | 2026-11-14 | 主题 zeek 已上线验收（FR-9~14 状态由「移植中」改为「已上线」）；新增 FR-16 两级分类体系（OB-ENG-SOP-06）与 AC-16 | 待人批准 |
 
 ## 1 背景与目标
 
@@ -74,13 +75,14 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | FR-6 | 三级门禁 G2 | 脚本门 = `check-tags.py` strict（目录黑名单 + wikilink 一致性 + 重复标题），0 问题放行；完整脚本化（CI fail）属 P1-4，本轮不做 | 部分 |
 | FR-7 | 三级门禁 G3 | 人工门：人读稿明确批准后 AI 才翻转 published；未过 G1~G3 的内容**不得出现在任何公开产物**（公开仓红线 ③） | 靠 05 规范 §4.2 边界约束 |
 | FR-8 | 发布触发链 | 内容库 push[main] → notify-publish.yml 发 repository_dispatch(content-updated) → deploy.yml 拉内容、`node bin/collect.js`、`npx hexo generate`、孤儿强推 gh-pages；每日 UTC 2:00 cron 兜底；hexo-engine push 与手动 workflow_dispatch 可用；并发组 pages-publish 不取消 | deploy.yml 已生效 |
-| FR-9 | 主题五视图 | 自研主题 zeek 提供 5 个真实页面：首页（/）、归档（/archives/）、标签（/tags/）、文章（/posts/:abbrlink.html）、关于（/about/）；视图映射与交互见 docs/UI-01-原型说明.md | 移植中 |
-| FR-10 | ⌘K 搜索 | 全站 ⌘K（mac）/ Ctrl+K（其他）与 `/` 键唤起命令面板，数据源 `/search.json`，键盘 ↑↓ 选择、↵ 打开、Esc 关闭 | 移植中 |
-| FR-11 | 主题三态 | system / light / dark 三态循环切换，system 跟随 `prefers-color-scheme`，选择持久化 localStorage | 移植中 |
-| FR-12 | 移动端适配 | 断点 860px（顶栏导航切换移动抽屉、触摸目标 ≥44px）、560px（排版紧凑化）；详见 UI-01 §4 | 移植中 |
-| FR-13 | 无障碍 | skip-link 跳转主内容、`:focus-visible` 焦点样式、语义化地标、返回顶部 aria-label | 移植中 |
-| FR-14 | 404 | 主题 404 页：错误码 + 回首页 / 搜索 / 归档三出口 | 移植中 |
+| FR-9 | 主题五视图 | 自研主题 zeek 提供 5 个真实页面：首页（/）、归档（/archives/）、标签（/tags/）、文章（/posts/:abbrlink.html）、关于（/about/）；视图映射与交互见 docs/UI-01-原型说明.md | 已上线 |
+| FR-10 | ⌘K 搜索 | 全站 ⌘K（mac）/ Ctrl+K（其他）与 `/` 键唤起命令面板，数据源 `/search.json`，键盘 ↑↓ 选择、↵ 打开、Esc 关闭 | 已上线 |
+| FR-11 | 主题三态 | system / light / dark 三态循环切换，system 跟随 `prefers-color-scheme`，选择持久化 localStorage | 已上线 |
+| FR-12 | 移动端适配 | 断点 860px（顶栏导航切换移动抽屉、触摸目标 ≥44px）、560px（排版紧凑化）；详见 UI-01 §4 | 已上线 |
+| FR-13 | 无障碍 | skip-link 跳转主内容、`:focus-visible` 焦点样式、语义化地标、返回顶部 aria-label | 已上线 |
+| FR-14 | 404 | 主题 404 页：错误码 + 回首页 / 搜索 / 归档三出口 | 已上线 |
 | FR-15 | 零新增依赖 | 主题移植不新增 npm 依赖：渲染器用既有 `hexo-renderer-ejs` + `hexo-renderer-stylus` | 约束生效 |
+| FR-16 | 两级分类 | 侧栏/归档/统计页/面包屑按「领域 → 细分分类 → 文章」两级展示，8 个领域由 ai-obsidian `90-OB工程管理/方案/06-分类映射.json` 定义；collect.js 构建期注入嵌套 `categories: [[领域, 细分]]`；vault frontmatter 仍只写单一细分分类（写作习惯不变）；分类页与文章页侧栏只渲染当前领域一组；映射缺失告警 + fallback「其他」 | 已上线（OB-ENG-SOP-06） |
 
 > UI 需求的完整交互清单、设计 tokens、原型↔线上差异**引用** docs/UI-01-原型说明.md，本文件不重复。
 
@@ -114,10 +116,13 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | AC-12 | 访问不存在路径返回 404 页且三个出口可用 | FR-14 |
 | AC-13 | `npm ls` 依赖树与移植前一致（无新增包）；`package-lock.json` 在库且 `npm ci` 可复现 | FR-15 |
 | AC-14 | 仓库无 artifact 产物；`git log --all` 提交身份仅 `zeek.zhao <zeek.zhao@foxmail.com>` 一行 | NFR-SEC/05 §5.2 |
+| AC-15 | 首页渲染 8 张领域卡、无扁平分类卡；侧栏 `<div class="sidegroup">` 在首页为 8 组、分类页与文章页均为 1 组；`/categories/<领域>/<细分>/` 可访问且面包屑含领域链；`search.json` 每条含 `group` 字段且 group 去重为 8 | FR-16 |
+| AC-16 | 删除 `06-分类映射.json` 后构建输出告警且文章归入「其他」，构建不失败 | FR-16 |
 
 ## 6 引用文件
 
-- ai-obsidian `90-OB工程管理/方案/05-发布流与AI使用规范.md`（OB-ENG-SOP-05 v1.2）：三级门禁模型 §3、AI 使用边界 §4.2、凭据与提交身份 §5.2、公开仓暴露面红线 §5.4
+- ai-obsidian `90-OB工程管理/方案/05-发布流与AI使用规范.md`（OB-ENG-SOP-05 v1.3）：三级门禁模型 §3、AI 使用边界 §4.2、凭据与提交身份 §5.2、公开仓暴露面红线 §5.4
+- ai-obsidian `90-OB工程管理/方案/06-分类与目录映射.md`（OB-ENG-SOP-06 v1.0）与同目录 `06-分类映射.json`：两级分类领域定义与细分归属（FR-16 数据源）
 - docs/SDD-01-概要设计.md：架构、门禁与部署链设计、ADR
 - docs/UI-01-原型说明.md：原型定稿状态、视图映射、交互清单、设计 tokens
 - 仓库事实：`package.json`（Hexo 7.3.0 与依赖清单）、`_config.yml`（permalink `posts/:abbrlink.html`、per_page 10）、`bin/collect.js`（352 行）、`.github/workflows/deploy.yml`
