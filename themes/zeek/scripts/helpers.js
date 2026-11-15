@@ -75,3 +75,17 @@ hexo.extend.helper.register('siteWords', function (site) {
   site.posts.each((p) => { sum += wordCount(p.content); });
   return sum;
 });
+
+/* 主题辅助：全站文章显式排序（上一篇/下一篇的唯一定序依据）。
+ * hexo 内置 page.prev/next 的顺序在同日期文章间不稳定（本库大量文章同日导入），
+ * 且方向与首页列表阅读流相反。这里统一为：date 降序，同日期按 path 字母序稳定排序。
+ * 结果缓存在 site 对象上（构建期内 site.posts 不再变化，跨页面共享一次排序）。 */
+hexo.extend.helper.register('sortedPosts', function (site) {
+  if (!site._zeekSorted) {
+    site._zeekSorted = site.posts.toArray().slice().sort(function (a, b) {
+      const d = (b.date ? b.date.valueOf() : 0) - (a.date ? a.date.valueOf() : 0);
+      return d !== 0 ? d : String(a.path).localeCompare(String(b.path));
+    });
+  }
+  return site._zeekSorted;
+});

@@ -1,7 +1,7 @@
 ---
 title: 需求规格说明书（URD-01）
 doc_id: HEXO-ENG-URD-01
-version: v1.4
+version: v1.5
 date: 2026-11-14
 updated: 2026-11-14
 status: draft
@@ -30,6 +30,7 @@ description: hexo-engine 工程库的需求规格：内容采集与双链转换�
 |---|---|---|---|
 | v1.0 | 2026-11-14 | 首版：范围、功能需求 FR、非功能需求 NFR、验收标准 | 待人批准 |
 | v1.1 | 2026-11-14 | 主题 zeek 已上线验收（FR-9~14 状态由「移植中」改为「已上线」）；新增 FR-16 两级分类体系（OB-ENG-SOP-06）与 AC-16 | 待人批准 |
+| v1.5 | 2026-11-15 | 第八轮：FR-31 上下篇显式定序（sortedPosts）+ FR-32 搜索覆盖正文全文（text/snippet） | 待人批准 |
 | v1.4 | 2026-11-15 | 第七轮：新增 FR-27 字数统计 / FR-28 结构化数据 JSON-LD / FR-29 访问统计配置槽 / FR-30 BDD 功能门禁；AC-20 | 待人批准 |
 | v1.3 | 2026-11-14 | 第六轮：新增 FR-21 评论 giscus / FR-22 RSS / FR-23 SEO 三件套 / FR-24 分页 / FR-25 lightbox+复制链接 / FR-26 手机端补强；AC-19；FR-15 约束范围改「主题层」（流水线新增 hexo-generator-feed/sitemap 见 FR-22/23） | 待人批准 |
 | v1.2 | 2026-11-14 | 第五轮：新增 FR-17 Obsidian 方言转换 / FR-18 分类图标 / FR-19 装饰层 / FR-20 发布前体检门禁与 AC-17/AC-18；引用 06 映射 v1.1.0 | 待人批准 |
@@ -99,6 +100,8 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | FR-27 | 字数统计 | 文章 meta 显示单篇字数与阅读时长（400 字/分钟）；页脚显示全站总字数；中文字 + 西文词统一口径（wordCount helper） | 已上线 |
 | FR-28 | 结构化数据 | 全站 WebSite JSON-LD；文章页 BlogPosting + BreadcrumbList JSON-LD（富摘要） | 已上线 |
 | FR-29 | 访问统计（配置槽） | `_config.yml zeek.analytics` 支持 ga4 / goatcounter，默认空 = 不加载任何脚本；隐私优先（anonymize_ip） | 已上线（待配置取值） |
+| FR-31 | 上下篇显式定序 | helpers.sortedPosts：date 降序 + 同日期按路径稳定排序，← 上一篇 = 更新一篇（与首页阅读流一致）；不依赖 hexo 内置 page.prev/next（同日文章顺序不稳定） | 已上线 |
+| FR-32 | 搜索覆盖正文全文 | collect.js 逐篇生成 search.json text 字段（≤1200 字符）；cmdk 匹配正文、命中展示 snippet 上下文、标题命中排前 | 已上线 |
 | FR-30 | BDD 功能门禁 | tests/features/*.feature（Gherkin 子集）+ 零依赖 runner，26 场景覆盖浏览/导航/阅读/搜索/RSS/SEO/移动端/装饰/方言转换/未发布保护；`npm run test:bdd` 本地与 CI（deploy.yml）发布前执行 | 已上线 |树/文章特征/无 Obsidian 语法残留），与 search.json、source/_posts 交叉核对；`npm run build` 末尾与 deploy.yml 发布前各跑一次，fail 即阻断发布 | 已上线 |
 
 > UI 需求的完整交互清单、设计 tokens、原型↔线上差异**引用** docs/UI-01-原型说明.md，本文件不重复。

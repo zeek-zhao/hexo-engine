@@ -64,15 +64,36 @@
   function closeSearch() { if (cmdk) { cmdk.hidden = true; selIdx = -1; } }
 
   function matchEntry(e, q) {
-    var hay = [e.title, e.description, (e.tags || []).join(' '), (e.categories || []).join(' ')].join(' ').toLowerCase();
+    var hay = [e.title, e.description, (e.tags || []).join(' '), (e.categories || []).join(' '), e.text || ''].join(' ').toLowerCase();
     return q.split(/\s+/).every(function (w) { return w && hay.indexOf(w) !== -1; });
+  }
+  /* 命中片段：优先展示正文 text 中首个关键词上下文；无命中退回 description */
+  function snippet(e, q) {
+    var t = String(e.text || '');
+    if (q) {
+      var words = q.split(/\s+/).filter(Boolean);
+      for (var i = 0; i < words.length; i++) {
+        var p = t.toLowerCase().indexOf(words[i]);
+        if (p >= 0) { var s = Math.max(0, p - 30); return '…' + t.slice(s, s + 70) + '…'; }
+      }
+    }
+    return e.description || (t ? t.slice(0, 70) + (t.length > 70 ? '…' : '') : '');
   }
   function renderResults(q) {
     if (!cmdkResults) return;
     q = (q || '').trim().toLowerCase();
     var list = [];
     if (q) {
-      list = (searchIndex || []).filter(function (e) { return matchEntry(e, q); }).slice(0, 12);
+      // 标题命中的排在前面（多关键词时按第一个词判断），其余按 search.json 顺序
+      var q0 = q.split(/\s+/)[0] || '';
+      list = (searchIndex || [])
+        .filter(function (e) { return matchEntry(e, q); })
+        .sort(function (a, b) {
+          var ra = String(a.title).toLowerCase().indexOf(q0) >= 0 ? 0 : 1;
+          var rb = String(b.title).toLowerCase().indexOf(q0) >= 0 ? 0 : 1;
+          return ra - rb;
+        })
+        .slice(0, 12);
     } else {
       // 空查询：展示最近 8 篇（search.json 按 date 降序生成）
       list = (searchIndex || []).slice(0, 8);
@@ -82,7 +103,7 @@
       var cat = (e.tags && e.tags.length) ? e.tags[0] : (e.categories && e.categories[0]) || '文章';
       return '<a class="cmd-item' + (i === 0 ? ' sel' : '') + '" href="' + e.url + '" data-i="' + i + '">' +
         '<span class="cmd-ico">📄</span>' +
-        '<span class="cmd-main"><b>' + esc(e.title) + '</b><span>' + esc(e.description || '') + '</span></span>' +
+        '<span class="cmd-main"><b>' + esc(e.title) + '</b><span>' + esc(snippet(e, q)) + '</span></span>' +
         '<span class="cmd-cat">' + esc(cat) + '</span></a>';
     }).join('') || '<div class="cmd-item" style="cursor:default"><span class="cmd-ico">🔍</span><span class="cmd-main"><b>没有匹配的结果</b></span></div>';
     var foot = document.getElementById('cmdkFoot');

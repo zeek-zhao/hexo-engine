@@ -1,7 +1,7 @@
 ﻿---
 title: 概要设计说明书（SDD-01）
 doc_id: HEXO-ENG-SDD-01
-version: v1.4
+version: v1.5
 date: 2026-11-14
 updated: 2026-11-14
 status: draft
@@ -29,6 +29,7 @@ description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三�
 |---|---|---|---|
 | v1.0 | 2026-11-14 | 首版：架构数据流、主题结构、门禁与部署链、暴露面设计、回滚预案、ADR×4 | 待人批准 |
 | v1.1 | 2026-11-14 | 主题 zeek 已上线并验收；§2 模板表按实际落地状态校正；新增 §2.1 两级分类体系（OB-ENG-SOP-06：映射 JSON → collect.js v7 注入嵌套 categories → catTree helper → 主题两级渲染）；ADR-3 补注 search.json 增加 group 字段 | 待人批准 |
+| v1.5 | 2026-11-15 | 新增 §2.5 上下篇定序与全文搜索（sortedPosts 缓存 / text 字段 / snippet） | 待人批准 |
 | v1.4 | 2026-11-15 | 第七轮：新增 §2.4（字数/JSON-LD/analytics/BDD）；ADR-8 自研 BDD runner 选型 | 待人批准 |
 | v1.3 | 2026-11-14 | 第六轮：新增 §2.3 评论与分发层（giscus 懒加载+主题同步 / RSS 摘要 / SEO / 分页 / lightbox / 复制链接）；ADR-7 giscus 选型 | 待人批准 |
 | v1.2 | 2026-11-14 | 第五轮：新增 §2.2 Obsidian 方言转换与装饰层（obsidian.js 优先级 1 抢跑 / mermaid 构建期 div / 图标表 / zeek 配置段 / check-pages 体检门禁）；ADR-5 | 待人批准 |
@@ -123,6 +124,15 @@ repository_dispatch                    │   → tags/categories 统计页      
 | 分页 | hexo 内置 paginator（mid_size 1）：首页与归档末尾；分类/标签页不分页 |
 | 图片放大 | 自研 lightbox（main.js 零依赖）：.content/.post-body img 点击 → 全屏 overlay，esc/点击关闭，排除 a 内与头像 logo |
 | 复制链接 | article-meta copy-link 按钮（data-url=full_url_for），clipboard API + execCommand fallback，✓ 已复制 1.6s |
+
+### 2.5 上下篇定序与全文搜索（v1.5 追加）
+
+| 决策 | 说明 |
+|---|---|
+| 定序数据源 | hexo page.prev/next 同日期文章顺序不稳定 → helpers.js `sortedPosts(site)`：date 降序、path 字母序 tie-break，缓存 `site._zeekSorted`（构建期不变，跨页共享） |
+| 方向约定 | ← 上一篇 = 更新一篇；下一篇 → = 更早一篇（与首页列表滚动方向一致） |
+| 全文检索 | collect.js pass1 逐篇算 `text`（剥图片/raw/换行压缩，限 1200 字符）；cmdk 匹配 title+description+tags+categories+text，命中展示 snippet，标题命中排前 |
+| 体积 | search.json 2.42MB（gzip 后约 600KB），按需 fetch |
 
 ## 3 门禁设计（三级，前一级不 PASS 后一级禁止执行）
 

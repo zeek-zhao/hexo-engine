@@ -55,9 +55,15 @@ ldCrumb = {
   <span class="ac-go">查看个人主页 →</span>
 </a>
 
+<% /* 上一篇/下一篇：用 sortedPosts 显式定序（date 降序 + 同日期按路径稳定排序），
+     顺序与首页列表阅读流一致：← 上一篇 = 更新的一篇，下一篇 → = 更早的一篇。
+     不用 hexo 内置 page.prev/next（同日期文章顺序不稳定，见 helpers.js 注释）。 */ %>
+<% const sp = sortedPosts(site); const curIdx = sp.findIndex(p => p.path === page.path); %>
+<% const prevP = curIdx > 0 ? sp[curIdx - 1] : null; %>
+<% const nextP = curIdx >= 0 && curIdx < sp.length - 1 ? sp[curIdx + 1] : null; %>
 <div class="pager">
-  <% if (page.prev) { %><a href="<%- url_for(page.prev.path) %>"><span class="pg-label">← 上一篇</span><%= page.prev.title %></a><% } else { %><span style="flex:1"></span><% } %>
-  <% if (page.next) { %><a class="next" href="<%- url_for(page.next.path) %>"><span class="pg-label">下一篇 →</span><%= page.next.title %></a><% } else { %><span style="flex:1"></span><% } %>
+  <% if (prevP) { %><a href="<%- url_for(prevP.path) %>"><span class="pg-label">← 上一篇</span><%= prevP.title %></a><% } else { %><span style="flex:1"></span><% } %>
+  <% if (nextP) { %><a class="next" href="<%- url_for(nextP.path) %>"><span class="pg-label">下一篇 →</span><%= nextP.title %></a><% } else { %><span style="flex:1"></span><% } %>
 </div>
 
 <% /* 评论 giscus（GitHub Discussions）：容器由 main.js 进入视口后懒加载脚本 */ %>

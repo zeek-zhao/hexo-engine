@@ -1,4 +1,4 @@
-/* BDD 功能性测试 runner（第七轮）——零依赖迷你 Gherkin 子集执行器。
+﻿/* BDD 功能性测试 runner（第七轮）——零依赖迷你 Gherkin 子集执行器。
  * 用法：node tests/bdd-runner.js [publicDir]
  * feature 文件：tests/features/*.feature（Feature/Scenario/Given/When/Then/And）。
  * 每个步骤按「精确文本 → 正则」在 STEPS 注册表中查找执行；断言失败即该 Scenario FAIL。
@@ -63,6 +63,28 @@ function expect(cond, msg) { if (!cond) throw new Error(msg); }
 const STEPS = [];
 function step(pattern, fn) { STEPS.push({ pattern, fn }); }
 
+/* 第八轮：上下篇定序与全文搜索 */
+step(/^文章页上一篇与下一篇链接齐全$/, c => {
+  const h = String(c.cur || '');
+  expect(/← 上一篇<\/span>/.test(h), '缺少上一篇链接');
+  expect(/下一篇 →<\/span>/.test(h), '缺少下一篇链接');
+  const prevs = [...h.matchAll(/class="pager"[\s\S]{0,400}?← 上一篇<\/span>([^<]{1,60})</g)];
+  if (prevs.length) {
+    const t = prevs[0][1].trim();
+    expect(t.length > 0, '上一篇标题为空');
+  }
+});
+step(/^search\.json 至少 1146 条且每条含非空 text 字段$/, c => {
+  const s = c.samples.search;
+  expect(Array.isArray(s) && s.length >= 1146, 'search.json 条目不足: ' + (s || []).length);
+  const empty = s.filter(e => !e.text || !String(e.text).length).length;
+  expect(empty === 0, empty + ' 条 text 为空');
+});
+step(/^main\.js 搜索逻辑覆盖 text 字段并展示命中片段$/, c => {
+  const js = c.samples.js || '';
+  expect(/e\.text/.test(js), 'matchEntry 未覆盖 text 字段');
+  expect(/function snippet/.test(js), '缺少 snippet 命中片段函数');
+});
 /* Given */
 step(/^已构建的站点 public 目录$/, c => { c.samples = collectSamples(); });
 step(/^从 public 收集页面样本（首页、文章、分类、about、404、RSS、sitemap、robots、search）$/, c => { c.samples = collectSamples(); });
@@ -253,3 +275,5 @@ function main() {
   process.exitCode = scFail ? 1 : 0;
 }
 main();
+
+

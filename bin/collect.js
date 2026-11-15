@@ -143,6 +143,13 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
     tagList: flat(fm.tags),
     catList: catArr,
     group: groupOf(cat0),
+    text: (body || '') // v8：正文片段（限 1200 字符），search.json 全文检索用
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ') // 图片语法
+      .replace(/\{% raw %\}|\{% endraw %\}/g, ' ')
+      .replace(/\r?\n/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 1200),
   });
 }
 
@@ -291,7 +298,8 @@ comments: false
 ${groupBlocks}
 `);
 
-  // search.json：全站顶部搜索框的数据源（标题/描述/标签/分类快速检索）
+  // search.json：全站顶部搜索框的数据源（标题/描述/标签/分类/正文全文检索）
+  // text 字段在 pass 1（handleFile）逐篇计算，见 report.map.push
   const searchData = report.map.map((m) => ({
     title: m.title,
     url: '/' + m.url,
@@ -300,6 +308,7 @@ ${groupBlocks}
     tags: m.tagList,
     categories: m.catList,
     group: m.group, // v7：一级领域，搜索结果可直接展示归属
+    text: m.text, // v8：正文片段，全文检索用
   }));
   fs.writeFileSync(path.join(ROOT, 'source', 'search.json'), JSON.stringify(searchData));
 }

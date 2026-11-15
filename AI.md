@@ -65,6 +65,9 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 2. **docs/URD-01-需求规格.md** — 需求 FR/NFR/验收标准
 3. **docs/SDD-01-概要设计.md** — 架构数据流、主题结构、门禁/部署/暴露面设计、ADR
 4. **docs/UI-01-原型说明.md** — 视图映射、交互清单、设计 tokens（原型 `D:\zeek\AiData\code\blog-ui-prototype\index.html` 已定稿）
+5. **docs/功能说明与使用指南.md** — 全部功能列表 + 使用方法 + 人工配置项
+6. **docs/SEO-RSS-评论详解.md** — SEO/RSS/giscus 评论原理、验证方法、常见问题（含 giscus App 安装步骤）
+7. **docs/PAT替换指南.md** — classic PAT → fine-grained PAT 替换全步骤
 5. **ai-obsidian `90-OB工程管理/rules/`**（01-目录 · 02-元数据 · 03-md格式 · 06-自动检查 · 07-发布全流程 · 08-仓库）与 `90-OB工程管理/skills/`
 6. **05 规范**（`90-OB工程管理/方案/05-发布流与AI使用规范.md`）— 顶层受控规范：§3 门禁模型、§4.2 AI 使用边界、§5 凭据与身份、§5.4 公开仓红线、§7 整改台账
 
@@ -90,6 +93,13 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 
 **第六轮（2026-11-14）已落地**：评论 giscus（文章页懒加载 + 主题切换同步换肤，Discussions 已开启，Announcements 分类）；RSS tom.xml 摘要模式（footer 链接 + head 发现）；SEO 三件套（canonical 剥 index.html / OG / Twitter Card / sitemap.xml / robots.txt）；首页与归档分页导航；图片点击放大（自研 lightbox 零依赖）；复制本文链接；手机端补强（宽表格与 cmp-table 横向滚动、cmdk 92vw、article-meta 换行）。新增流水线依赖 hexo-generator-feed / hexo-generator-sitemap（主题仍零依赖）。写作指南见 §7 第 7 条。
 
+
+### 第八轮（2026-11-15）：上下篇定序 + 全文搜索 + 三份运维文档
+
+- **上一篇/下一篇乱序修复**：hexo 内置 `page.prev/next` 在同日期文章间顺序不稳定（本库大量同日文章），且方向与首页列表阅读流相反。新增 helpers.js `sortedPosts(site)`（date 降序 + 同日期按 path 字母序稳定排序，结果缓存 site._zeekSorted），post.ejs 改用它定序：← 上一篇 = 更新一篇，下一篇 → = 更早一篇，与首页滚动方向一致。
+- **全文搜索**：collect.js pass 1 逐篇生成 `text` 字段（正文剥图片/raw 后限 1200 字符）进 search.json；main.js `matchEntry` 覆盖 text、新增 `snippet()` 展示命中片段（关键词上下文 ±30/70 字符）、标题命中结果排前。
+- **文档三份**：docs/功能说明与使用指南.md（16 项功能 + 使用方法 + 人工配置表）、docs/SEO-RSS-评论详解.md（三块原理/实现/验证/FAQ，含 giscus App 安装四步）、docs/PAT替换指南.md（fine-grained PAT 最小权限设计 + 创建/替换/验证/撤销步骤）。
+- **教训**：collect.js 全局段引用 pass 1 局部变量 `body` → ReferenceError exit 1（generate 只出 17 文件）；`text` 计算必须在 `handleFile` 内。
 ## 10 已知坑与教训
 
 1. **bearer 不被接受**：`AUTHORIZATION: bearer <PAT>` 会回落交互式用户名（`fatal: could not read Username`），必须 `basic` + `x-access-token:<PAT>` 形式（05 规范 §5.1 实测教训）。
@@ -105,3 +115,5 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 AI 在本工程内**一律禁止**：未经人批准翻转 `published`/`status`（G3 是人的独占权）；改动受控文件（`.github/`、rules/、方案/ 等）不走修订记录；未经人明确批准 force push / 改写历史 / 直接向产物仓推送；把 token/私钥**值**写入任何文件；绕过 AI.md 路由直接改内容；把构建产物当手工编辑对象。
 
 AI 必须遵守：每任务先读 AI.md 与路由；质检以脚本结论为准（LLM 补充项标注「脚本外」）；文档与实现冲突时以流水线实际行为为准并提整改；每操作在 `90-OB工程管理/log/YYYY-MM.md` 留一行；提交按 §6 身份铁律执行。
+
+
