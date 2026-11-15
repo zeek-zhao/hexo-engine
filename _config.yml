@@ -75,6 +75,7 @@ zeek:
   mermaid: true    # mermaid 图（CDN 客户端渲染，失败回退原代码块）
   mascot: true     # 右下角 live2d 形象（CDN 加载，失败静默；窄屏/减少动效自动关闭）
   bgm: ""          # 背景音乐 URL（如 /audio/bgm.mp3，文件放入 hexo-engine source/audio/）；空 = 不渲染播放按钮
+  analytics: ""    # 访问统计配置槽（第七轮）：'ga4-G-XXXXXXXXXX' 或 'goatcounter-<站点代码>'；空 = 不加载任何统计脚本
   # 评论 giscus（GitHub Discussions，仅文章页懒加载；id 为公开的 widget 参数非密钥）
   giscus:
     repo: zeek-zhao/zeek-zhao.github.io

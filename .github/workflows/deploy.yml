@@ -48,6 +48,10 @@ jobs:
       - name: Check rendered pages
         run: node scripts/check-pages.js
 
+      # BDD 功能性测试（Given/When/Then 场景断言，见 tests/features/）：失败则不发布
+      - name: BDD functional tests
+        run: npm run test:bdd
+
       - name: Publish to Pages repo (orphan push)
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}

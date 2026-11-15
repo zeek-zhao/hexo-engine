@@ -1,7 +1,7 @@
 ---
 title: 需求规格说明书（URD-01）
 doc_id: HEXO-ENG-URD-01
-version: v1.3
+version: v1.4
 date: 2026-11-14
 updated: 2026-11-14
 status: draft
@@ -30,6 +30,7 @@ description: hexo-engine 工程库的需求规格：内容采集与双链转换�
 |---|---|---|---|
 | v1.0 | 2026-11-14 | 首版：范围、功能需求 FR、非功能需求 NFR、验收标准 | 待人批准 |
 | v1.1 | 2026-11-14 | 主题 zeek 已上线验收（FR-9~14 状态由「移植中」改为「已上线」）；新增 FR-16 两级分类体系（OB-ENG-SOP-06）与 AC-16 | 待人批准 |
+| v1.4 | 2026-11-15 | 第七轮：新增 FR-27 字数统计 / FR-28 结构化数据 JSON-LD / FR-29 访问统计配置槽 / FR-30 BDD 功能门禁；AC-20 | 待人批准 |
 | v1.3 | 2026-11-14 | 第六轮：新增 FR-21 评论 giscus / FR-22 RSS / FR-23 SEO 三件套 / FR-24 分页 / FR-25 lightbox+复制链接 / FR-26 手机端补强；AC-19；FR-15 约束范围改「主题层」（流水线新增 hexo-generator-feed/sitemap 见 FR-22/23） | 待人批准 |
 | v1.2 | 2026-11-14 | 第五轮：新增 FR-17 Obsidian 方言转换 / FR-18 分类图标 / FR-19 装饰层 / FR-20 发布前体检门禁与 AC-17/AC-18；引用 06 映射 v1.1.0 | 待人批准 |
 
@@ -94,7 +95,11 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | FR-23 | SEO 三件套 | canonical（剥 `index.html`）/ Open Graph（article 与 website 分型）/ Twitter Card / `sitemap.xml` / `robots.txt` | 已上线 |
 | FR-24 | 分页导航 | 首页与归档末尾翻页链接（hexo paginator），分类/标签页不分页 | 已上线 |
 | FR-25 | 图片放大与分享 | 图片点击放大（自研 lightbox 零依赖）；文章 meta「复制本文链接」（clipboard API + fallback） | 已上线 |
-| FR-26 | 手机端补强 | 宽表格/对比表块级横向滚动、命令面板 92vw、article-meta 换行；与 FR-12 断点体系叠加 | 已上线 |树/文章特征/无 Obsidian 语法残留），与 search.json、source/_posts 交叉核对；`npm run build` 末尾与 deploy.yml 发布前各跑一次，fail 即阻断发布 | 已上线 |
+| FR-26 | 手机端补强 | 宽表格/对比表块级横向滚动、命令面板 92vw、article-meta 换行；与 FR-12 断点体系叠加 | 已上线 |
+| FR-27 | 字数统计 | 文章 meta 显示单篇字数与阅读时长（400 字/分钟）；页脚显示全站总字数；中文字 + 西文词统一口径（wordCount helper） | 已上线 |
+| FR-28 | 结构化数据 | 全站 WebSite JSON-LD；文章页 BlogPosting + BreadcrumbList JSON-LD（富摘要） | 已上线 |
+| FR-29 | 访问统计（配置槽） | `_config.yml zeek.analytics` 支持 ga4 / goatcounter，默认空 = 不加载任何脚本；隐私优先（anonymize_ip） | 已上线（待配置取值） |
+| FR-30 | BDD 功能门禁 | tests/features/*.feature（Gherkin 子集）+ 零依赖 runner，26 场景覆盖浏览/导航/阅读/搜索/RSS/SEO/移动端/装饰/方言转换/未发布保护；`npm run test:bdd` 本地与 CI（deploy.yml）发布前执行 | 已上线 |树/文章特征/无 Obsidian 语法残留），与 search.json、source/_posts 交叉核对；`npm run build` 末尾与 deploy.yml 发布前各跑一次，fail 即阻断发布 | 已上线 |
 
 > UI 需求的完整交互清单、设计 tokens、原型↔线上差异**引用** docs/UI-01-原型说明.md，本文件不重复。
 
@@ -132,7 +137,8 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | AC-16 | 删除 `06-分类映射.json` 后构建输出告警且文章归入「其他」，构建不失败 | FR-16 |
 | AC-17 | 模板文章（`32-工具/obsidian/Obsidian 语法模板与转换体检.md`）转换后：callout/mark/脚注/任务列表/mermaid 各特征数与源文一致；正文无 `==`/`%%`/`[!type]`/未转换双链残留；mermaid 输出 `<div class="mermaid">` 且数学公式页含 KaTeX 资源；check-pages.js 全站 PASS | FR-17/FR-20 |
 | AC-18 | 首页与侧栏分类均带各自图标（无默认 📁 残留于已配图分类）；06 映射 v1.1.0 图标表全量覆盖 8 领域 + 46 细分 |
-| AC-19 | 文章页含 giscus 容器与 copy-link 按钮（data-url 为规范地址）；`atom.xml`/`sitemap.xml`/`robots.txt` 存在且 atom 无全文；首页第 2 页与 `/archives/page/2/` 可经分页链接到达；canonical 剥 `index.html`；og:type 按 article/website 区分 | FR-21~26 | FR-18 |
+| AC-19 | 文章页含 giscus 容器与 copy-link 按钮（data-url 为规范地址）；`atom.xml`/`sitemap.xml`/`robots.txt` 存在且 atom 无全文；首页第 2 页与 `/archives/page/2/` 可经分页链接到达；canonical 剥 `index.html`；og:type 按 article/website 区分 |
+| AC-20 | 文章 meta 含「N 字 · 约 M 分钟」且页脚含「全站 N 字」；文章 head 含 BlogPosting/BreadcrumbList JSON-LD；analytics 为空时页面无任何统计脚本引用；`npm run test:bdd` 26 场景全过（本地与 CI） | FR-27~30 | FR-18 |
 
 ## 6 引用文件
 

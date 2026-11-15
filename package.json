@@ -8,6 +8,7 @@
   "scripts": {
     "collect": "node bin/collect.js",
     "build": "npm run collect && hexo clean && hexo generate && node scripts/check-pages.js",
+    "test:bdd": "node tests/bdd-runner.js",
     "server": "hexo server"
   },
   "dependencies": {

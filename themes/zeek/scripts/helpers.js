@@ -8,7 +8,9 @@ hexo.extend.helper.register('heads', function (content) {
       const idm = /id="([^"]*)"/.exec(attrs);
       const id = idm ? idm[1] : 'h-' + heads.length;
       heads.push({ level: Number(lvl), id, text: inner.replace(/<[^>]+>/g, '').trim() });
-      return '<h' + lvl + attrs + ' id="' + id + '">' + inner +
+      // attrs 已带 id（hexo-renderer-marked 生成的 slug id）时不再追加，避免重复属性
+      const open = idm ? '<h' + lvl + attrs : '<h' + lvl + attrs + ' id="' + id + '"';
+      return open + '>' + inner +
         '<a class="hlink" data-h="' + id + '" href="#' + id + '" title="跳到本节">¶</a></h' + lvl + '>';
     });
   return { heads, body };
@@ -50,4 +52,26 @@ hexo.extend.helper.register('catTree', function (site) {
     return c || null;
   };
   return { roots, childrenOf, byLeaf, rootOf };
+});
+
+/* 主题辅助：字数统计（中文按字、西文按词，剥 HTML 标签与实体后计数）。
+ * post.ejs（单篇字数/阅读时长）、layout.ejs（页脚全站总字数）共用，保证口径一致。
+ * 阅读时长按中文 400 字/分钟估算，至少 1 分钟。 */
+function wordCount(content) {
+  const t = String(content || '')
+    .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z]+;/gi, ' ');
+  const cjk = (t.match(/[\u4e00-\u9fff]/g) || []).length;
+  const lat = (t.match(/[A-Za-z0-9]+/g) || []).length;
+  return cjk + lat;
+}
+hexo.extend.helper.register('wordCount', wordCount);
+hexo.extend.helper.register('readMin', function (content) {
+  return Math.max(1, Math.ceil(wordCount(content) / 400));
+});
+hexo.extend.helper.register('siteWords', function (site) {
+  let sum = 0;
+  site.posts.each((p) => { sum += wordCount(p.content); });
+  return sum;
 });

@@ -538,4 +538,24 @@
       }
     });
   })();
+
+  /* ---------- 访问统计（第七轮，配置槽 zeek.analytics，默认关闭） ----------
+   * 取值示例：'ga4-G-XXXXXXXXXX'（Google Analytics 4）或 'goatcounter-<站点代码>'
+   * （GoatCounter，可自托管）。未配置则不加载任何脚本。 */
+  (function () {
+    var a = CFG.analytics;
+    if (!a || a.indexOf('-') < 0) return;
+    var kind = a.slice(0, a.indexOf('-'));
+    var id = a.slice(a.indexOf('-') + 1);
+    if (kind === 'ga4' && /^G-[A-Z0-9]+$/.test(id)) {
+      loadScript('https://www.googletagmanager.com/gtag/js?id=' + id);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', id, { anonymize_ip: true });
+    } else if (kind === 'goatcounter' && /^[A-Za-z0-9-]+$/.test(id)) {
+      window.goatcounter = { no_onload: false, allow_local: false };
+      loadScript('https://gc.zgo.at/count.js?site=' + encodeURIComponent(id));
+    }
+  })();
 })();
