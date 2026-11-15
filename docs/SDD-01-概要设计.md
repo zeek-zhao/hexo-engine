@@ -113,7 +113,7 @@ repository_dispatch                    │   → tags/categories 统计页      
 | 字数统计 | helpers.js `wordCount`（剥 script/style/标签/实体 → 中文字数 + 西文词数）；`readMin`（400 字/分钟，≥1）；`siteWords`（全站求和）。post.ejs meta 与 layout.ejs 页脚共用同一 helper，口径一致 |
 | JSON-LD | layout head 全站 WebSite；post.ejs BlogPosting（headline/author/datePublished/url）+ BreadcrumbList（首页/归档/领域/细分/标题五层），复用 post.ejs 已有 chain |
 | 访问统计 | `zeek.analytics` 字符串配置槽：`ga4-G-XXX` / `goatcounter-<code>`；main.js 解析前缀加载对应脚本；默认空 = 零第三方请求（隐私优先） |
-| BDD 门禁 | tests/bdd-runner.js：零依赖 Gherkin 子集执行器（精确文本→正则两级步骤匹配）；samples 收集器一次读全站关键页面；10 feature / 26 scenario；退出码作门禁；CI 在 check-pages 后执行 |
+| BDD 门禁 | tests/bdd-runner.js：零依赖 Gherkin 子集执行器（精确文本→正则两级步骤匹配）；samples 收集器一次读全站关键页面；12+ feature / 35+ scenario（规模随轮次增长，以 npm run test:bdd 实时输出为准）；退出码作门禁；CI 在 check-pages 后执行 |
 
 ### 2.3 评论与分发层（v1.3 追加）
 

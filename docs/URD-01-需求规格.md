@@ -103,7 +103,7 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | FR-29 | 访问统计（配置槽） | `_config.yml zeek.analytics` 支持 ga4 / goatcounter，默认空 = 不加载任何脚本；隐私优先（anonymize_ip） | 已上线（待配置取值） |
 | FR-31 | 上下篇显式定序 | helpers.sortedPosts：date 降序 + 同日期按路径稳定排序，← 上一篇 = 更新一篇（与首页阅读流一致）；不依赖 hexo 内置 page.prev/next（同日文章顺序不稳定） | 已上线 |
 | FR-32 | 搜索覆盖正文全文 | collect.js 逐篇生成 search.json text 字段（≤1200 字符）；cmdk 匹配正文、命中展示 snippet 上下文、标题命中排前 | 已上线 |
-| FR-30 | BDD 功能门禁 | tests/features/*.feature（Gherkin 子集）+ 零依赖 runner，26 场景覆盖浏览/导航/阅读/搜索/RSS/SEO/移动端/装饰/方言转换/未发布保护；`npm run test:bdd` 本地与 CI（deploy.yml）发布前执行 | 已上线 |树/文章特征/无 Obsidian 语法残留），与 search.json、source/_posts 交叉核对；`npm run build` 末尾与 deploy.yml 发布前各跑一次，fail 即阻断发布 | 已上线 |
+| FR-30 | BDD 功能门禁 | tests/features/*.feature（Gherkin 子集）+ 零依赖 runner，全量场景（以 npm run test:bdd 实时输出为准）覆盖浏览/导航/阅读/搜索/RSS/SEO/移动端/装饰/方言转换/未发布保护；`npm run test:bdd` 本地与 CI（deploy.yml）发布前执行 | 已上线 |树/文章特征/无 Obsidian 语法残留），与 search.json、source/_posts 交叉核对；`npm run build` 末尾与 deploy.yml 发布前各跑一次，fail 即阻断发布 | 已上线 |
 
 > UI 需求的完整交互清单、设计 tokens、原型↔线上差异**引用** docs/UI-01-原型说明.md，本文件不重复。
 
@@ -142,7 +142,7 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | AC-17 | 模板文章（`32-工具/obsidian/Obsidian 语法模板与转换体检.md`）转换后：callout/mark/脚注/任务列表/mermaid 各特征数与源文一致；正文无 `==`/`%%`/`[!type]`/未转换双链残留；mermaid 输出 `<div class="mermaid">` 且数学公式页含 KaTeX 资源；check-pages.js 全站 PASS | FR-17/FR-20 |
 | AC-18 | 首页与侧栏分类均带各自图标（无默认 📁 残留于已配图分类）；06 映射 v1.1.0 图标表全量覆盖 8 领域 + 46 细分 |
 | AC-19 | 文章页含 giscus 容器与 copy-link 按钮（data-url 为规范地址）；`atom.xml`/`sitemap.xml`/`robots.txt` 存在且 atom 无全文；首页第 2 页与 `/archives/page/2/` 可经分页链接到达；canonical 剥 `index.html`；og:type 按 article/website 区分 |
-| AC-20 | 文章 meta 含「N 字 · 约 M 分钟」且页脚含「全站 N 字」；文章 head 含 BlogPosting/BreadcrumbList JSON-LD；analytics 为空时页面无任何统计脚本引用；`npm run test:bdd` 26 场景全过（本地与 CI） | FR-27~30 | FR-18 |
+| AC-20 | 文章 meta 含「N 字 · 约 M 分钟」且页脚含「全站 N 字」；文章 head 含 BlogPosting/BreadcrumbList JSON-LD；analytics 为空时页面无任何统计脚本引用；`npm run test:bdd` 全绿（本地与 CI） | FR-27~30 | FR-18 |
 
 ## 5A 第九轮追加需求（v1.6，2026-11-15）
 
