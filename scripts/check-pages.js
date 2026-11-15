@@ -1,4 +1,6 @@
-#!/usr/bin/env node
+/* 直接以 `node scripts/check-pages.js` 运行；本目录会被 hexo 当作站点脚本目录加载，
+ * 必须用 require.main 守卫避免被 hexo 执行（否则 generate 阶段会跑断言并 exit）。 */
+if (require.main !== module) return;
 /* ============================================================
  * scripts/check-pages.js — 全站页面渲染体检（按语法类型断言）
  *

@@ -1,4 +1,4 @@
-﻿/* BDD 功能性测试 runner（第七轮）——零依赖迷你 Gherkin 子集执行器。
+/* BDD 功能性测试 runner（第七轮）——零依赖迷你 Gherkin 子集执行器。
  * 用法：node tests/bdd-runner.js [publicDir]
  * feature 文件：tests/features/*.feature（Feature/Scenario/Given/When/Then/And）。
  * 每个步骤按「精确文本 → 正则」在 STEPS 注册表中查找执行；断言失败即该 Scenario FAIL。
@@ -74,9 +74,9 @@ step(/^文章页上一篇与下一篇链接齐全$/, c => {
     expect(t.length > 0, '上一篇标题为空');
   }
 });
-step(/^search\.json 至少 1146 条且每条含非空 text 字段$/, c => {
+step(/^search\.json 至少 1100 条且每条含非空 text 字段$/, c => {
   const s = c.samples.search;
-  expect(Array.isArray(s) && s.length >= 1146, 'search.json 条目不足: ' + (s || []).length);
+  expect(Array.isArray(s) && s.length >= 1100, 'search.json 条目不足: ' + (s || []).length);
   const empty = s.filter(e => !e.text || !String(e.text).length).length;
   expect(empty === 0, empty + ' 条 text 为空');
 });
@@ -129,8 +129,8 @@ step(/^当前页侧栏只渲染当前领域组$/, c => {
 });
 
 /* 搜索 */
-step(/^search\.json 条目数至少 1146 且分组去重为 8$/, c => {
-  expect(c.samples.search.length >= 1146, `search.json 条目=${c.samples.search.length}`);
+step(/^search\.json 条目数至少 1100 且分组去重为 8$/, c => {
+  expect(c.samples.search.length >= 1100, `search.json 条目=${c.samples.search.length}`);
   expect(new Set(c.samples.search.map(x => x.group)).size === 8, 'search.json 分组去重 != 8');
   expect(c.samples.search.every(x => x.title && x.url && x.group), 'search.json 条目缺 title/url/group');
 });

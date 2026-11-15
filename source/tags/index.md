@@ -3,12 +3,12 @@ title: 标签
 comments: false
 ---
 
-共 **632** 个标签 · **1146** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。
+共 **632** 个标签 · **1144** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。
 
 <div class="tagcloud">
 <a class="tagbig" href="/tags/%E7%B3%BB%E7%BB%9F/">系统<b>317</b></a>
 <a class="tagbig" href="/tags/%E5%B7%A5%E5%85%B7/">工具<b>180</b></a>
-<a class="tagbig" href="/tags/%E6%8A%80%E8%83%BD/">技能<b>130</b></a>
+<a class="tagbig" href="/tags/%E6%8A%80%E8%83%BD/">技能<b>128</b></a>
 <a class="tagbig" href="/tags/apollo/">apollo<b>62</b></a>
 <a class="tagbig" href="/tags/Keep/">Keep<b>43</b></a>
 <a class="tagbig" href="/tags/%E5%B8%95%E6%A2%85%E6%8B%89/">帕梅拉<b>42</b></a>
@@ -57,7 +57,6 @@ comments: false
 <a class="tagbig" href="/tags/%E6%80%A7%E8%83%BD/">性能<b>10</b></a>
 <a class="tagbig" href="/tags/%E5%AE%89%E8%A3%85/">安装<b>8</b></a>
 <a class="tagbig" href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96/">格式化<b>8</b></a>
-<a class="tagbig" href="/tags/AI/">AI<b>8</b></a>
 <a class="tagbig" href="/tags/docker/">docker<b>8</b></a>
 <a class="tagbig" href="/tags/OpenLDAP/">OpenLDAP<b>8</b></a>
 <a class="tagbig" href="/tags/%E9%83%A8%E7%BD%B2/">部署<b>7</b></a>
@@ -68,6 +67,7 @@ comments: false
 <a class="tagbig" href="/tags/%E6%81%A2%E5%A4%8D/">恢复<b>6</b></a>
 <a class="tagbig" href="/tags/%E6%9D%83%E9%99%90/">权限<b>6</b></a>
 <a class="tagbig" href="/tags/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">学习路线<b>6</b></a>
+<a class="tagbig" href="/tags/AI/">AI<b>6</b></a>
 <a class="tagbig" href="/tags/%E5%A4%87%E4%BB%BD/">备份<b>5</b></a>
 <a class="tagbig" href="/tags/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践<b>5</b></a>
 <a class="tagbig" href="/tags/%E8%BF%9B%E9%98%B6/">进阶<b>5</b></a>

@@ -3,7 +3,7 @@ title: 分类
 comments: false
 ---
 
-按领域分组的全部分类，共 **46** 个细分分类 · **1146** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
+按领域分组的全部分类，共 **46** 个细分分类 · **1144** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
 
 <details class="catgroup" open><summary>📁 操作系统与机器人<span class="cnt">318 篇</span></summary>
 <div class="tagcloud">
@@ -42,12 +42,12 @@ comments: false
 <a class="tagbig" href="/categories/portainer/">portainer<b>17</b></a>
 </div>
 </details>
-<details class="catgroup" open><summary>📁 技能专项<span class="cnt">130 篇</span></summary>
+<details class="catgroup" open><summary>📁 技能专项<span class="cnt">128 篇</span></summary>
 <div class="tagcloud">
 <a class="tagbig" href="/categories/qt/">qt<b>42</b></a>
 <a class="tagbig" href="/categories/selinux/">selinux<b>42</b></a>
 <a class="tagbig" href="/categories/yocto/">yocto<b>42</b></a>
-<a class="tagbig" href="/categories/AI/">AI<b>4</b></a>
+<a class="tagbig" href="/categories/AI/">AI<b>2</b></a>
 </div>
 </details>
 <details class="catgroup" open><summary>📁 健身<span class="cnt">127 篇</span></summary>
