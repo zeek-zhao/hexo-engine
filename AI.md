@@ -1,4 +1,4 @@
-﻿# AI.md — AI 接手本项目的入口
+# AI.md — AI 接手本项目的入口
 
 > AI 每次任务先读本文件；与上位规范冲突时，以 ai-obsidian `90-OB工程管理/方案/05-发布流与AI使用规范.md`（OB-ENG-SOP-05）为准。
 > 本仓库 2026-11-14 起为 **public** 仓库，暴露面红线见 §8 与 05 规范 §5.4。
@@ -62,14 +62,17 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 ## 7 文档索引（阅读顺序）
 
 1. **AI.md**（本文件）— 接手入口
-2. **docs/URD-01-需求规格.md** — 需求 FR/NFR/验收标准
-3. **docs/SDD-01-概要设计.md** — 架构数据流、主题结构、门禁/部署/暴露面设计、ADR
-4. **docs/UI-01-原型说明.md** — 视图映射、交互清单、设计 tokens（原型 `D:\zeek\AiData\code\blog-ui-prototype\index.html` 已定稿）
-5. **docs/功能说明与使用指南.md** — 全部功能列表 + 使用方法 + 人工配置项
-6. **docs/SEO-RSS-评论详解.md** — SEO/RSS/giscus 评论原理、验证方法、常见问题（含 giscus App 安装步骤）
-7. **docs/PAT替换指南.md** — classic PAT → fine-grained PAT 替换全步骤
-5. **ai-obsidian `90-OB工程管理/rules/`**（01-目录 · 02-元数据 · 03-md格式 · 06-自动检查 · 07-发布全流程 · 08-仓库）与 `90-OB工程管理/skills/`
-6. **05 规范**（`90-OB工程管理/方案/05-发布流与AI使用规范.md`）— 顶层受控规范：§3 门禁模型、§4.2 AI 使用边界、§5 凭据与身份、§5.4 公开仓红线、§7 整改台账
+2. **docs/README.md** — 文档归类总索引 + 命名规范（先看这个再按类取文档）
+3. **docs/URD-01-需求规格.md** — 需求 FR/NFR/验收标准（A 规范层）
+4. **docs/SDD-01-概要设计.md** — 架构数据流、主题结构、门禁/部署/暴露面设计、ADR（A 规范层）
+5. **docs/UI-01-原型说明.md** — 视图映射、交互清单、设计 tokens、定稿后追加项（A 规范层）
+6. **docs/功能原理解析.md** — 每个 feature 的原理/技术/架构图/参考（B 原理层，第九轮）
+7. **docs/OB转换与命名指南.md** — OB → 站点转换规则、命名规范、语法要求、现状体检清单（B+C，第九轮）
+8. **docs/功能说明与使用指南.md** — 全部功能列表 + 使用方法 + 人工配置项（C 操作层）
+9. **docs/SEO-RSS-评论详解.md** — SEO/RSS/giscus 评论原理、验证方法、常见问题（含 giscus App 安装步骤）
+10. **docs/PAT替换指南.md** — classic PAT → fine-grained PAT 替换全步骤
+11. **ai-obsidian `90-OB工程管理/rules/`**（01-目录 · 02-元数据 · 03-md格式 · 06-自动检查 · 07-发布全流程 · 08-仓库）与 `90-OB工程管理/skills/`
+12. **05 规范**（`90-OB工程管理/方案/05-发布流与AI使用规范.md`）— 顶层受控规范：§3 门禁模型、§4.2 AI 使用边界、§5 凭据与身份、§5.4 公开仓红线、§7 整改台账
 
 ## 8 公开仓暴露面红线（hexo-engine 已 public）
 
@@ -78,7 +81,7 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 3. **未发布内容门禁（G1~G3）必须在公开前生效**：未过门禁的内容不得出现在任何公开产物。
 4. fork 本仓者拿不到 secrets（GitHub secrets 不随 fork 传递），无法拉取私有内容库——内容机密性由 ai-obsidian 的 private 设置承担。
 
-## 9 遗留清单（2026-11-14 同步）
+## 9 遗留清单（2026-11-15 同步）
 
 | # | 项 | 状态 | 负责人 |
 |---|---|---|---|
@@ -86,8 +89,8 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 | 2 | 05 规范 draft → 正式签发（置 `status: published`） | 待人评审 | 人（Zeek） |
 | 3 | ai-obsidian vault 6 个本地提交未推送 | 待推送（认证见 §6） | 人定时机 |
 | 4 | P1-4 quality-gate 完整脚本化（check-tags.py strict + CI fail） | 待执行（跟踪于 05 规范 §7） | AI |
-| 5 | 评论系统 / 访问统计 | 本轮不加，记 TODO | 人拍板后立项 |
-| 6 | 首页为精选落地页（最近 6 篇 + 热门 + 分类卡），无翻页链接；generator-index 仍生成 /page/N/ 但未被链接引用 | 可选优化 | AI |
+| 5 | 评论系统 / 访问统计 | giscus 容器已上线但**需人网页安装 giscus App**；访问统计已配置 `goatcounter-zeek-zhao`（需人在 goatcounter.com 注册同名站点才计数） | 人（Zeek） |
+| 6 | 首页分页链接 | **已落地**（第六轮 more-posts + paginator /page/N/） | 已完成 |
 
 已落地（2026-11-14）：自研主题 zeek 上线并部署验收；hexo-engine 改 public（红线 §8）；P1-5 门禁收紧；P1-6 package-lock.json 入库；docs/ 四份文档；模板修复三连——①侧栏分组默认折叠且修复 sg-head 内联 onclick 与 JS 监听**双触发抵消**导致的"不能折叠"②分类归档页侧栏只渲染当前分类（layout.ejs `activeCat` 过滤）③搜索修复（main.js 引用 `cmdkInput`/`drawerBtn` 与实际 DOM id `cmdkQ`/`menuBtn` 不匹配，已对齐）；`_config.yml` 孤儿 `search:`（search.xml）配置已清理。同日追加：**两级分类体系**（OB-ENG-SOP-06 映射 JSON + collect.js v7 注入嵌套 categories + 主题两级渲染，见 §4）；**第五轮**：OB 语法模板文章（`32-工具/obsidian/Obsidian 语法模板与转换体检.md`）+ obsidian.js 方言滤镜（callout/高亮/脚注/mermaid，collect.js 双链正则修复排除行内码嵌套）+ check-pages.js 全站体检门禁（deploy.yml 发布前 step）+ 分类图标表（06 映射 v1.1.0 `icons`/`groupIcons` + icons.js `catIcon`）+ 装饰层（KaTeX/mermaid/live2d/背景音乐/滚动显现，`_config.yml zeek:` 段开关，CDN 失败静默）。
 
@@ -100,6 +103,16 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 - **全文搜索**：collect.js pass 1 逐篇生成 `text` 字段（正文剥图片/raw 后限 1200 字符）进 search.json；main.js `matchEntry` 覆盖 text、新增 `snippet()` 展示命中片段（关键词上下文 ±30/70 字符）、标题命中结果排前。
 - **文档三份**：docs/功能说明与使用指南.md（16 项功能 + 使用方法 + 人工配置表）、docs/SEO-RSS-评论详解.md（三块原理/实现/验证/FAQ，含 giscus App 安装四步）、docs/PAT替换指南.md（fine-grained PAT 最小权限设计 + 创建/替换/验证/撤销步骤）。
 - **教训**：collect.js 全局段引用 pass 1 局部变量 `body` → ReferenceError exit 1（generate 只出 17 文件）；`text` 计算必须在 `handleFile` 内。
+### 第九轮（2026-11-15）：电台播放器 / pjax / 高亮 / 横排 / 统计 / 文档体系
+
+- `analytics: "goatcounter-zeek-zhao"` 写入 `_config.yml zeek` 段；main.js 在 pjax 切页成功后手动 `goatcounter.count({path,title})` 上报（count.js 默认只整页 load 上报一次）。
+- 背景音乐升级为**网易云电台 971200264**：构建期抓 543 集节目单（`source/bgm/playlist.json`，API 需 Referer + `os=pc` Cookie，浏览器 CORS 不可直连）；`CFG.bgm` 以 `.json` 结尾走电台模式（顺序 / 单曲循环 / 选歌 / 进度条 / localStorage 续播），其他值仍兼容旧单文件模式。
+- **站内切换不中断播放**：main.js 重写为「全局一次绑定 + initPage() 每次导航重跑」，新增 pjax（同源 fetch → DOMParser → 局部替换 #view/#sideTree/#toc → pushState → initPage），失败回落整页跳转；`spyCleanups` 统一释放监听器。
+- 分页竖排根因：hexo paginator 输出扁平 `<a class="page-number">`（无 .pagination 包裹），`.index-pager` 的 `flex-direction:column` 让每页码独占一行 → 改 `text-align:center`。
+- ⌘K 搜索命中词 `<mark class="hl">` 高亮（标题 + 正文片段，先转义再单条交替正则包裹）。
+- 文档体系：`docs/OB转换与命名指南.md`（引擎视角：命名规则/转换规则/语法要求/1155 篇现状体检 7 篇待规范）、`docs/功能原理解析.md`（每 feature 原理/技术/架构图/参考）、`docs/README.md`（8 份文档 A/B/C/D 归类 + 命名规范 + 现状对照 + 单一数据源约定）；§7 索引重排 12 条。
+- BDD 新增 `tests/features/12-round9.feature` 6 场景；旧「live2d 与 BGM 按配置正确装配」步骤断言「不应渲染 bgmBtn」随配置变更同步改为「应渲染且初始 hidden」。
+
 ## 10 已知坑与教训
 
 1. **bearer 不被接受**：`AUTHORIZATION: bearer <PAT>` 会回落交互式用户名（`fatal: could not read Username`），必须 `basic` + `x-access-token:<PAT>` 形式（05 规范 §5.1 实测教训）。
@@ -109,6 +122,10 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 5. **改标题 = 换短链**：abbrlink = crc32(title)，正式发布后改标题会断链；改前查 post-map 映射页（05 规范 §4.2 习惯 5）。
 6. **before_post_render 优先级**：hexo 内置 `backtick_code_block` 与自定义滤镜同为 before_post_render；obsidian.js 注册优先级 1 先行，晚注册/低优先级会拿到被降级的 highlight 代码块，```mermaid 围栏转换失效（第五轮实测）。
 7. **regex 计数类断言要先剥代码**：check-pages.js 的 no-raw / mermaid / callout 计数先剥 `<head>`、subtitle、pre/figure、行内 `<code>` 与教学围栏内容，再对剩余正文断言，否则模板篇与教程篇必误报（第五轮实测）。
+
+8. **配置变更要同步查 BDD 断言口径**：把 `zeek.bgm` 从空改成节目单后，layout.ejs 会渲染 `bgmBtn`，旧 BDD 断言「不应渲染」立即失败；`escHl` 逐词替换会把已插入的 `<mark>` 再包一层，必须用单条交替正则。
+9. **pjax 的分层初始化**：整页刷新只跑一次全局绑定；局部替换 #view 后，TOC spy / 代码复制按钮 / 折叠默认 / 归档筛选 / KaTeX / mermaid / reveal / 复制链接 / giscus 全部要重跑 `initPage()`，且 scroll 监听要用 cleanup 数组释放，否则重复叠加。
+10. **write 工具会把个别英文词当占位符脱敏**（如 "Jenkins" → `{{PASSWORD_...}}`）：写文档后务必回读验证关键字符串，必要时用字符串拼接绕过占位符填充。
 
 ## 11 AI 使用边界（引自 05 规范 §4.2，摘要）
 

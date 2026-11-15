@@ -1,9 +1,9 @@
 ﻿---
 title: 概要设计说明书（SDD-01）
 doc_id: HEXO-ENG-SDD-01
-version: v1.5
+version: v1.6
 date: 2026-11-14
-updated: 2026-11-14
+updated: 2026-11-15
 status: draft
 tags: [hexo-engine, 概要设计, 发布流]
 description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三级门禁落点、部署链与公开仓暴露面设计、回滚预案，以及自研主题/EJS/search.json 等关键技术决策记录（ADR）。
@@ -16,7 +16,7 @@ description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三�
 | 项 | 值 |
 |---|---|
 | 文件编号 | HEXO-ENG-SDD-01（下称 SDD-01） |
-| 版本 | v1.2（方言转换 + 图标 + 装饰层 + 体检门禁） |
+| 版本 | v1.6（第九轮：电台播放器 / pjax / 搜索高亮 / 横排分页 / 统计配置 / 文档体系） |
 | 编制 | AI（依据 2026-11-14 UI 定稿与公开仓决议） |
 | 审核 / 批准 | 人（Zeek） |
 | 生效条件 | 人批准后置 `status: published` |
@@ -27,6 +27,7 @@ description: hexo-engine 的架构与数据流、自研主题 zeek 结构、三�
 
 | 版本 | 日期 | 修订内容 | 批准 |
 |---|---|---|---|
+| v1.6 | 2026-11-15 | 第九轮：新增 §2.6 pjax 导航与电台播放器（分层初始化 / 节目单静态化 / 续播 / 切页统计上报）；ADR-9 pjax 选型 | 待人批准 |
 | v1.0 | 2026-11-14 | 首版：架构数据流、主题结构、门禁与部署链、暴露面设计、回滚预案、ADR×4 | 待人批准 |
 | v1.1 | 2026-11-14 | 主题 zeek 已上线并验收；§2 模板表按实际落地状态校正；新增 §2.1 两级分类体系（OB-ENG-SOP-06：映射 JSON → collect.js v7 注入嵌套 categories → catTree helper → 主题两级渲染）；ADR-3 补注 search.json 增加 group 字段 | 待人批准 |
 | v1.5 | 2026-11-15 | 新增 §2.5 上下篇定序与全文搜索（sortedPosts 缓存 / text 字段 / snippet） | 待人批准 |
@@ -189,6 +190,20 @@ repository_dispatch                    │   → tags/categories 统计页      
 | ADR-6 | **发布前体检门禁 check-pages.js 构建期断言**（非 CI 单独 step 起源） | 断言随构建跑，本地与 CI 
 | ADR-8 | **BDD 用零依赖自研 runner 而非 cucumber/cypress** | 测试对象是静态产物 HTML（无浏览器交互需求），断言本质是字符串/正则检查；零依赖避免 node_modules 膨胀，Gherkin 子集（Feature/Scenario/Given-When-Then）保留业务可读性；与 check-pages.js 互补：check-pages 管语法级体检，BDD 管用户故事级功能 |
 | ADR-7 | **评论选 giscus 而非 utterances/Valine/Disqus** | GitHub Discussions 原生承载、无后端无追踪第三方、读者凭 GitHub 账号、主题三态可 postMessage 同步；Announcements 分类防游客灌水。feed/sitemap 为流水线级新依赖（hexo 官方插件），主题层保持零依赖（FR-15 v1.3 修订） |同一入口（npm run build 末尾），deploy.yml 再显式跑一次防绕过；fail 即 exit 1 阻断发布，语法坏页不可能上线 | 只在 CI 跑：本地构建无反馈，坏页要到推送后才发现；人工抽查：1150+ 页覆盖不住 |
+
+## 2.6 第九轮：pjax 导航与电台播放器（v1.6）
+
+| 决策 | 做法 | 理由 |
+|---|---|---|
+| 站内播放不中断 | 拦截同源 `<a>` → `fetch` HTML → `DOMParser` → 替换 `#view`/`#sideTree`/`#toc`/title/`body[data-page]` → `pushState` → `initPage()` | 整页刷新必然终止 `<audio>`；纯静态站无服务端会话，pjax 是唯一可行解 |
+| 代码分层 | main.js 拆「全局一次绑定」（主题/⌘K/抽屉/lightbox/统计/播放器/pjax 引擎）与 `initPage()`（页面级：TOC spy、代码复制、折叠默认、归档筛选、KaTeX/mermaid/reveal/复制链接/giscus）；`spyCleanups` 数组统一释放滚动监听 | pjax 后旧 DOM 被替换，所有针对 DOM 的监听必须重绑，否则功能失效或监听器叠加 |
+| 节目单获取 | 构建期抓 `api/dj/program/byradio`（需 `Referer` + `os=pc` Cookie，浏览器 CORS 不允许）落 `source/bgm/playlist.json`（543 集：id/name/dur） | 避免运行时跨域与限流；音频仍用 `outer/url?id=<id>.mp3`（非官方外链，error 事件标灰换下一集） |
+| 刷新续播 | `localStorage["bgm-state"]` 每 5 秒/暂停/切歌存 `{i,t,mode,playing}`；刷新后定位曲目+进度，按钮呼吸动画提示点 ▶（浏览器自动播放策略不能自动响） | 无法跨越整页刷新保活 Audio 对象，只能恢复状态 |
+| 统计切页 | pjax 成功后调 `goatcounter.count({path,title})` | count.js 默认只在整页 load 上报一次，pjax 无 load 事件 |
+
+### ADR-9：站内导航选原生 fetch pjax 而非 Turbolinks/SPA 框架
+
+对象是 hexo 生成的多页静态 HTML，不需要前端路由与状态管理；原生 fetch + DOMParser 约 60 行，零依赖、失败可回落整页跳转（`location.href`），且不改变线上 URL 与 SEO 结构。引入 SPA 框架会推翻已上线的模板层与 JSON-LD/分页，收益与风险不成比例。
 
 ## 8 引用文件
 

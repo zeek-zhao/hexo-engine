@@ -191,7 +191,8 @@ step(/^live2d 与 BGM 按配置正确装配$/, c => {
   expect(/"mascot":true/.test(c.cur), 'ZEEK_CFG mascot 未开启');
   expect(c.samples.js.includes('live2d-widget'), 'main.js 缺 live2d 加载');
   expect(c.samples.css.includes('#waifu'), 'css 缺 #waifu 定位规则');
-  expect(!c.cur.includes('bgmBtn'), 'BGM 未配置时不应渲染播放按钮');
+  /* 第九轮起 bgm 已配置：按钮渲染但初始 hidden（由 main.js 判定后显示） */
+  expect(c.cur.includes('id="bgmBtn"') && c.cur.includes('hidden'), 'BGM 配置时按钮应渲染且初始隐藏');
 });
 step(/^KaTeX 与 mermaid 渲染通道就绪$/, c => {
   expect(/"katex":true/.test(c.cur) && /"mermaid":true/.test(c.cur), 'ZEEK_CFG 渲染开关未开启');
@@ -229,6 +230,54 @@ step(/^文章页含 giscus 评论容器与配置注入$/, c => {
 step(/^归档第 2 页可经分页链接到达$/, c => {
   const p2 = read(path.join(PUB, 'archives', 'page', '2', 'index.html'));
   expect(p2.includes('index-pager'), '归档第 2 页缺分页导航');
+});
+
+/* 第九轮：横排分页 / 搜索高亮 / 电台播放器 / pjax / 统计 */
+step(/^分页导航为横排布局$/, c => {
+  const css = c.samples.css;
+  expect(!/\.index-pager\{[^}]*flex-direction:column/.test(css), 'index-pager 仍为纵向 flex（页码会竖排）');
+  expect(css.includes('.index-pager{margin:24px 0 6px;text-align:center}'), 'index-pager 未改为横排居中');
+  const p2 = read(path.join(PUB, 'page', '2', 'index.html'));
+  expect((p2.match(/class="page-number/g) || []).length >= 3, '首页第 2 页页码数不足');
+  const a2 = read(path.join(PUB, 'archives', 'page', '2', 'index.html'));
+  expect(a2.includes('index-pager'), '归档第 2 页缺分页导航');
+});
+step(/^搜索结果对命中关键词高亮$/, c => {
+  expect(c.samples.js.includes('escHl') && c.samples.js.includes('mark class="hl"'), 'main.js 缺高亮渲染');
+  expect(c.samples.css.includes('mark.hl'), 'css 缺 mark.hl 样式');
+});
+step(/^电台节目单静态化且含 500 集以上$/, c => {
+  const p = path.join(PUB, 'bgm', 'playlist.json');
+  expect(fs.existsSync(p), 'public/bgm/playlist.json 不存在');
+  const j = JSON.parse(read(p));
+  expect(j.count >= 500 && j.tracks.length >= 500, `节目单条目=${j.count}`);
+  expect(j.tracks.every(t => t.id && t.name && t.dur > 0), '节目单条目字段不全');
+});
+step(/^页面注入电台播放器配置与统计配置$/, c => {
+  expect(/"bgm":"\/bgm\/playlist.json"/.test(c.cur), 'ZEEK_CFG bgm 未指向节目单');
+  expect(/"analytics":"goatcounter-zeek-zhao"/.test(c.cur), 'ZEEK_CFG analytics 未配置');
+  expect(c.cur.includes('id="bgmBtn"'), '缺 BGM 按钮');
+});
+step(/^主配置已启用电台与 GoatCounter$/, c => {
+  const cfg = read(path.join(__dirname, '..', '_config.yml'));
+  expect(/bgm:\s*"\/bgm\/playlist\.json"/.test(cfg), '_config.yml bgm 未指向节目单');
+  expect(/analytics:\s*"goatcounter-zeek-zhao"/.test(cfg), '_config.yml analytics 未配置');
+});
+step(/^main\.js 装配 pjax 导航与 GoatCounter 切页上报$/, c => {
+  const js = c.samples.js;
+  expect(js.includes('DOMParser') && js.includes('pushState') && js.includes('popstate'), 'main.js 缺 pjax 引擎');
+  expect(js.includes('goatcounter.count'), 'main.js 缺 pjax 切页统计上报');
+});
+step(/^main\.js 装配电台播放器与断点续播$/, c => {
+  const js = c.samples.js;
+  expect(js.includes('bgm-state') && js.includes('loop1') && js.includes('bgm-panel'), 'main.js 缺播放器/续播/面板');
+  expect(c.samples.css.includes('.bgm-panel'), 'css 缺播放器面板样式');
+});
+step(/^文档含转换命名指南与功能原理解析$/, c => {
+  const d = path.join(__dirname, '..', 'docs');
+  ['OB转换与命名指南.md', '功能原理解析.md', 'README.md'].forEach(f => {
+    expect(fs.existsSync(path.join(d, f)), '缺文档 ' + f);
+  });
 });
 
 /* ---------- 解析并执行 feature ---------- */

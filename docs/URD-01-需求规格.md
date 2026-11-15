@@ -1,9 +1,9 @@
 ---
 title: 需求规格说明书（URD-01）
 doc_id: HEXO-ENG-URD-01
-version: v1.5
+version: v1.6
 date: 2026-11-14
-updated: 2026-11-14
+updated: 2026-11-15
 status: draft
 tags: [hexo-engine, 需求规格, 发布流]
 description: hexo-engine 工程库的需求规格：内容采集与双链转换、三级门禁、发布触发链、自研主题 zeek 五视图与公开仓暴露面约束；对照 ISO 9001 §7.5 文件控制要求编制。
@@ -16,7 +16,7 @@ description: hexo-engine 工程库的需求规格：内容采集与双链转换�
 | 项 | 值 |
 |---|---|
 | 文件编号 | HEXO-ENG-URD-01（下称 URD-01） |
-| 版本 | v1.2（语法模板 + 体检门禁 + 图标 + 装饰层） |
+| 版本 | v1.6（第九轮：电台播放器 / pjax / 搜索高亮 / 横排分页 / 统计配置 / 文档体系） |
 | 编制 | AI（依据 2026-11-14 UI 定稿与公开仓决议） |
 | 审核 / 批准 | 人（Zeek） |
 | 生效条件 | 人批准后置 `status: published`；批准前不得作为实施验收依据 |
@@ -28,6 +28,7 @@ description: hexo-engine 工程库的需求规格：内容采集与双链转换�
 
 | 版本 | 日期 | 修订内容 | 批准 |
 |---|---|---|---|
+| v1.6 | 2026-11-15 | 第九轮：FR-33 电台 BGM 播放器（543 集静态节目单 + 顺序/单曲循环/选歌 + pjax 跨页不中断 + localStorage 续播）/ FR-34 分页横排 / FR-35 搜索命中高亮 / FR-36 GoatCounter 统计与 pjax 切页上报 / FR-37 转换与命名指南 + 功能原理解析 + docs 归类索引；AC-21 | 待人批准 |
 | v1.0 | 2026-11-14 | 首版：范围、功能需求 FR、非功能需求 NFR、验收标准 | 待人批准 |
 | v1.1 | 2026-11-14 | 主题 zeek 已上线验收（FR-9~14 状态由「移植中」改为「已上线」）；新增 FR-16 两级分类体系（OB-ENG-SOP-06）与 AC-16 | 待人批准 |
 | v1.5 | 2026-11-15 | 第八轮：FR-31 上下篇显式定序（sortedPosts）+ FR-32 搜索覆盖正文全文（text/snippet） | 待人批准 |
@@ -142,6 +143,18 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | AC-18 | 首页与侧栏分类均带各自图标（无默认 📁 残留于已配图分类）；06 映射 v1.1.0 图标表全量覆盖 8 领域 + 46 细分 |
 | AC-19 | 文章页含 giscus 容器与 copy-link 按钮（data-url 为规范地址）；`atom.xml`/`sitemap.xml`/`robots.txt` 存在且 atom 无全文；首页第 2 页与 `/archives/page/2/` 可经分页链接到达；canonical 剥 `index.html`；og:type 按 article/website 区分 |
 | AC-20 | 文章 meta 含「N 字 · 约 M 分钟」且页脚含「全站 N 字」；文章 head 含 BlogPosting/BreadcrumbList JSON-LD；analytics 为空时页面无任何统计脚本引用；`npm run test:bdd` 26 场景全过（本地与 CI） | FR-27~30 | FR-18 |
+
+## 5A 第九轮追加需求（v1.6，2026-11-15）
+
+| 编号 | 需求 | 对应 AC |
+|---|---|---|
+| FR-33 | 背景音乐电台化：网易云电台 543 集在构建期抓取为静态 `source/bgm/playlist.json`（浏览器 CORS 不可直连 API）；前端提供顺序播放 / 单曲循环 / 选歌 / 进度条；站内切换走 pjax 不整页刷新 → 音频连续；整页刷新从 localStorage 恢复曲目与进度（自动播放策略下提示一键续播） | AC-21 |
+| FR-34 | 分页数字横向排成一行（hexo paginator 输出扁平 `<a>`，nav 不得使用 `flex-direction:column`） | AC-21 |
+| FR-35 | ⌘K 搜索对命中关键词高亮（标题 + 正文片段，先转义再用单条交替正则包裹 `<mark class="hl">`，防 XSS 与嵌套误包） | AC-21 |
+| FR-36 | 访问统计配置 `goatcounter-zeek-zhao`；pjax 切页调用 `goatcounter.count({path,title})` 手动上报 | AC-21 |
+| FR-37 | 文档体系：`docs/OB转换与命名指南.md`（转换规则/命名规则/语法要求/现状体检）、`docs/功能原理解析.md`（每 feature 原理/技术/图/参考）、`docs/README.md`（8 份文档归类索引与命名规范） | AC-21 |
+
+| AC-21 | 首页第 2 页分页数字横向排成一行；搜索面板标题与片段对命中词包 `<mark class="hl">`；`public/bgm/playlist.json` 含 ≥500 集；ZEEK_CFG 注入 bgm 与 analytics；main.js 含 pjax 与 `goatcounter.count`；`npm run test:bdd` 追加 6 场景全过 | FR-33~37 | FR-32 |
 
 ## 6 引用文件
 

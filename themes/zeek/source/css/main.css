@@ -505,16 +505,18 @@ details.callout .callout-title::-webkit-details-marker{display:none}
   transition:color .15s,border-color .15s}
 .copy-link:hover{color:var(--accent);border-color:var(--accent)}
 .copy-link.copied{color:#1a7f37;border-color:#1a7f37}
-/* 首页翻页 */
-.index-pager{margin:24px 0 6px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.more-posts{font-size:14px;color:var(--accent);text-decoration:none}
+/* 首页/归档翻页（第九轮修复：hexo paginator 输出扁平 <a>，nav 本身不能做纵向 flex，
+   否则每个页码独占一行 = 竖排；改为 nav 文本居中，页码行内排布，更多文章单独一行） */
+.index-pager{margin:24px 0 6px;text-align:center}
+.more-posts{display:inline-block;margin-bottom:10px;font-size:14px;color:var(--accent);text-decoration:none}
 .index-pager .pagination{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:13.5px}
 .index-pager a,.index-pager span{min-width:36px;min-height:36px;display:inline-flex;align-items:center;
   justify-content:center;padding:4px 8px;border:1px solid var(--border);border-radius:8px;
-  color:var(--text-2);text-decoration:none}
+  color:var(--text-2);text-decoration:none;vertical-align:middle}
 .index-pager span.current{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
 .index-pager a:hover{border-color:var(--accent);color:var(--accent)}
 .index-pager .space{border:none;min-width:12px}
+.index-pager .extend{padding:4px 12px}
 /* 图片点击放大 */
 .lightbox{position:fixed;inset:0;z-index:1000;background:rgba(10,12,16,.82);
   display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
@@ -530,3 +532,39 @@ details.callout .callout-title::-webkit-details-marker{display:none}
   .lightbox{padding:10px}
   .index-pager{font-size:13px}
 }
+
+/* ===== 第九轮：搜索命中高亮 ===== */
+mark.hl{background:rgba(0,150,199,.22);color:inherit;border-radius:3px;padding:0 2px;font-weight:600}
+[data-theme=dark] mark.hl{background:rgba(94,197,255,.28)}
+.cmd-main b mark.hl{background:rgba(255,170,0,.30)}
+[data-theme=dark] .cmd-main b mark.hl{background:rgba(255,196,84,.32)}
+
+/* ===== 第九轮：电台背景音乐播放器 ===== */
+.bgm-panel{position:fixed;right:12px;bottom:64px;z-index:940;width:min(320px,calc(100vw - 24px));
+  background:var(--bg-1,#fff);border:1px solid var(--border);border-radius:14px;
+  box-shadow:0 16px 48px rgba(0,0,0,.18);padding:12px 14px;font-size:13px}
+[data-theme=dark] .bgm-panel{background:#1c2027}
+.bgm-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bgm-title{font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bgm-mode,.bgm-close{background:none;border:1px solid var(--border);border-radius:8px;
+  padding:3px 8px;cursor:pointer;color:var(--text-2);font-size:12px;min-height:28px}
+.bgm-close{min-width:28px;padding:3px 0}
+.bgm-mode:hover,.bgm-close:hover{border-color:var(--accent);color:var(--accent)}
+.bgm-now{display:flex;align-items:baseline;gap:8px}
+.bgm-now b{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13.5px}
+.bgm-time{color:var(--text-3,#888);font-variant-numeric:tabular-nums;font-size:12px}
+.bgm-bar{height:4px;border-radius:2px;background:var(--border);margin:8px 0 10px;overflow:hidden}
+.bgm-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s linear}
+.bgm-ctrl{display:flex;justify-content:center;gap:18px;margin-bottom:8px}
+.bgm-ctrl button{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-1);
+  min-width:44px;min-height:36px;border-radius:8px}
+.bgm-ctrl button:hover{color:var(--accent);background:rgba(127,127,127,.08)}
+.bgm-list{max-height:180px;overflow-y:auto;border-top:1px solid var(--border);padding-top:6px}
+.bgm-item{display:flex;gap:8px;align-items:baseline;padding:4px 4px;border-radius:6px;
+  color:var(--text-2);text-decoration:none;cursor:pointer}
+.bgm-item:hover{background:rgba(127,127,127,.08);color:var(--accent)}
+.bgm-item.on{color:var(--accent);font-weight:600}
+.bgm-item .bi-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px}
+.bgm-item .bi-dur{color:var(--text-3,#999);font-size:11px;font-variant-numeric:tabular-nums}
+.bgmbtn.resume{animation:notePulse 1.6s ease-in-out infinite}
+@media (max-width:560px){ .bgm-panel{bottom:56px} }
