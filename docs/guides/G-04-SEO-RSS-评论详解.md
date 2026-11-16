@@ -118,5 +118,5 @@ giscus 分两层：**配置**（repoId/categoryId，站点里已配好、已验�
 |---|------|------|--------|
 | 1 | **安装 giscus App**（§3.3 四步） | https://github.com/apps/giscus | 想要评论就必须做，一次即可 |
 | 2 | （可选）Google Search Console 提交 sitemap 加速收录 | https://search.google.com/search-console | 推荐做，免费 |
-| 3 | （可选）替换 PAT | 见 `docs/PAT替换指南.md` | 安全加固，建议尽快 |
+| 3 | （可选）替换 PAT | 见 `docs/guides/G-05-PAT替换指南.md` | 安全加固，建议尽快 |
 | 4 | （可选）访问统计选型 | `_config.yml` `zeek.analytics` | 配置槽已留好，填一行即启用 |

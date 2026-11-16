@@ -152,7 +152,7 @@ hexo-engine 是三仓发布链路中的**构建仓**（私有 → 2026-11-14 决
 | FR-34 | 分页数字横向排成一行（hexo paginator 输出扁平 `<a>`，nav 不得使用 `flex-direction:column`） | AC-21 |
 | FR-35 | ⌘K 搜索对命中关键词高亮（标题 + 正文片段，先转义再用单条交替正则包裹 `<mark class="hl">`，防 XSS 与嵌套误包） | AC-21 |
 | FR-36 | 访问统计配置 `goatcounter-zeek-zhao`；pjax 切页调用 `goatcounter.count({path,title})` 手动上报 | AC-21 |
-| FR-37 | 文档体系：`docs/OB转换与命名指南.md`（转换规则/命名规则/语法要求/现状体检）、`docs/功能原理解析.md`（每 feature 原理/技术/图/参考）、`docs/README.md`（8 份文档归类索引与命名规范） | AC-21 |
+| FR-37 | 文档体系：`docs/guides/G-02-OB转换与命名指南.md`（转换规则/命名规则/语法要求/现状体检）、`docs/guides/G-01-功能原理解析.md`（每 feature 原理/技术/图/参考）、`docs/README.md`（8 份文档归类索引与命名规范） | AC-21 |
 
 | AC-21 | 首页第 2 页分页数字横向排成一行；搜索面板标题与片段对命中词包 `<mark class="hl">`；`public/bgm/playlist.json` 含 ≥500 集；ZEEK_CFG 注入 bgm 与 analytics；main.js 含 pjax 与 `goatcounter.count`；`npm run test:bdd` 追加 6 场景全过 | FR-33~37 | FR-32 |
 

@@ -575,7 +575,8 @@
    * 站内导航走 pjax 不整页刷新 → 音频天然连续；
    * 整页刷新后从 localStorage 恢复曲目与进度（浏览器自动播放策略限制，需点一次 ▶）。 */
   var bgmAPI = (function () {
-    var audio = null, tracks = [], idx = -1, mode = 'seq', panel = null, saved = null;
+    var audio = null, tracks = [], idx = -1, mode = 'loop1', panel = null, saved = null;
+    var httpsTried = Object.create(null);
     var STATE_KEY = 'bgm-state';
     var btn = document.getElementById('bgmBtn');
 
@@ -616,7 +617,7 @@
       panel.hidden = true;
       panel.innerHTML =
         '<div class="bgm-head"><span class="bgm-title">电台</span>' +
-        '<button type="button" class="bgm-mode" title="播放模式">🔁 顺序</button>' +
+        '<button type="button" class="bgm-mode" title="播放模式">🔂 单曲循环</button>' +
         '<button type="button" class="bgm-close" aria-label="收起播放器">×</button></div>' +
         '<div class="bgm-now"><b class="bgm-track">—</b><span class="bgm-time">0:00 / 0:00</span></div>' +
         '<div class="bgm-bar"><i></i></div>' +
@@ -685,7 +686,31 @@
       audio.addEventListener('pause', function () { render(); saveState(); });
       audio.addEventListener('error', function () {
         var t = cur();
-        if (t) { t.err = true; render(); }
+        if (!t) return;
+        /* 网易云外链 302 到 http://mN.music.126.net（https 页面 mixed-content 风险）。
+         * 若浏览器已解析出最终 CDN 地址，改用 https 直连重试一次（签名未过期时可直接救回）。 */
+        var resolved = '';
+        try { resolved = audio.currentSrc || ''; } catch (e) {}
+        if (!httpsTried[t.id] && /^http:\/\/m\d+\.music\.126\.net\//.test(resolved)) {
+          httpsTried[t.id] = true;
+          audio.src = resolved.replace(/^http:/, 'https:');
+          audio.load();
+          audio.play().catch(function () {});
+          return;
+        }
+        t.err = true;
+        render();
+        /* 该集不可用 → 自动跳到下一集可播的；全部失效则停机并提示，避免死循环 */
+        var next = -1;
+        for (var k = 1; k <= tracks.length; k++) {
+          var j = (idx + k) % tracks.length;
+          if (j !== idx && !tracks[j].err) { next = j; break; }
+        }
+        if (next >= 0) play(next);
+        else {
+          btn.classList.remove('on');
+          if (panel) panel.querySelector('.bgm-track').textContent = '音源暂不可用';
+        }
       });
       audio.addEventListener('timeupdate', function () {
         if (!panel) return;

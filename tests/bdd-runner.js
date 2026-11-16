@@ -275,7 +275,7 @@ step(/^main\.js 装配电台播放器与断点续播$/, c => {
 });
 step(/^文档含转换命名指南与功能原理解析$/, c => {
   const d = path.join(__dirname, '..', 'docs');
-  ['OB转换与命名指南.md', '功能原理解析.md', 'README.md'].forEach(f => {
+  ['guides/G-02-OB转换与命名指南.md', 'guides/G-01-功能原理解析.md', 'README.md'].forEach(f => {
     expect(fs.existsSync(path.join(d, f)), '缺文档 ' + f);
   });
 });

@@ -82,4 +82,4 @@ gh secret list -R zeek-zhao/hexo-engine
 
 - 本地残留 token 的清理：WSL `~/.bashrc` / 脚本中如有硬编码 ghp_ 旧值，替换后一并删除；
 - AI 会话中的 token 引用均来自会话环境变量，不存在落盘；
-- 出问题先看 `docs/SEO-RSS-评论详解.md` §4 的人工事项表，再看本指南 §5 验证方法。
+- 出问题先看 `docs/guides/G-04-SEO-RSS-评论详解.md` §4 的人工事项表，再看本指南 §5 验证方法。
