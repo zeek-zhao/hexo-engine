@@ -71,8 +71,10 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 8. **docs/guides/G-03-功能说明与使用指南.md** — 全部功能列表 + 使用方法 + 人工配置项（C 操作层）
 9. **docs/guides/G-04-SEO-RSS-评论详解.md** — SEO/RSS/giscus 评论原理、验证方法、常见问题（含 giscus App 安装步骤）
 10. **docs/guides/G-05-PAT替换指南.md** — classic PAT → fine-grained PAT 替换全步骤
-11. **ai-obsidian `90-OB工程管理/rules/`**（01-目录 · 02-元数据 · 03-md格式 · 06-自动检查 · 07-发布全流程 · 08-仓库）与 `90-OB工程管理/skills/`
-12. **05 规范**（`90-OB工程管理/方案/05-发布流与AI使用规范.md`）— 顶层受控规范：§3 门禁模型、§4.2 AI 使用边界、§5 凭据与身份、§5.4 公开仓红线、§7 整改台账
+11. **docs/guides/G-06-博客写作风格.md** — 去 AI 味规则引擎侧索引副本（权威源是内容库 SOP-08；第十一轮）
+12. **ai-obsidian `90-OB工程管理/rules/`**（01-目录 · 02-元数据 · 03-md格式 · 06-自动检查 · 07-发布全流程 · 08-仓库）与 `90-OB工程管理/skills/`
+13. **05 规范**（`90-OB工程管理/方案/05-发布流与AI使用规范.md`）— 顶层受控规范：§3 门禁模型、§4.2 AI 使用边界、§5 凭据与身份、§5.4 公开仓红线、§7 整改台账
+14. **08 规范**（`90-OB工程管理/方案/08-博客写作去AI味规则.md`）— 博客文章写作/改写规则权威源：中度改写、禁用词表、句式硬指标、自检清单（第十一轮）
 
 ## 8 公开仓暴露面红线（hexo-engine 已 public）
 
@@ -119,6 +121,12 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 - **5 份文档物理重命名**：`git mv` 到 `docs/guides/` 并改 `G-01~G-05` 规范名；Node 脚本一次性同步全仓引用（`AI.md §7`、URD/SDD/UI、指南互链）；`tests/bdd-runner.js` 文档存在性断言改 `guides/G-0N-…`，feature 步骤文本不写死文件名；`docs/README.md` 升 v1.1 并记录执行过程，8/8 文档现均合规。
 - **GoatCounter 静默边界写进文档**：`goatcounter-zeek-zhao` 必须在 goatcounter.com 注册同名站点才计数；未注册时脚本正常加载、页面无报错但无数据。`docs/README.md §5` 与 `docs/guides/G-03-功能说明与使用指南.md §2.7/§3` 均加可见提示。
 
+### 第十一轮（2026-11-18）：去 AI 味改写 / 计数口径 / 双锚点（进行中）
+- **写作规则受控化**：新增 SOP-08《博客写作去AI味规则》（内容库权威源，中度改写+禁用词表+句式硬指标+自检清单）+ G-06 引擎侧索引副本；apollo 62 篇按此改写，样稿 03/09 先行。
+- **计数口径修复**：细分页/领域页正文"共 N 篇"原取当前页 `page.posts`（受 per_page:10 分页影响只显示 10），改取 `catObj.length`（hexo 分类对象已累加子分类，apollo 实为 62）；`category.ejs` 与 `tag.ejs` 同步。归档/首页保持全量。
+- **双锚点修复**：#11 标题"渲染两遍"真凶是 marked 的 `<a class="headerlink">` 与主题 helpers.js 注入的 `<a class="hlink">` 并存；在 heads() 回调剥 headerlink、保留 marked slug id 与 ¶（配置 `headerIds:false` 会连 id 一起去掉、破坏 heads/TOC，不可用）。
+- 问题台账：`D:\zeek\AiData\quark\Apollo博客审查问题清单.md`（每轮续记，带状态列 + 轮次区）。
+
 ## 10 已知坑与教训
 
 1. **bearer 不被接受**：`AUTHORIZATION: bearer <PAT>` 会回落交互式用户名（`fatal: could not read Username`），必须 `basic` + `x-access-token:<PAT>` 形式（05 规范 §5.1 实测教训）。
@@ -133,6 +141,8 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 9. **pjax 的分层初始化**：整页刷新只跑一次全局绑定；局部替换 #view 后，TOC spy / 代码复制按钮 / 折叠默认 / 归档筛选 / KaTeX / mermaid / reveal / 复制链接 / giscus 全部要重跑 `initPage()`，且 scroll 监听要用 cleanup 数组释放，否则重复叠加。
 10. **write 工具会把个别英文词当占位符脱敏**（如 "Jenkins" → `{{PASSWORD_...}}`）：写文档后务必回读验证关键字符串，必要时用字符串拼接绕过占位符填充。
 11. **批量改名要防二次前缀**：`G-01-功能原理解析.md` 里再全局替换 `功能原理解析` 会变成 `G-01-G-01-…`；用 `(^|[^\w-])旧名` 正则排除已带 `G-0N-` 前缀处，并单独核对 markdown 标题（曾出现 `# zeek 站点G-01-功能原理解析`）。
+12. **计数不能用当前页 posts**：分类/标签页 `page.posts` 受 `per_page:10` 限制只含当前页，"共 N 篇"要取分类对象 `.length`（已累加子分类）；否则 apollo 62 篇显示 10。
+13. **双锚点 headerlink**：marked 默认给 h2/h3 加 `<a class="headerlink">`，主题 heads() 再加 `<a class="hlink">` → 标题渲染两遍；在 heads() 回调剥 headerlink、保留 id。别用 `headerIds:false`（会连 id 一起去掉、破坏 TOC）。
 
 ## 11 AI 使用边界（引自 05 规范 §4.2，摘要）
 

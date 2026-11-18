@@ -3,13 +3,16 @@
 const tagName = page.tag || page.name || '';
 const items = [];
 if (page.posts) page.posts.each((p) => items.push(p));
+/* 同 category.ejs：分类对象 length 为总数，page.posts 仅为当前分页 */
+const tagObj = typeof page.tag === 'string' ? site.tags.findOne({ name: page.tag }) : (page.tag || null);
+const totalCount = tagObj ? tagObj.length : items.length;
 %>
 
 <div class="crumb"><a href="<%- url_for('') %>">首页</a> / <a href="<%- url_for('tags/') %>">标签</a> / <span>#<%= tagName %></span></div>
 <h1 style="font-size:26px;margin-bottom:6px">#<%= tagName %></h1>
-<p style="color:var(--text-2);margin-bottom:18px">标签「<%= tagName %>」下共 <%= items.length %> 篇文档。</p>
+<p style="color:var(--text-2);margin-bottom:18px">标签「<%= tagName %>」下共 <%= totalCount %> 篇文档。</p>
 
-<details class="archgroup" open><summary>#<%= tagName %><span class="cnt"><%= items.length %> 篇</span></summary>
+<details class="archgroup" open><summary>#<%= tagName %><span class="cnt"><%= totalCount %> 篇</span></summary>
   <div class="archlist">
     <% items.forEach((p) => { %>
     <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('YYYY-MM-DD') %></span><span><%= p.title %></span>

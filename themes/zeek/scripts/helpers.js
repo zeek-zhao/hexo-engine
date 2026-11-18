@@ -5,6 +5,10 @@ hexo.extend.helper.register('heads', function (content) {
   const heads = [];
   const body = String(content || '').replace(/<h([23])((?:\s[^>]*)?)>([\s\S]*?)<\/h\1>/g,
     (m, lvl, attrs, inner) => {
+      // 清单 #11：hexo-renderer-marked 会在标题内注入 <a class="headerlink">…</a>（renderer.js:59），
+      // 与主题 ¶ 锚点并存导致“标题渲染两遍”的视觉重复。这里先剥掉 headerlink，只留主题 hlink。
+      // 注意不能靠 _config.yml 的 headerIds:false 关它——那会连 slug id 一起去掉，破坏 heads/TOC 的 id 一致性。
+      inner = inner.replace(/<a\s+href="#[^"]*"\s+class="headerlink"[^>]*><\/a>/g, '');
       const idm = /id="([^"]*)"/.exec(attrs);
       const id = idm ? idm[1] : 'h-' + heads.length;
       heads.push({ level: Number(lvl), id, text: inner.replace(/<[^>]+>/g, '').trim() });

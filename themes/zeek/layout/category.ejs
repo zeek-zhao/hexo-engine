@@ -1,4 +1,4 @@
-﻿<%
+<%
 /* 分类聚合页（对照原型 viewArchive 单组形态）：复用归档列表渲染，标题为该分类。
  * 两级分类（OB-ENG-SOP-06）：面包屑 首页 / 分类 / 领域 / 细分；领域页列出下属细分 chips。 */
 const catName = page.category || page.name || '';
@@ -8,6 +8,9 @@ const catObj = typeof page.category === 'string'
   : (page.category || null);
 const items = [];
 if (page.posts) page.posts.each((p) => items.push(p));
+/* 总数口径（清单 #31/#32）：page.posts 是当前分页，不能当分类总数（曾误显示 10）。
+ * hexo 的 category.length 已自动累加子分类（领域页=318，细分页 apollo=62），直接取它。 */
+const totalCount = catObj ? catObj.length : items.length;
 const tree = catTree(site);
 const chain = [];
 (function () {
@@ -27,7 +30,7 @@ const kids = isRoot && catObj
   <% }) %>
 </div>
 <h1 style="font-size:26px;margin-bottom:6px"><%= catIcon(catName) %> <%= catName %></h1>
-<p style="color:var(--text-2);margin-bottom:18px"><%= isRoot ? '领域' : '分类' %>「<%= catName %>」下共 <%= items.length %> 篇文档<%= isRoot ? '，含下属全部分类' : '' %>。</p>
+<p style="color:var(--text-2);margin-bottom:18px"><%= isRoot ? '领域' : '分类' %>「<%= catName %>」下共 <%= totalCount %> 篇文档<%= isRoot ? '，含下属全部分类' : '' %>。</p>
 
 <% if (kids.length) { %>
 <div class="cat-chips">
@@ -35,7 +38,7 @@ const kids = isRoot && catObj
 </div>
 <% } %>
 
-<details class="archgroup" open><summary><%= catIcon(catName) %> <%= catName %><span class="cnt"><%= items.length %> 篇</span></summary>
+<details class="archgroup" open><summary><%= catIcon(catName) %> <%= catName %><span class="cnt"><%= totalCount %> 篇</span></summary>
   <div class="archlist">
     <% items.forEach((p) => { %>
     <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('YYYY-MM-DD') %></span><span><%= p.title %></span>

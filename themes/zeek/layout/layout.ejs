@@ -115,7 +115,7 @@
     </div>
   </aside>
   <main class="main"><div class="content" id="view"><%- body %>
-    <div class="footer">© <%= new Date().getFullYear() %> <b><%= config.title %></b> · <span class="site-wc" title="中文字 + 西文词">全站 <%= siteWords(site) %> 字</span> · <a href="<%- url_for('about/') %>">About me</a> · <a href="<%- full_url_for('atom.xml') %>" target="_blank" rel="noopener noreferrer">RSS</a> · 由 AI 流水线构建</div>
+    <div class="footer">© <%= new Date().getFullYear() %> <b><%= config.title %></b> · <span class="site-wc">全站 <%= siteWords(site) %> 字</span> · <a href="<%- url_for('about/') %>">About me</a> · <a href="<%- full_url_for('atom.xml') %>" target="_blank" rel="noopener noreferrer">RSS</a> · 持续更新中</div>
   </div></main>
   <aside class="toc" id="toc">
     <% if (tocData && tocData.heads.length) { %>
