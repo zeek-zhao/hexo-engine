@@ -38,13 +38,15 @@ const kids = isRoot && catObj
 </div>
 <% } %>
 
-<details class="archgroup" open><summary><%= catIcon(catName) %> <%= catName %><span class="cnt"><%= totalCount %> 篇</span></summary>
+<div class="archgroup archgroup-open">
+  <div class="archgroup-head"><%= catIcon(catName) %> <%= catName %><span class="cnt"><%= totalCount %> 篇</span></div>
   <div class="archlist">
     <% items.forEach((p) => { %>
     <a href="<%- url_for(p.path) %>"><span class="ad"><%= p.date.format('YYYY-MM-DD') %></span><span><%= p.title %></span>
       <span class="ai-sub"><%= p.description || '' %></span></a>
     <% }) %>
-  </div></details>
+  </div>
+</div>
 
 <% if (page.total > 1) { %>
 <div class="pager">
