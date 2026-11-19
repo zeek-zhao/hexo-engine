@@ -10,6 +10,8 @@
  * 放行条件：目录在黑名单外 且 published === true 且 status === 'published'，tags 数量 2~3
  * 双链处理：[[目标]] / [[目标|别名]] 解析为已发布文档的真实站内链接（完整路径 > 同目录 > 全局唯一 basename > 唯一 title），
  *           解析失败退化为纯文本，绝不生成错误链接
+ * 系列导航：extractSeriesNav() 在双链转换前从正文「上一篇/下一篇」硬编码链解析相邻篇，
+ *           注入 prev_post/next_post/prev_title/next_title 到 frontmatter，主题 pager 直接读（见 05 规范 §6.2）
  * 短链算法与 hexo-abbrlink 一致：crc32(title) >>> 0（dec）
  */
 const fs = require('fs');
@@ -183,6 +185,21 @@ function resolveLink(srcRel, rawTarget) {
   return cands.length === 1 ? byRel.get(cands[0]) : null;
 }
 
+// 从正文「*上一篇：[[X]]　下一篇：[[Y]]*」硬编码链解析系列内相邻篇，注入 frontmatter
+// 依据：正文双链是作者维护的系列内顺序（最权威），解析成 /posts/N.html 后主题 pager 直接读，
+// 不依赖运行时分类/source 解析——本地与 CI 由同一份 collect.js 生成，结果完全一致。
+// 背景（2026-11-20）：seriesPosts helper 依赖 p.source 数字前缀，在 CI 环境（内容与本地不同步）
+// 下排序键失效导致上下篇跨系列乱跳（ros2/00 → 34-安全与权限），改用 collect 期注入彻底根治。
+function extractSeriesNav(srcRel, p, body) {
+  // 只取末尾「上一篇/下一篇」行（可能只有其中一条：00 只有下一篇、90 只有上一篇）
+  const prevM = body.match(/上一篇[：:]\s*\[\[([^\]]+)\]\]/);
+  const nextM = body.match(/下一篇[：:]\s*\[\[([^\]]+)\]\]/);
+  const prev = prevM ? resolveLink(srcRel, prevM[1]) : null;
+  const next = nextM ? resolveLink(srcRel, nextM[1]) : null;
+  if (prev) { p.outFm.prev_post = prev.url.replace(/^posts\//, ''); p.outFm.prev_title = String(prev.outFm.title); }
+  if (next) { p.outFm.next_post = next.url.replace(/^posts\//, ''); p.outFm.next_title = String(next.outFm.title); }
+}
+
 // [[目标|别名]] → [别名](短链)；[[目标]] → [文件名](短链)；解析失败 → 纯文本
 // 目标名排除嵌套方括号：防止行内代码 `[[` 被当成开括号吞掉后续真双链的 ]]（2026-11-14 体检发现）
 function convertWikiLinks(srcRel, body) {
@@ -203,6 +220,7 @@ for (const f of fs.readdirSync(OUT_POSTS)) {
   if (f.endsWith('.md')) fs.rmSync(path.join(OUT_POSTS, f));
 }
 for (const p of pending) {
+  extractSeriesNav(p.rel, p, p.body); // 在双链转换前，从原始 [[...]] 解析系列内上下篇 → frontmatter
   const body = convertWikiLinks(p.rel, p.body);
   const dest = path.join(OUT_POSTS, p.name + '.md');
   fs.mkdirSync(path.dirname(dest), { recursive: true }); // name 含子目录路径时先建目录

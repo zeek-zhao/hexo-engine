@@ -94,15 +94,12 @@ hexo.extend.helper.register('sortedPosts', function (site) {
   return site._zeekSorted;
 });
 
-/* 主题辅助：系列内上一篇/下一篇（OB-ENG 上下篇规则，取代 sortedPosts 的全站日期混排）。
- * 乱跳根因：旧 sortedPosts 按全站 date 降序 + 同日 path 字母序，而本库大量系列文章同日导入
- *   （ros1/ros2/Zephyr 等整系列 date=2026-10-24），导致上下篇跨系列乱跳（如 ros1/20 上一篇
- *   跳到 ros2/19、下一篇跳到 windows/20）。
- * 规则：仅在同一 leaf 分类（系列，如 ros1/ros2/apollo/FreeRTOS）内取上下篇，系列内按
- *   title 的数字前缀（00→01→…→40→90）升序排列——与正文硬编码的
- *   「上一篇：[[NN-…]] 下一篇：[[NN-…]]」链一致。无数字前缀的按 title 兜底排序；
- *   当前文章无分类或系列无相邻篇时返回 null（pager 侧留空）。
- * 结果按 leaf 分类 id 缓存在 site 上（构建期内不变）。 */
+/* 主题辅助：系列内上一篇/下一篇 —— 已弃用（DEPRECATED，保留仅为兼容历史引用）。
+ * 运行时方案（本 helper，第十三轮）依赖 p.source 数字前缀在构建期排序，CI 与本地内容源
+ * 版本不同步时排序键失效，线上 ros2/00 曾跨系列乱跳（上一篇跳 34-安全与权限），而 CI
+ * check-pages/BDD 不校验 pager 内容故未拦截。post.ejs 已改用 collect.js 收集期注入的
+ * prev_post/next_post frontmatter 字段（同一份 collect.js 在 CI/本地生成，结果必然一致）。
+ * 规则见 05 规范 §6.2、实现见 bin/collect.js 的 extractSeriesNav()。请勿在新模板调用本 helper。 */
 hexo.extend.helper.register('seriesPosts', function (site, page) {
   const cs = [];
   if (page.categories) page.categories.each((c) => cs.push(c));

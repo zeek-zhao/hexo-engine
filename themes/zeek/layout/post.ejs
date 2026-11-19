@@ -55,16 +55,13 @@ ldCrumb = {
   <span class="ac-go">查看个人主页 →</span>
 </a>
 
-<% /* 上一篇/下一篇（OB-ENG 上下篇规则）：仅在同一系列（leaf 分类）内，按标题数字前缀
-     （00→…→90）取相邻篇，与正文硬编码的「上一篇/下一篇」链一致。旧 sortedPosts 全站
-     date 排序会在同日系列文章间跨系列乱跳（ros1/20 → ros2/19、windows/20），已弃用。
-     无同系列相邻篇时留空。详见 helpers.js 的 seriesPosts 注释与 05 规范 §6.1。 */ %>
-<% const ser = seriesPosts(site, page); %>
-<% const prevP = ser.prev; %>
-<% const nextP = ser.next; %>
+<% /* 上一篇/下一篇（OB-ENG 上下篇规则）：读 collect.js 在收集期从正文硬编码链解析并注入的
+     prev_post/next_post/prev_title/next_title frontmatter 字段——即作者维护的系列内顺序。
+     不再依赖运行时 seriesPosts helper（其 p.source 数字前缀排序在 CI 环境失效，会跨系列乱跳）。
+     本地与 CI 由同一份 collect.js 生成，结果完全一致。详见 05 规范 §6.1 与 collect.js extractSeriesNav。 */ %>
 <div class="pager">
-  <% if (prevP) { %><a href="<%- url_for(prevP.path) %>" title="<%= ser.series %> 系列 · 上一篇"><span class="pg-label">← 上一篇</span><%= prevP.title %></a><% } else { %><span style="flex:1"></span><% } %>
-  <% if (nextP) { %><a class="next" href="<%- url_for(nextP.path) %>" title="<%= ser.series %> 系列 · 下一篇"><span class="pg-label">下一篇 →</span><%= nextP.title %></a><% } else { %><span style="flex:1"></span><% } %>
+  <% if (page.prev_post) { %><a href="<%- url_for('/posts/' + page.prev_post) %>" title="系列 · 上一篇"><span class="pg-label">← 上一篇</span><%= page.prev_title || page.prev_post %></a><% } else { %><span style="flex:1"></span><% } %>
+  <% if (page.next_post) { %><a class="next" href="<%- url_for('/posts/' + page.next_post) %>" title="系列 · 下一篇"><span class="pg-label">下一篇 →</span><%= page.next_title || page.next_post %></a><% } else { %><span style="flex:1"></span><% } %>
 </div>
 
 <% /* 评论 giscus（GitHub Discussions）：容器由 main.js 进入视口后懒加载脚本 */ %>
