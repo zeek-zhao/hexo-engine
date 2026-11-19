@@ -5,6 +5,14 @@ name: Build and Publish
 #                        写 zeek-zhao/zeek-zhao.github.io（公开产物仓）。
 # 提交身份统一为 zeek.zhao <zeek.zhao@foxmail.com>，
 # 依据见 ai-obsidian/90-OB工程管理/方案/05-发布流与AI使用规范.md「提交身份基线」。
+#
+# ⚠ 执行顺序（先内容源后引擎，强制）：本工作流构建时 clone 的是 ai-obsidian 的 main，
+#   必须保证内容源已推送就位再触发本构建，否则 clone 到旧提交、线上不含本次改动。
+#   1) 先推 ai-obsidian 内容源（文章/frontmatter/06-分类映射.json），记下 HEAD SHA；
+#   2) 如需改引擎（主题/本文件），再推 hexo-engine；
+#   3) 触发构建后，核对下方「Clone content repo」日志里的 ai-obsidian commit == 步骤1 SHA；
+#      不等即clone到旧内容（时差坑），手动 workflow_dispatch 重跑一次。
+#   详见 05 规范 §6.1「执行顺序：先内容源，后引擎」。
 on:
   schedule:
     - cron: "0 2 * * *" # 每日 UTC 2:00（北京时间 10:00）全量重建

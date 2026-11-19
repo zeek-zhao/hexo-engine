@@ -93,3 +93,46 @@ hexo.extend.helper.register('sortedPosts', function (site) {
   }
   return site._zeekSorted;
 });
+
+/* 主题辅助：系列内上一篇/下一篇（OB-ENG 上下篇规则，取代 sortedPosts 的全站日期混排）。
+ * 乱跳根因：旧 sortedPosts 按全站 date 降序 + 同日 path 字母序，而本库大量系列文章同日导入
+ *   （ros1/ros2/Zephyr 等整系列 date=2026-10-24），导致上下篇跨系列乱跳（如 ros1/20 上一篇
+ *   跳到 ros2/19、下一篇跳到 windows/20）。
+ * 规则：仅在同一 leaf 分类（系列，如 ros1/ros2/apollo/FreeRTOS）内取上下篇，系列内按
+ *   title 的数字前缀（00→01→…→40→90）升序排列——与正文硬编码的
+ *   「上一篇：[[NN-…]] 下一篇：[[NN-…]]」链一致。无数字前缀的按 title 兜底排序；
+ *   当前文章无分类或系列无相邻篇时返回 null（pager 侧留空）。
+ * 结果按 leaf 分类 id 缓存在 site 上（构建期内不变）。 */
+hexo.extend.helper.register('seriesPosts', function (site, page) {
+  const cs = [];
+  if (page.categories) page.categories.each((c) => cs.push(c));
+  const leaf = cs.length ? cs[cs.length - 1] : null;
+  if (!leaf) return { prev: null, next: null, series: null };
+
+  if (!site._zeekSeries) site._zeekSeries = new Map();
+  if (!site._zeekSeries.has(leaf._id)) {
+    const sibs = [];
+    site.posts.each((p) => {
+      const pcs = [];
+      p.categories.each((c) => pcs.push(c));
+      if (pcs.length && pcs[pcs.length - 1]._id === leaf._id) sibs.push(p);
+    });
+    // 数字前缀升序。注意 title 可能带系列名前缀（如 "ros2 03-核心概念"、"apollo 00-索引"），
+    // 不能直接 /^(\d+)/；改用 source 文件名（NN-xxx.md）提取，再兜底匹配 title 中任意位置的 NN-。
+    const numOf = (p) => {
+      const base = String(p.source || '').split('/').pop();
+      let m = base.match(/^(\d+)/);
+      if (!m) m = String(p.title || '').match(/(?:^|\s)(\d+)[-－]/);
+      return m ? parseInt(m[1], 10) : 9999;
+    };
+    sibs.sort((a, b) => numOf(a) - numOf(b) || String(a.title).localeCompare(String(b.title), 'zh'));
+    site._zeekSeries.set(leaf._id, sibs);
+  }
+  const sibs = site._zeekSeries.get(leaf._id);
+  const idx = sibs.findIndex((p) => p.path === page.path);
+  return {
+    series: leaf.name,
+    prev: idx > 0 ? sibs[idx - 1] : null,
+    next: idx >= 0 && idx < sibs.length - 1 ? sibs[idx + 1] : null
+  };
+});
