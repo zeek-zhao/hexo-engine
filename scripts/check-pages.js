@@ -44,11 +44,11 @@ function stripFences(md) {
   var inFence = null; // { ch: '`'|'~', n: 长度 }
   String(md).split(/\r?\n/).forEach(function (l) {
     if (inFence) {
-      var closeRun = new RegExp('^' + (inFence.ch === '`' ? '`' : '~') + '{' + inFence.n + ',}\\s*$').exec(l);
+      var closeRun = new RegExp('^\\s*' + (inFence.ch === '`' ? '`' : '~') + '{' + inFence.n + ',}\\s*$').exec(l);
       if (closeRun) inFence = null;
       return;
     }
-    var m = /^(`{3,}|~{3,})/.exec(l);
+    var m = /^\s*(`{3,}|~{3,})/.exec(l);
     if (m) { inFence = { ch: m[1][0], n: m[1].length }; return; }
     out.push(l);
   });
@@ -57,7 +57,9 @@ function stripFences(md) {
 function stripCodeHtml(html) {
   // HTML 侧去掉 pre/figure/script/style 与行内 <code> 的文本，避免源码里的 == [[ [! 干扰残留检测
   return String(html).replace(/<(pre|figure|script|style)[\s\S]*?<\/\1>/gi, ' ')
-    .replace(/<code>[\s\S]*?<\/code>/gi, ' ');
+    .replace(/<code>[\s\S]*?<\/code>/gi, ' ')
+    // mermaid 图块（含 %%{init:...}%% 指令）是代码块内容，不算正文残留
+    .replace(/<[^>]*class="[^"]*mermaid[^"]*"[^>]*>[\s\S]*?<\/[^>]+>/gi, ' ');
 }
 function parseFm(md) {
   const m = /^---\r?\n([\s\S]*?)\r?\n---/.exec(String(md));
@@ -103,7 +105,7 @@ function detectFeatures(md) {
     return false;
   })(md);
   f.code = /```/.test(String(md));
-  f.comment = /%%[\s\S]*?%%/.test(String(md));
+  f.comment = /%%[\s\S]*?%%/.test(body); // 用剥掉围栏后的正文检测，避开 mermaid %%{init}%% 等块内指令
   f.wikilinkTargets = (body.match(/\[\[([^\]|]+)(?:\|[^\]]*)?\]\]/g) || []).map(function (s) {
     return /\[\[([^\]|]+)/.exec(s)[1].split('/').pop().trim();
   });

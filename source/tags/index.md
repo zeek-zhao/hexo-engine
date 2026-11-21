@@ -3,11 +3,12 @@ title: 标签
 comments: false
 ---
 
-共 **632** 个标签 · **1144** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。
+共 **632** 个标签 · **1273** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。
 
 <div class="tagcloud">
-<a class="tagbig" href="/tags/%E7%B3%BB%E7%BB%9F/">系统<b>317</b></a>
+<a class="tagbig" href="/tags/%E7%B3%BB%E7%BB%9F/">系统<b>446</b></a>
 <a class="tagbig" href="/tags/%E5%B7%A5%E5%85%B7/">工具<b>180</b></a>
+<a class="tagbig" href="/tags/Linux/">Linux<b>130</b></a>
 <a class="tagbig" href="/tags/%E6%8A%80%E8%83%BD/">技能<b>128</b></a>
 <a class="tagbig" href="/tags/apollo/">apollo<b>62</b></a>
 <a class="tagbig" href="/tags/Keep/">Keep<b>43</b></a>
@@ -33,7 +34,7 @@ comments: false
 <a class="tagbig" href="/tags/windows/">windows<b>23</b></a>
 <a class="tagbig" href="/tags/%E5%AE%9E%E6%88%98/">实战<b>22</b></a>
 <a class="tagbig" href="/tags/ubuntu24.04/">ubuntu24.04<b>22</b></a>
-<a class="tagbig" href="/tags/%E7%B4%A2%E5%BC%95/">索引<b>19</b></a>
+<a class="tagbig" href="/tags/%E7%B4%A2%E5%BC%95/">索引<b>20</b></a>
 <a class="tagbig" href="/tags/k8s/">k8s<b>19</b></a>
 <a class="tagbig" href="/tags/C/">C<b>18</b></a>
 <a class="tagbig" href="/tags/elk/">elk<b>18</b></a>
@@ -565,7 +566,6 @@ comments: false
 <a class="tagbig" href="/tags/Keepland/">Keepland<b>1</b></a>
 <a class="tagbig" href="/tags/Lambda/">Lambda<b>1</b></a>
 <a class="tagbig" href="/tags/lint/">lint<b>1</b></a>
-<a class="tagbig" href="/tags/Linux/">Linux<b>1</b></a>
 <a class="tagbig" href="/tags/List/">List<b>1</b></a>
 <a class="tagbig" href="/tags/Macro/">Macro<b>1</b></a>
 <a class="tagbig" href="/tags/Make/">Make<b>1</b></a>
