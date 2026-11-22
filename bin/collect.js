@@ -105,8 +105,11 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
   // 正文防御：清掉残留的中文键 frontmatter 块（历史注入遗留）
   body = body.replace(/^---\r?\n((?:标题|说明|标签|创建时间):[^\n]*\n)+^---\r?\n?/m, '');
 
-  // 守卫：剥离 {% raw %} 段（刻意展示字面语法）与围栏代码块、行内代码后再检测
-  const guarded = stripFences(body.replace(/\{% raw %\}[\s\S]*?\{% endraw %\}/g, '').replace(/`[^`\n]*`/g, ''));
+  // 守卫：先剥围栏代码块（必须在行内代码之前，否则三反引号会被行内正则吃掉一）
+  // 再剥 {% raw %} 段（刻意展示字面语法）与行内代码后检测
+  const guarded = stripFences(body)
+    .replace(/\{% raw %\}[\s\S]*?\{% endraw %\}/g, '')
+    .replace(/`[^`\n]*`/g, '');
   if (/\{\{/.test(guarded)) { report.skipped.push({ file: rel, reason: '代码块外含 {{ }}（模板语法冲突风险）' }); continue; }
   if (/\{%[^%]*%\}/.test(guarded)) { report.skipped.push({ file: rel, reason: '代码块外含 {% %} 标签语法' }); continue; }
   if (/TODO:/.test(guarded)) { report.skipped.push({ file: rel, reason: '含 TODO' }); continue; }
