@@ -23,7 +23,7 @@ function collectSamples() {
   const s = {};
   s.home = read(path.join(PUB, 'index.html'));
   s.article = read(path.join(PUB, 'posts', '2674584049.html')); // 模板篇（全语法）
-  const anyPost = walk(path.join(PUB, 'posts'), []).find(f => f.endsWith('.html') && !f.endsWith('2674584049.html'));
+  const anyPost = walk(path.join(PUB, 'posts'), []).find(f => f.endsWith('.html') && !f.endsWith('2674584049.html') && read(f).includes('← 上一篇</span>') && read(f).includes('下一篇 →</span>'));
   s.post2 = read(anyPost);
   s.about = read(path.join(PUB, 'about', 'index.html'));
   s.notfound = read(path.join(PUB, '404.html'));
