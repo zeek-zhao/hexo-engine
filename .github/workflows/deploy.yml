@@ -1,23 +1,23 @@
 name: Build and Publish
 
-# 认证：全部走 HTTPS + PAT secret，仓库内不再保存任何 SSH 私钥。
-# DEPLOY_TOKEN 需要具备：读 zeek-zhao/ai-obsidian（私有内容库）+
-#                        写 zeek-zhao/zeek-zhao.github.io（公开产物仓）。
-# 提交身份统一为 zeek.zhao <zeek.zhao@foxmail.com>，
-# 依据见 ai-obsidian/90-OB工程管理/方案/05-发布流与AI使用规范.md「提交身份基线」。
+# 认证：全部走 HTTPS + PAT secret，仓库内不保存任何 SSH 私钥。
+# DEPLOY_TOKEN：读 zeek-zhao/ai-obsidian（私有内容库）+ 写 zeek-zhao/zeek-zhao.github.io。
+# 提交身份统一 zeek.zhao <zeek.zhao@foxmail.com>（见 05-发布流与AI使用规范.md）。
 #
-# ⚠ 执行顺序（先内容源后引擎，强制）：本工作流构建时 clone 的是 ai-obsidian 的 main，
-#   必须保证内容源已推送就位再触发本构建，否则 clone 到旧提交、线上不含本次改动。
-#   1) 先推 ai-obsidian 内容源（文章/frontmatter/06-分类映射.json），记下 HEAD SHA；
-#   2) 如需改引擎（主题/本文件），再推 hexo-engine；
-#   3) 触发构建后，核对下方「Clone content repo」日志里的 ai-obsidian commit == 步骤1 SHA；
-#      不等即clone到旧内容（时差坑），手动 workflow_dispatch 重跑一次。
-#   详见 05 规范 §6.1「执行顺序：先内容源，后引擎」。
+# ⚠ 时差坑（必须遵守）：Clone content repo 拉的是 ai-obsidian main。
+#   先推内容源 → 再触发本构建 → 核对 Clone 步骤日志里的 commit == 内容源 HEAD。
+#
+# ── 分阶段架构（2026-11 重构，解决单 job 12 步黑盒、卡住难排查）──
+#   preflight  源码门禁 + 收集（clone/install/check:meta/collect/audit:cat）——秒级，早失败
+#   build      渲染 + 私密加密（hexo generate）——耗时瓶颈，独立 job 便于观察
+#   verify     渲染体检 + BDD（并发矩阵，读 build 产物）——互不依赖，并行提速
+#   publish    发布到 Pages（needs 全部上游绿）
+# 每阶段失败只影响自身，GitHub UI 直接定位；public 产物用 artifact 传递。
 on:
   schedule:
-    - cron: "0 2 * * *" # 每日 UTC 2:00（北京时间 10:00）全量重建
+    - cron: "0 2 * * *" # 每日 UTC 2:00（北京 10:00）全量重建
   push:
-    branches: [main] # 引擎或流水线变更后自动重建（也用于云端验证）
+    branches: [main]
   workflow_dispatch: {}
   repository_dispatch:
     types: [content-updated]
@@ -29,51 +29,153 @@ concurrency:
   group: pages-publish
   cancel-in-progress: false
 
+env:
+  NODE_VERSION: "20"
+
 jobs:
-  publish:
+  # ─────────────────────────────────────────────────────────
+  # 阶段 1：预检（快速失败）——源码门禁 + 收集，秒级
+  # 元数据/格式问题在昂贵的 hexo generate 之前暴露，不用等 1 小时
+  # ─────────────────────────────────────────────────────────
+  preflight:
+    name: "1 · 预检（源码门禁）"
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout engine
         uses: actions/checkout@v4
 
-      - name: Clone content repo (private, via HTTPS + DEPLOY_TOKEN)
+      - name: Clone content repo
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
           git clone --depth 1 https://x-access-token:${DEPLOY_TOKEN}@github.com/zeek-zhao/ai-obsidian.git content
+          echo "CONTENT_HEAD=$(git -C content rev-parse --short HEAD)" >> "$GITHUB_ENV"
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      # 2026-11 审计门禁（CFG-04/FMT-01/FMT-02/PIP-01/PIP-02）：collect 前拦截元数据/短链/格式问题
       - name: Check content metadata gate
+        # CFG-04/FMT-01/FMT-02/PIP-01/PIP-02：collect 前拦截元数据/短链/格式问题
         run: node bin/check-metadata.js
 
-      - name: Build
-        run: npm run build
+      - name: Collect content
+        # 生成 source/_posts、search.json、tags/categories 统计页
+        run: npm run collect
 
-      # 任务A：私密文章加密（口令仅从 Secret 注入，绝不写库；0 篇私密时无行为变化）
+      - name: Audit category counts
+        # CAT-06：分类计数与归属对账（只读告警，需 collect 后的统计页）
+        run: npm run audit:cat
+
+      - name: Summary
+        run: echo "✅ 预检通过 · content HEAD=${{ env.CONTENT_HEAD }}"
+
+  # ─────────────────────────────────────────────────────────
+  # 阶段 2：渲染（耗时瓶颈，独立 job）——便于单独观察/限时/排查
+  # ─────────────────────────────────────────────────────────
+  build:
+    name: "2 · 渲染（hexo generate + 私密加密）"
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout engine
+        uses: actions/checkout@v4
+
+      - name: Clone content repo
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: git clone --depth 1 https://x-access-token:${DEPLOY_TOKEN}@github.com/zeek-zhao/ai-obsidian.git content
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Collect content
+        run: npm run collect
+
+      - name: Hexo generate
+        # 单独成步：过去 check-pages 被塞进 build 脚本，跑 1 小时后才发现是体检失败
+        run: npx hexo clean && npx hexo generate
+
       - name: Encrypt private posts
+        # 任务A：口令仅从 Secret 注入，绝不写库；0 篇私密时无行为变化
         env:
           CONTENT_PASSWORD: ${{ secrets.CONTENT_PASSWORD }}
         run: node bin/encrypt-private.js
 
-      # 全站渲染体检（按语法类型断言，见 docs/SDD-01 §门禁）：失败则不发布
+      - name: Upload rendered site
+        # 传给 verify 并发检查与 publish 发布；仅产物目录
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-site
+          path: public/
+          retention-days: 1
+          include-hidden-files: true
+
+  # ─────────────────────────────────────────────────────────
+  # 阶段 3：验证（并发矩阵）——两项检查互不依赖，并行跑，省时间
+  # 任一项 FAIL → publish 不执行
+  # ─────────────────────────────────────────────────────────
+  verify:
+    name: "3 · 验证 · ${{ matrix.check }}"
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: true
+      matrix:
+        check: [rendered-pages, bdd]
+    steps:
+      - name: Checkout engine
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download rendered site
+        uses: actions/download-artifact@v4
+        with:
+          name: rendered-site
+          path: public/
+
       - name: Check rendered pages
+        if: matrix.check == 'rendered-pages'
+        # 全站渲染体检（按语法类型断言）；失败则不发布
         run: node scripts/check-pages.js
 
-      # CAT-06：分类计数与归属对账（只读；漂移仅告警，人工核对后再决定是否 strict）
-      - name: Audit category counts
-        run: npm run audit:cat
-
-      # BDD 功能性测试（Given/When/Then 场景断言，见 tests/features/）：失败则不发布
       - name: BDD functional tests
-        run: npm run test:bdd
+        if: matrix.check == 'bdd'
+        # Given/When/Then 场景断言（tests/features/）；失败则不发布
+        run: node tests/bdd-runner.js
+
+  # ─────────────────────────────────────────────────────────
+  # 阶段 4：发布——needs 全部上游绿，下载同一份已验证产物
+  # ─────────────────────────────────────────────────────────
+  publish:
+    name: "4 · 发布到 Pages"
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Download rendered site
+        uses: actions/download-artifact@v4
+        with:
+          name: rendered-site
+          path: public/
 
       - name: Publish to Pages repo (orphan push)
         env:

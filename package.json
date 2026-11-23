@@ -7,7 +7,9 @@
   },
   "scripts": {
     "collect": "node bin/collect.js",
-    "build": "npm run collect && hexo clean && hexo generate && node scripts/check-pages.js",
+    "render": "hexo clean && hexo generate",
+    "build": "npm run collect && npm run render",
+    "check:pages": "node scripts/check-pages.js",
     "test:bdd": "node tests/bdd-runner.js",
     "server": "hexo server",
     "check:meta": "node bin/check-metadata.js",
