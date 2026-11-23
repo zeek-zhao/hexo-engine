@@ -125,6 +125,8 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
   for (const k of ['title', 'date', 'updated', 'tags', 'categories', 'description', 'cover']) {
     if (fm[k] !== undefined && fm[k] !== null) outFm[k] = fm[k];
   }
+  // 任务A（私密文章）：透传 private 标记，供 encrypt-private.js 识别；hint 不得含口令
+  if (fm.private === true) { outFm.private = true; if (fm.password_hint) outFm.password_hint = String(fm.password_hint); }
   if (outFm.title === undefined) outFm.title = name;
   // 标题查重：abbrlink 由 title 派生，重复标题会短链冲突
   const t = String(outFm.title);
@@ -137,6 +139,11 @@ for (const full of walk(CONTENT_DIR, (n) => n.toLowerCase().endsWith('.md'))) {
   if (cat0) outFm.categories = [[groupOf(cat0), cat0]]; // v7：hexo 嵌套分类 [[领域, 细分]]，细分 URL 不变
   const abbrlink = crc32.str(String(outFm.title)) >>> 0;
   pending.push({ rel, name, body, outFm, abbrlink, url: `posts/${abbrlink}.html` });
+  // 任务A：登记私密文章（仅短链 + 非敏感提示，绝不含口令）
+  if (outFm.private === true) {
+    if (!report.privatePosts) report.privatePosts = [];
+    report.privatePosts.push({ url: `posts/${abbrlink}.html`, hint: outFm.password_hint || '' });
+  }
   report.published.push(rel);
   report.map.push({
     rel,
@@ -230,17 +237,21 @@ for (const p of pending) {
   fs.writeFileSync(dest, matter.stringify(body, p.outFm));
 }
 
+// 任务A：私密文章短链集合（全局共享），用于所有公开派生页统一剔除
+const privateUrls = new Set((report.privatePosts || []).map((p) => p.url));
+const publicMap = report.map.filter((m) => !privateUrls.has(m.url));
+
 // 生成短链映射页（sticky 置顶，随站点发布）
 const mapAbbr = crc32.str(MAP_TITLE) >>> 0;
 const mapUrl = `posts/${mapAbbr}.html`;
 if (report.map.length) {
   const today = new Date().toISOString().slice(0, 10);
-  const rows = report.map
+  const rows = publicMap
     .map((m) => `| \`${m.rel}\` | ${m.title} | [${m.url.replace('posts/', '')}](/${m.url}) |`)
     .join('\n');
   const mapBody = `本页由流水线 collect.js 自动生成，收录全部已发布文档的源路径与短链对照。改标题会改变短链，正式发布后请勿修改 title。
 
-## 映射表（${report.map.length} 篇）
+## 映射表（${publicMap.length} 篇）
 
 | 源文档（ob-content 相对路径） | 标题 | 短链 |
 |---|---|---|
@@ -261,7 +272,7 @@ ${rows}
 // ── 标签/分类统计页 + 站内搜索数据（编译时从已发布文档动态生成）──
 if (report.map.length) {
   const tagCount = new Map(), catCount = new Map();
-  for (const m of report.map) {
+  for (const m of publicMap) { // 任务A：公开派生页统一用 publicMap（已排除私密）
     for (const t of m.tagList) tagCount.set(t, (tagCount.get(t) || 0) + 1);
     for (const c of m.catList) catCount.set(c, (catCount.get(c) || 0) + 1);
   }
@@ -283,11 +294,11 @@ ${pills}
 `;
   };
   fs.writeFileSync(path.join(ROOT, 'source', 'tags', 'index.md'),
-    statPage('标签', `共 **${tagCount.size}** 个标签 · **${report.map.length}** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。`, tagCount, 'tags'));
+    statPage('标签', `共 **${tagCount.size}** 个标签 · **${publicMap.length}** 篇文档，点击标签查看该标签下的全部文章（按收录量排序）。`, tagCount, 'tags'));
 
   // v7：分类统计页两级渲染 —— 领域（details 分组）← 细分分类（tagbig 链接，URL 不变）
   const grpCount = new Map();
-  for (const m of report.map) {
+  for (const m of publicMap) { // 任务A：公开派生页统一用 publicMap（已排除私密）
     if (!grpCount.has(m.group)) grpCount.set(m.group, new Map());
     for (const c of m.catList) {
       const cm = grpCount.get(m.group);
@@ -314,24 +325,32 @@ title: 分类
 comments: false
 ---
 
-按领域分组的全部分类，共 **${catCount.size}** 个细分分类 · **${report.map.length}** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
+按领域分组的全部分类，共 **${catCount.size}** 个细分分类 · **${publicMap.length}** 篇文档，点击分类查看该分类下的全部文章（按收录量排序）。
 
 ${groupBlocks}
 `);
 
   // search.json：全站顶部搜索框的数据源（标题/描述/标签/分类/正文全文检索）
   // text 字段在 pass 1（handleFile）逐篇计算，见 report.map.push
-  const searchData = report.map.map((m) => ({
-    title: m.title,
-    url: '/' + m.url,
-    date: m.date,
-    description: m.description,
-    tags: m.tagList,
-    categories: m.catList,
-    group: m.group, // v7：一级领域，搜索结果可直接展示归属
-    text: m.text, // v8：正文片段，全文检索用
-  }));
+  // 任务A：私密文章不进搜索索引（正文片段/标题/摘要均不外泄）
+  const searchData = report.map
+    .filter((m) => !privateUrls.has(m.url))
+    .map((m) => ({
+      title: m.title,
+      url: '/' + m.url,
+      date: m.date,
+      description: m.description,
+      tags: m.tagList,
+      categories: m.catList,
+      group: m.group, // v7：一级领域，搜索结果可直接展示归属
+      text: m.text, // v8：正文片段，全文检索用
+    }));
   fs.writeFileSync(path.join(ROOT, 'source', 'search.json'), JSON.stringify(searchData));
+
+  // 任务A：写出私密清单供 encrypt-private.js 消费（不含口令）
+  // 放项目根、不入 source/，避免被 hexo 当静态资源复制进 public 发布；同时入 .gitignore
+  fs.writeFileSync(path.join(ROOT, 'private-list.json'),
+    JSON.stringify({ posts: report.privatePosts || [] }));
 }
 
 console.log(JSON.stringify(report, null, 2));
