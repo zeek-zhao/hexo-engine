@@ -57,6 +57,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      # 任务A：私密文章加密（口令仅从 Secret 注入，绝不写库；0 篇私密时无行为变化）
+      - name: Encrypt private posts
+        env:
+          CONTENT_PASSWORD: ${{ secrets.CONTENT_PASSWORD }}
+        run: node bin/encrypt-private.js
+
       # 全站渲染体检（按语法类型断言，见 docs/SDD-01 §门禁）：失败则不发布
       - name: Check rendered pages
         run: node scripts/check-pages.js
