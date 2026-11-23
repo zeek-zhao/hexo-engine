@@ -61,6 +61,10 @@ jobs:
       - name: Check rendered pages
         run: node scripts/check-pages.js
 
+      # CAT-06：分类计数与归属对账（只读；漂移仅告警，人工核对后再决定是否 strict）
+      - name: Audit category counts
+        run: npm run audit:cat
+
       # BDD 功能性测试（Given/When/Then 场景断言，见 tests/features/）：失败则不发布
       - name: BDD functional tests
         run: npm run test:bdd
