@@ -1,12 +1,13 @@
 <%
-/* 首页：hero + 最新文章 + 分类卡片 + 热门排行（对照原型 viewHome） */
+/* 首页：hero + 最新文章 + 分类卡片 + 精选阅读（对照原型 viewHome） */
 const all = []; site.posts.each((p) => all.push(p));
 all.sort((a, b) => b.date.valueOf() - a.date.valueOf());
 const recent = all.slice(0, 6);
-/* 热门排行：线上暂无阅读统计，沿用原型 MOCK_VIEWS 的示例值，按最新文章顺序赋值；
- * 待接入真实统计（如不蒜子/自建计数）后，把 MOCK_VIEWS 换成按 post 查询的真实阅读数。 */
-const MOCK_VIEWS = [4820, 3960, 3510, 2870, 2410, 1980, 1760, 1540, 1320, 1100];
-const hot = all.slice(0, 5).map((p, i) => ({ p, views: MOCK_VIEWS[i] || 300 + i * 137 }));
+/* 精选阅读（2026-11 审计 LAY-01 修复）：不再展示虚构的 MOCK_VIEWS 阅读数。
+ * 取最近更新中 description 较完整的前 5 篇作为「编辑精选」，展示真实分类与更新日期。
+ * 接入 goatcounter 真实数据前，不对外展示任何数字排行。 */
+const hot = all.slice(0, 30).filter((p) => p.description && p.description.length >= 15).slice(0, 5)
+  .map((p) => { const cs = []; p.categories.each((c) => cs.push(c)); return { p, cat: cs.length ? cs[cs.length - 1].name : '未分类' }; });
 const CAT_COLORS = ['#0969da', '#41c143', '#8250df', '#d29922', '#3fb2a5'];
 const tree = catTree(site); /* 两级分类（OB-ENG-SOP-06）：首页分类卡按领域（8 组）渲染 */
 %>
@@ -38,13 +39,13 @@ const tree = catTree(site); /* 两级分类（OB-ENG-SOP-06）：首页分类卡
   <% }) %>
 </ul>
 
-<div class="sect-head"><h2>热门内容</h2><span class="mock-tag">示例排行 · 示例数据</span></div>
+<div class="sect-head"><h2>编辑精选</h2><span class="mock-tag">近期优质文章</span></div>
 <ol class="hotlist">
   <% hot.forEach((h, i) => { %>
   <li><span class="hot-no <%= i < 3 ? 'top' : '' %>"><%= String(i + 1).padStart(2, '0') %></span>
     <span class="hot-main"><a href="<%- url_for(h.p.path) %>"><%= h.p.title %></a>
       <span class="hot-sub"><%= h.p.description || '' %></span></span>
-    <span class="hot-views"><%= h.views.toLocaleString() %> 次阅读</span></li>
+    <span class="hot-views"><%= catIcon(h.cat) %> <%= h.cat %> · <%= h.p.date.format('YYYY-MM-DD') %></span></li>
   <% }) %>
 </ol>
 
