@@ -11,7 +11,8 @@
     "test:bdd": "node tests/bdd-runner.js",
     "server": "hexo server",
     "check:meta": "node bin/check-metadata.js",
-    "encrypt:private": "node bin/encrypt-private.js"
+    "encrypt:private": "node bin/encrypt-private.js",
+    "audit:cat": "node bin/audit-category-count.js"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
