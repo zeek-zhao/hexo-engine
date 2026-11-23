@@ -47,10 +47,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install and Build
-        run: |
-          npm install --no-audit --no-fund
-          npm run build
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      # 2026-11 审计门禁（CFG-04/FMT-01/FMT-02/PIP-01/PIP-02）：collect 前拦截元数据/短链/格式问题
+      - name: Check content metadata gate
+        run: node bin/check-metadata.js
+
+      - name: Build
+        run: npm run build
 
       # 全站渲染体检（按语法类型断言，见 docs/SDD-01 §门禁）：失败则不发布
       - name: Check rendered pages

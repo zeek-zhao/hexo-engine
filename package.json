@@ -9,7 +9,8 @@
     "collect": "node bin/collect.js",
     "build": "npm run collect && hexo clean && hexo generate && node scripts/check-pages.js",
     "test:bdd": "node tests/bdd-runner.js",
-    "server": "hexo server"
+    "server": "hexo server",
+    "check:meta": "node bin/check-metadata.js"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

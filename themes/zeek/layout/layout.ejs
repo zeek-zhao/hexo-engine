@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= page.title ? page.title + ' · ' : '' %><%= config.title %></title>
 <meta name="description" content="<%= page.description || page.title || config.description %>">
-<% if (page.current && page.current > 1) { %><meta name="robots" content="noindex"><% } %>
+<% /* CFG-02（2026-11 审计）：列表/归档/标签等薄页统一 noindex,follow；正文页保持可索引 */
+   const isListing = !is_post() && !is_page() && !is_home();
+   const isDeepList = isListing || (page.current && page.current > 1);
+   if (isDeepList) { %><meta name="robots" content="noindex,follow"><% } %>
 <% /* SEO 第六轮：canonical + Open Graph + Twitter Card + RSS 发现 */
    const canonPath = (page.path || '').replace(/(^|\/)index\.html$/, '$1'); %>
 <link rel="canonical" href="<%- full_url_for(canonPath) %>">
@@ -15,11 +18,22 @@
 <meta property="og:description" content="<%= page.description || config.description %>">
 <meta property="og:url" content="<%- full_url_for(canonPath) %>">
 <meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
+<% /* CFG-01（2026-11 审计）：社交分享封面图。文章 frontmatter.cover 优先，否则站点默认占位图 */
+   const ogImg = (is_post() && page.cover) ? (full_url_for(page.cover)) : full_url_for('img/og-default.svg'); %>
+<meta property="og:image" content="<%- ogImg %>">
+<meta property="og:image:alt" content="<%= page.title || config.title %>">
+<meta name="twitter:image" content="<%- ogImg %>">
 <meta property="og:locale" content="zh_CN">
 <% if (is_post()) { %><meta property="article:published_time" content="<%= date(page.date, 'YYYY-MM-DD[T]HH:mm:ssZ') %>"><% } %>
 <meta name="twitter:card" content="summary">
 <% /* JSON-LD：全站 WebSite（文章页另有 BlogPosting/BreadcrumbList，见 post.ejs） */ %>
 <script type="application/ld+json"><%- JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: config.title, url: full_url_for(''), description: config.description || '', inLanguage: 'zh-CN' }) %></script>
+
+<% /* CFG-03（2026-11 审计）：GitHub Pages 无法设响应头，前端 meta 做基础加固 */
+   const csp = "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https: data:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"; %>
+<meta http-equiv="Content-Security-Policy" content="<%= csp %>">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="stylesheet" href="<%- url_for('css/main.css') %>">
 <% /* KaTeX：数学公式（客户端渲染，配置开关见 _config.yml zeek 段） */ %>
 <% if (config.zeek && config.zeek.katex) { %>
