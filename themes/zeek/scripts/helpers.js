@@ -24,6 +24,11 @@ hexo.extend.helper.register('heads', function (content) {
  * layout.ejs（侧栏）、category.ejs（面包屑）、archive.ejs（chips 分组）共用，保证树结构一致。
  * 前提：collect.js v7 已注入 [[领域, 细分]] 嵌套 categories（OB-ENG-SOP-06）。 */
 hexo.extend.helper.register('catTree', function (site) {
+  // 构建期缓存：layout/post/index/archive/category 每页都调用本 helper，
+  // 无缓存时每页都全量遍历 site.categories + site.posts → O(页面数×文章数)，
+  // 1500 篇时约 225 万次遍历，是 hexo generate 卡死（CPU 100%/内存暴涨）的根因。
+  // site 对象在单次构建中不变，缓存一次跨页共享（与 sortedPosts 同策略）。
+  if (site._zeekCatTree) return site._zeekCatTree;
   const all = [];
   site.categories.each((c) => all.push(c));
   const byId = new Map(all.map((c) => [c._id, c]));
@@ -55,7 +60,8 @@ hexo.extend.helper.register('catTree', function (site) {
     while (c && c.parent && byId.has(c.parent)) c = byId.get(c.parent);
     return c || null;
   };
-  return { roots, childrenOf, byLeaf, rootOf };
+  site._zeekCatTree = { roots, childrenOf, byLeaf, rootOf };
+  return site._zeekCatTree;
 });
 
 /* 主题辅助：字数统计（中文按字、西文按词，剥 HTML 标签与实体后计数）。
@@ -75,8 +81,13 @@ hexo.extend.helper.register('readMin', function (content) {
   return Math.max(1, Math.ceil(wordCount(content) / 400));
 });
 hexo.extend.helper.register('siteWords', function (site) {
+  // 构建期缓存：页脚「全站字数」在 layout.ejs 中被每一页调用，
+  // 无缓存时每页都遍历全站文章做 wordCount（O(页面数×文章数) 正则），
+  // 与 catTree 同为 hexo generate 卡死主因。构建期 site 不变，只算一次。
+  if (site._zeekSiteWords !== undefined) return site._zeekSiteWords;
   let sum = 0;
   site.posts.each((p) => { sum += wordCount(p.content); });
+  site._zeekSiteWords = sum;
   return sum;
 });
 
