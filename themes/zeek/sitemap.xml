@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{# CFG-02（任务 D）：sitemap 只收正文页 + 首页；排除归档/标签/分类/about/静态 JSON 等薄页。
+   插件 posts 数组含 pages（search.json、about、bgm、assets 等），按 permalink 是否含 /posts/ 过滤。 #}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {% for post in posts %}
+  {% if '/posts/' in post.permalink %}
+  <url>
+    <loc>{{ post.permalink | uriencode }}</loc>
+    {% if post.updated %}
+    <lastmod>{{ post.updated | formatDate }}</lastmod>
+    {% elif post.date %}
+    <lastmod>{{ post.date | formatDate }}</lastmod>
+    {% endif %}
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  {% endif %}
+  {% endfor %}
+
+  <url>
+    <loc>{{ config.url | uriencode }}</loc>
+    <lastmod>{{ sNow | formatDate }}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

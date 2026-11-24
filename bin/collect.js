@@ -18,6 +18,7 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 const crc32 = require('hexo-abbrlink/lib/crc32');
+const { slugize } = require('hexo-util');
 
 const ROOT = path.join(__dirname, '..');
 const CONTENT_DIR = process.env.CONTENT_DIR || path.join(ROOT, 'content');
@@ -38,6 +39,10 @@ try {
 }
 const groupOf = (cat) => (CATMAP.categories && CATMAP.categories[cat]) || CATMAP.fallback || '未分组';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// PIP-04：统计页链接必须与 hexo 生成的 tag/category 路径一致。
+// hexo 用 slugize 生成permalink（空格→-、C++→C、CI/CD→CI-CD、ubuntu24.04→ubuntu24-04），
+// 旧版直接 encodeURIComponent(原始名) 会产生 404。这里统一 slug 化后拼路径。
+const slugPath = (s) => encodeURIComponent(slugize(String(s), { transform: false }));
 
 function* walk(dir, filterFn) {
   if (!fs.existsSync(dir)) return;
@@ -225,6 +230,35 @@ function convertWikiLinks(srcRel, body) {
   return body;
 }
 
+// ── CAT-01 / LAY-02（任务 D 方案 A）：建立「索引页 ↔ 文章」双向归属 ──
+// 索引页 = 70-索引/<领域>/00-索引.md，是各领域的权威导航入口；原生分类仍作底层打标。
+// 解析索引页正文里的双链目标，给目标文章注入 index_ref（权威索引的标题+短链），
+// 主题 post.ejs 据此在正文底部渲染「所属索引」回链 → 与索引页已有的正向表格构成双向跳转。
+// 采用 collect 期注入：不改内容库源文件、可整批回滚、本地与 CI 完全一致。
+const INDEX_RE = /(^|\/)70-索引\/[^/]+\/00-索引\.md$/;
+const indexStat = { indexes: 0, linked: 0, unresolved: [] };
+const indexPages = pending.filter((p) => INDEX_RE.test(p.rel));
+for (const idx of indexPages) {
+  indexStat.indexes++;
+  const targets = [];
+  idx.body.replace(/\[\[([^\[\]|#]+)(?:#[^\]|]*)?(?:\|[^\[\]]+)?\]\]/g, (m0, tgt) => {
+    targets.push(String(tgt).trim()); return m0;
+  });
+  for (const tgt of targets) {
+    if (/^(术语表|00-索引)$/.test(tgt)) continue; // 通用术语表/索引自引用不算领域归属
+    const p = resolveLink(idx.rel, tgt);
+    if (p && p !== idx) {
+      if (!p.outFm.index_ref) {
+        p.outFm.index_ref = { title: String(idx.outFm.title), url: idx.url };
+        indexStat.linked++;
+      }
+    } else if (!p) {
+      indexStat.unresolved.push({ index: idx.rel, target: tgt });
+    }
+  }
+}
+report.indexRef = { indexes: indexStat.indexes, linked: indexStat.linked, unresolved: indexStat.unresolved.length };
+
 // ── Pass 2：双链转换 + 落盘（先清空 _posts，防止旧命名/已下架文档残留重复发布） ──
 for (const f of fs.readdirSync(OUT_POSTS)) {
   if (f.endsWith('.md')) fs.rmSync(path.join(OUT_POSTS, f));
@@ -279,7 +313,7 @@ if (report.map.length) {
   const statPage = (title, intro, counter, dir) => {
     const entries = [...counter.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh'));
     const pills = entries
-      .map(([k, n]) => `<a class="tagbig" href="/${dir}/${encodeURIComponent(k)}/">${esc(k)}<b>${n}</b></a>`)
+      .map(([k, n]) => `<a class="tagbig" href="/${dir}/${slugPath(k)}/">${esc(k)}<b>${n}</b></a>`)
       .join('\n');
     return `---
 title: ${title}
@@ -313,9 +347,10 @@ ${pills}
     })
     .map(([g, cm]) => {
       const sum = [...cm.values()].reduce((x, y) => x + y, 0);
+      // v7 两级分类真实路径为 /categories/<领域>/<细分>/；PIP-04 巡检发现旧扁平链接 404，这里按领域拼两级。
       const pills = [...cm.entries()]
         .sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0], 'zh'))
-        .map(([k, n]) => `<a class="tagbig" href="/categories/${encodeURIComponent(k)}/">${esc(k)}<b>${n}</b></a>`)
+        .map(([k, n]) => `<a class="tagbig" href="/categories/${slugPath(g)}/${slugPath(k)}/">${esc(k)}<b>${n}</b></a>`)
         .join('\n');
       return `<details class="catgroup" open><summary>📁 ${esc(g)}<span class="cnt">${sum} 篇</span></summary>\n<div class="tagcloud">\n${pills}\n</div>\n</details>`;
     })

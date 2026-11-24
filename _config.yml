@@ -92,5 +92,9 @@ feed:
   content: false   # 摘要模式：description/摘要，不输出全文
 
 # ── sitemap（SEO 收录）──
+# CFG-02（任务 D）：只收正文页 + 首页；自定义模板过滤掉 tags/categories/pages/archive 等薄页。
 sitemap:
   path: sitemap.xml
+  tags: false
+  categories: false
+  template: themes/zeek/sitemap.xml
