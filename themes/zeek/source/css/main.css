@@ -597,3 +597,6 @@ mark.hl{background:rgba(0,150,199,.22);color:inherit;border-radius:3px;padding:0
   background:var(--accent);border:none;border-radius:6px;cursor:pointer}
 .private-lock .lock-btn:hover{filter:brightness(1.08)}
 .private-lock .lock-err{min-height:18px;margin-top:12px;color:#cf222e;font-size:13px}
+
+/* CAT-04：缩写 hover 提示 */
+.zeek-abbr{cursor:help;text-decoration:underline dotted;text-decoration-color:var(--muted,#8a94a6);text-underline-offset:3px}
