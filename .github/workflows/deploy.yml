@@ -122,6 +122,19 @@ jobs:
           retention-days: 1
           include-hidden-files: true
 
+      - name: Upload check baseline
+        # check-pages.js 的比对基准：source/_posts/*.md（文章语法特征）+ 分类映射（分类页抽样）。
+        # 分段后 verify job 只下载 public/，不含这两个源基准，故必须随产物一并传递，
+        # 否则 categories 抽样=0、walk(source/_posts) ENOENT 导致体检误报失败。
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-baseline
+          path: |
+            source/_posts/
+            content/90-OB工程管理/方案/06-分类映射.json
+          retention-days: 1
+          include-hidden-files: true
+
   # ─────────────────────────────────────────────────────────
   # 阶段 3：验证（并发矩阵）——两项检查互不依赖，并行跑，省时间
   # 任一项 FAIL → publish 不执行
@@ -149,6 +162,14 @@ jobs:
         with:
           name: rendered-site
           path: public/
+
+      - name: Download check baseline
+        if: matrix.check == 'rendered-pages'
+        # 还原 check-pages.js 的源基准到原路径（相对仓库根），供体检断言比对
+        uses: actions/download-artifact@v4
+        with:
+          name: check-baseline
+          path: ./
 
       - name: Check rendered pages
         if: matrix.check == 'rendered-pages'
