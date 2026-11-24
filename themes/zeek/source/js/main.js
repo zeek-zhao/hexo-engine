@@ -819,3 +819,87 @@
   /* ==================== 首次进入 ==================== */
   initPage();
 })();
+
+/* ==================== CAT-04：缩写全称提示（术语表三处消费之三） ==================== */
+/* 单一数据源 = 内容库 70-索引/术语表.md → collect 生成 /glossary.json。
+   对正文与索引页中的缩写首处加 <abbr title> hover 提示；pjax 场景用 MutationObserver 兜底。 */
+(function () {
+  'use strict';
+  var GLOSS = null;
+  var MAX_PER_PAGE = 12; // 每页最多标注 12 处，避免噪音
+  var SKIP_TAGS = { SCRIPT: 1, STYLE: 1, CODE: 1, PRE: 1, A: 1, ABBR: 1, TEXTAREA: 1 };
+
+  function load(cb) {
+    if (GLOSS) return cb(GLOSS);
+    try {
+      var x = new XMLHttpRequest();
+      x.open('GET', '/glossary.json', true);
+      x.onload = function () {
+        try { GLOSS = JSON.parse(x.responseText) || []; } catch (e) { GLOSS = []; }
+        GLOSS = GLOSS.filter(function (g) { return g && g.abbr && g.abbr.length >= 2; })
+          .sort(function (a, b) { return b.abbr.length - a.abbr.length; });
+        cb(GLOSS);
+      };
+      x.onerror = function () { GLOSS = []; cb(GLOSS); };
+      x.send();
+    } catch (e) { GLOSS = []; cb(GLOSS); }
+  }
+
+  function isZhBefore(node, idx) {
+    if (idx <= 0) return false;
+    return /[\u4e00-\u9fff]/.test(node.nodeValue.charAt(idx - 1));
+  }
+
+  function mark(root, list) {
+    var marked = 0;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (!n.nodeValue || n.nodeValue.length < 2) return NodeFilter.FILTER_REJECT;
+        var p = n.parentNode;
+        if (!p || SKIP_TAGS[p.nodeName]) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var targets = [];
+    while (walker.nextNode()) targets.push(walker.currentNode);
+    for (var i = 0; i < targets.length && marked < MAX_PER_PAGE; i++) {
+      var node = targets[i], text = node.nodeValue, best = null, bestIdx = -1;
+      for (var j = 0; j < list.length; j++) {
+        var g = list[j];
+        var re = new RegExp('(^|[^A-Za-z0-9])' + g.abbr.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![A-Za-z0-9])');
+        var m = re.exec(text);
+        if (m) {
+          var at = m.index + m[1].length;
+          if (!isZhBefore(node, at)) { best = g; bestIdx = at; break; }
+        }
+      }
+      if (!best) continue;
+      var abbrEl = document.createElement('abbr');
+      abbrEl.className = 'zeek-abbr';
+      abbrEl.title = best.full + (best.cn ? ' · ' + best.cn : '');
+      abbrEl.textContent = best.abbr;
+      var after = node.splitText(bestIdx + best.abbr.length);
+      node.parentNode.insertBefore(abbrEl, after);
+      marked++;
+    }
+  }
+
+  function run() {
+    var scope = document.querySelector('.content') || document.querySelector('main') || document.body;
+    if (!scope || !scope.querySelector) return;
+    if (scope.dataset.abbrDone) return;
+    scope.dataset.abbrDone = '1';
+    load(function (list) { if (list.length) mark(scope, list); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  var mo = new MutationObserver(function () {
+    var scope = document.querySelector('.content');
+    if (scope && !scope.dataset.abbrDone) run();
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+})();

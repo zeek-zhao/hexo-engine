@@ -382,6 +382,25 @@ ${groupBlocks}
     }));
   fs.writeFileSync(path.join(ROOT, 'source', 'search.json'), JSON.stringify(searchData));
 
+  // CAT-04（任务D）：术语表三处消费之一 —— 从内容库单一数据源 70-索引/术语表.md 生成 glossary.json，
+  // 供主题 main.js 在正文/索引页对缩写加 hover 全称提示（第二、三处消费在主题层）。
+  // 解析规则：取表格行「| 缩写 | 英文全称 | 中文 | 一句话说明 |」，跳过表头与分隔行。
+  try {
+    const glossPath = path.join(CONTENT_DIR, '70-索引', '术语表.md');
+    if (fs.existsSync(glossPath)) {
+      const rows = fs.readFileSync(glossPath, 'utf8').split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l.startsWith('|') && l.endsWith('|'))
+        .map((l) => l.slice(1, -1).split('|').map((c) => c.trim()))
+        .filter((c) => c.length >= 3 && c[0] && c[0] !== '缩写' && !/^-+$/.test(c[0]));
+      const glossary = rows.map((c) => ({ abbr: c[0], full: c[1], cn: c[2] || '' }));
+      fs.writeFileSync(path.join(ROOT, 'source', 'glossary.json'), JSON.stringify(glossary));
+      report.glossaryCount = glossary.length;
+    }
+  } catch (e) {
+    console.error('glossary parse failed (non-fatal): ' + e.message);
+  }
+
   // 任务A：写出私密清单供 encrypt-private.js 消费（不含口令）
   // 放项目根、不入 source/，避免被 hexo 当静态资源复制进 public 发布；同时入 .gitignore
   fs.writeFileSync(path.join(ROOT, 'private-list.json'),
