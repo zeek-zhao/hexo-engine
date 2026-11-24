@@ -49,6 +49,16 @@ ldCrumb = {
 
 <%- th.body %>
 
+<% /* CAT-01 / LAY-02（任务 D）：索引为权威导航入口；正文页底部回链到所属技能索引，
+     与索引页已有的正向双链表格构成双向跳转。index_ref 由 collect.js 在收集期注入。 */ %>
+<% if (page.index_ref && page.index_ref.url) { %>
+<a class="index-backlink" href="<%- url_for('/' + page.index_ref.url) %>">
+  <span class="ibl-label">📚 本系列由权威索引收录</span>
+  <span class="ibl-title"><%= page.index_ref.title %></span>
+  <span class="ibl-go">查看完整导航 →</span>
+</a>
+<% } %>
+
 <a class="author-card" href="<%- url_for('about/') %>">
   <span class="avatar sm" aria-hidden="true">Z</span>
   <span class="ac-text"><b>zeek.zhao</b><span class="ac-sub">嵌入式与 DevOps 工程师 · 折腾 Yocto、CI 与 Obsidian 知识管理</span></span>

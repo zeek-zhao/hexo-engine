@@ -64,6 +64,10 @@ jobs:
         # CFG-04/FMT-01/FMT-02/PIP-01/PIP-02：collect 前拦截元数据/短链/格式问题
         run: node bin/check-metadata.js
 
+      - name: Lint Markdown (FMT-04)
+        # FMT-04：markdownlint 核心规则子集（warn 报告，front-matter 必过已由上一道承担）
+        run: node bin/lint-markdown.js
+
       - name: Collect content
         # 生成 source/_posts、search.json、tags/categories 统计页
         run: npm run collect
@@ -147,7 +151,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        check: [rendered-pages, bdd]
+        check: [rendered-pages, bdd, links]
     steps:
       - name: Checkout engine
         uses: actions/checkout@v4
@@ -180,6 +184,11 @@ jobs:
         if: matrix.check == 'bdd'
         # Given/When/Then 场景断言（tests/features/）；失败则不发布
         run: node tests/bdd-runner.js
+
+      - name: Check internal links (PIP-04)
+        if: matrix.check == 'links'
+        # 站内链接健康巡检：404 即阻断发布；输出到日志供排查
+        run: node bin/check-links.js
 
   # ─────────────────────────────────────────────────────────
   # 阶段 4：发布——needs 全部上游绿，下载同一份已验证产物

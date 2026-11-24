@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= page.title ? page.title + ' · ' : '' %><%= config.title %></title>
 <meta name="description" content="<%= page.description || page.title || config.description %>">
-<% /* CFG-02（2026-11 审计）：列表/归档/标签等薄页统一 noindex,follow；正文页保持可索引 */
-   const isListing = !is_post() && !is_page() && !is_home();
-   const isDeepList = isListing || (page.current && page.current > 1);
+<% /* CFG-02（任务 D 口径）：列表第 4 页起 noindex,follow；前 3 页与所有正文页保持可索引。
+      归档/标签/分类的首页及第 2/3 页仍可索引，第 4 页起视为深分页薄页。 */
+   const isDeepList = !!(page.current && page.current >= 4);
    if (isDeepList) { %><meta name="robots" content="noindex,follow"><% } %>
 <% /* SEO 第六轮：canonical + Open Graph + Twitter Card + RSS 发现 */
    const canonPath = (page.path || '').replace(/(^|\/)index\.html$/, '$1'); %>

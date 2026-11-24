@@ -41,6 +41,9 @@ const flat = (v) => Array.isArray(v) ? v.flat(Infinity).map(String) : (v ? [Stri
 const catActual = new Map(), groupActual = new Map(), tagActual = new Map();
 let articleCount = 0;
 for (const f of walk(POSTS)) {
+  // 排除 collect 自动生成的派生页（短链映射页）：它不在 report.map 里，统计页不含它，
+  // 却带 tags/categories，会造成 +1 系统性假漂移。
+  if (path.basename(f) === 'post-map.md') continue;
   let fm;
   try { fm = matter(fs.readFileSync(f, 'utf8')).data; } catch (e) { continue; }
   articleCount++;
@@ -58,10 +61,15 @@ function claimed(file) {
   const m = new Map();
   if (!fs.existsSync(file)) return m;
   const html = fs.readFileSync(file, 'utf8');
-  const re = /<a class="tagbig" href="\/[^\/]+\/([^"\/]+)\/">[\s\S]*?<b>(\d+)<\/b><\/a>/g;
+  // 取 <a class="tagbig"> 的可见文本（原始名称，HTML 转义前）作为 key，与 frontmatter 对齐。
+  // 不取 href 末段：href 已按 hexo slug 化（C++→C、CI/CD→CI-CD），反解不回原名。
+  const re = /<a class="tagbig" href="[^"]+">([\s\S]*?)<b>(\d+)<\/b><\/a>/g;
   let mm;
   while ((mm = re.exec(html))) {
-    try { m.set(decodeURIComponent(mm[1]), Number(mm[2])); } catch (e) { /* 跳过异常编码 */ }
+    try {
+      const name = mm[1].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&').trim();
+      m.set(name, Number(mm[2]));
+    } catch (e) { /* 跳过异常项 */ }
   }
   return m;
 }
