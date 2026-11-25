@@ -85,10 +85,16 @@ for (const file of walk(CONTENT_DIR)) {
   let h1 = 0, fenceOpen = 0, untaggedCode = 0;
   for (let i = 0; i < lines.length; i++) {
     const ln = lines[i];
-    const fm = ln.match(/^\s*(`{3,}|~{3,})/);
+    // fm[1]=围栏符号, fm[2]=符号之后的内容（语言标识）。
+    // 旧实现只捕获 fm[1]，导致 ```python 也被当成无语言 → warn 恒等围栏总数。
+    const fm = ln.match(/^\s*(`{3,}|~{3,})(.*)$/);
     if (fm) {
-      if (!inFence) { inFence = true; fenceChar = fm[1][0]; if (!fm[1].slice(1).match(/[a-zA-Z0-9]/)) untaggedCode++; }
-      else if (fm[1][0] === fenceChar) inFence = false;
+      if (!inFence) {
+        inFence = true;
+        fenceChar = fm[1][0];
+        // 开围栏行去掉符号后若无实质内容（纯空白），才算未标注语言
+        if (!fm[2].trim()) untaggedCode++;
+      } else if (fm[1][0] === fenceChar) inFence = false;
       continue;
     }
     if (!inFence && /^#\s+\S/.test(ln)) h1++;
