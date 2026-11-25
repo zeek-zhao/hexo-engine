@@ -88,7 +88,7 @@ git -c "http.extraheader=AUTHORIZATION: basic $B64" push origin main
 | # | 项 | 状态 | 负责人 |
 |---|---|---|---|
 | 1 | fine-grained PAT 替换（替换 NOTIFY_TOKEN / DEPLOY_TOKEN，权限矩阵见 05 规范 §5.1；GitHub 无创建 API，须网页手动） | 待执行 | 人（Zeek） |
-| 2 | 05 规范 draft → 正式签发（置 `status: published`） | 待人评审 | 人（Zeek） |
+| 2 | 05 规范 draft → 正式签发（置 `status: published`） | 已完成：2026-11-25 人确认统一为 v1.4.2 正式签发（工作清单 Q6①）；§0 表格与 frontmatter 均已标注 | 人（Zeek） |
 | 3 | ai-obsidian vault 6 个本地提交未推送 | 待推送（认证见 §6） | 人定时机 |
 | 4 | P1-4 quality-gate 完整脚本化（check-tags.py strict + CI fail） | 待执行（跟踪于 05 规范 §7） | AI |
 | 5 | 评论系统 / 访问统计 | giscus 容器已上线但**需人网页安装 giscus App**；访问统计已配置 `goatcounter-zeek-zhao`（需人在 goatcounter.com 注册同名站点才计数） | 人（Zeek） |
