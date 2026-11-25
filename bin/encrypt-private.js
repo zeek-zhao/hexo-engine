@@ -128,11 +128,35 @@ const UNLOCK_JS = (payload) => `
 
 function stripFromIndex(files, urls) {
   let removed = 0;
+  // 私密文章 URL 集合（含 /posts/xxx.html 与 xxx.html 两种形态）
+  const idSet = new Set(urls.map((u) => path.basename(u, '.html')));
   for (const rel of files) {
     const p = path.join(PUBLIC, rel);
     if (!fs.existsSync(p)) continue;
     let s = fs.readFileSync(p, 'utf8');
     const before = s.length;
+
+    // search.json 是 JSON 数组（非 HTML），必须按结构过滤整条记录，
+    // 否则私密文章的 title/description/text 会完整残留在站内搜索里（明文泄露）。
+    if (rel === 'search.json') {
+      try {
+        const arr = JSON.parse(s);
+        if (Array.isArray(arr)) {
+          const kept = arr.filter((item) => {
+            const u = String(item && item.url || '');
+            return !idSet.has(path.basename(u, '.html'));
+          });
+          if (kept.length !== arr.length) {
+            fs.writeFileSync(p, JSON.stringify(kept));
+            removed++;
+            continue;
+          }
+        }
+      } catch (e) {
+        console.warn('  [warn] search.json 解析失败，回退文本过滤: ' + e.message);
+      }
+    }
+
     for (const u of urls) {
       // 去掉指向私密文章的 <a>/<li>/条目（按 href/url 片段匹配含短链的行）
       const id = path.basename(u, '.html');
