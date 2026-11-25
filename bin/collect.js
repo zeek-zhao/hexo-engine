@@ -408,4 +408,25 @@ ${groupBlocks}
 }
 
 console.log(JSON.stringify(report, null, 2));
+
+// Q4③（TASK-F3）：把 skip 从「只埋在 JSON」提升为控制台醒目告警 + 按原因分类计数。
+// 仅打印、不改任何发布放行逻辑（report.skipped 本就存在，此处只做可观测性增强）。
+if (report.skipped.length) {
+  const byReason = {};
+  for (const s of report.skipped) {
+    const key = String(s.reason).split('（')[0].split(':')[0].trim();
+    byReason[key] = (byReason[key] || 0) + 1;
+  }
+  console.warn(`\n[collect][SKIP-SUMMARY] 共跳过 ${report.skipped.length} 篇（按原因）:`);
+  for (const [k, v] of Object.entries(byReason).sort((a, b) => b[1] - a[1])) {
+    console.warn(`  ${String(v).padStart(4)}  ${k}`);
+  }
+  // 标签类问题单列篇目，供标签治理（Issue #14 CAT-05）直接消费
+  const tagSkips = report.skipped.filter(s => /tags/.test(String(s.reason)));
+  if (tagSkips.length) {
+    console.warn(`[collect][SKIP-TAGS] 标签不合规篇目（${tagSkips.length}）:`);
+    for (const s of tagSkips) console.warn(`  - ${s.file} :: ${s.reason}`);
+  }
+  console.warn('');
+}
 console.log('collect done: ' + report.published.length + ' published / ' + report.scanned + ' scanned / map ' + report.map.length + ' / search.json + tags/categories 统计页 written');
